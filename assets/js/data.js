@@ -1,7 +1,7 @@
-let products = JSON.parse(localStorage.products || "[]");
-let invoices = JSON.parse(localStorage.invoices || "[]");
+let products = JSON.parse(localStorage.products||"[]");
+let invoices = JSON.parse(localStorage.invoices||"[]");
 
-function saveAll() {
+function saveAll(){
   localStorage.products = JSON.stringify(products);
   localStorage.invoices = JSON.stringify(invoices);
 }
