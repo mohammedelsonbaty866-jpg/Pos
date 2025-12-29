@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <title>POS PRO | الكاشير</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
+
 <link rel="manifest" href="manifest.json">
 <link rel="stylesheet" href="assets/css/style.css">
 <link rel="stylesheet" href="assets/css/theme.css">
@@ -13,9 +14,9 @@
 <script src="assets/js/auth-guard.js"></script>
 
 <header class="top-bar">
-  <div class="logo">POS <span>PRO</span></div>
+  <h1>POS PRO</h1>
   <nav>
-    <a href="index.html" class="active">كاشير</a>
+    <a href="index.html" class="active">الكاشير</a>
     <a href="pages/products.html">الأصناف</a>
     <a href="pages/reports.html">التقارير</a>
     <a href="pages/settings.html">الإعدادات</a>
@@ -24,18 +25,24 @@
 </header>
 
 <main class="pos-layout">
+
   <section class="products-panel">
-    <input id="search" placeholder="🔍 اسم الصنف أو الباركود">
+    <input placeholder="بحث بالاسم أو الباركود" oninput="searchProduct(this.value)">
     <div id="productsGrid"></div>
   </section>
 
   <section class="invoice-panel">
     <h2>الفاتورة</h2>
     <div id="invoiceItems"></div>
-    <div class="total">الإجمالي: <span id="total">0</span> ج</div>
-    <button class="primary" onclick="saveInvoice()">حفظ الفاتورة</button>
+
+    <div class="total-box">
+      الإجمالي: <strong id="total">0</strong> ج
+    </div>
+
+    <button onclick="saveInvoice()">حفظ الفاتورة</button>
     <button onclick="clearInvoice()">تفريغ</button>
   </section>
+
 </main>
 
 <script src="assets/js/data.js"></script>
