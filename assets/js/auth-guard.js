@@ -1,3 +1,8 @@
-if(!localStorage.user){
-  location.href="login.html";
+if (!localStorage.session) {
+  location.href = "/login.html";
+}
+
+function logout() {
+  localStorage.removeItem("session");
+  location.href = "login.html";
 }
