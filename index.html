@@ -1,104 +1,46 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <title>POS Pro | الكاشير</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <!-- PWA -->
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#0d6efd">
-
-  <!-- CSS -->
-  <link rel="stylesheet" href="assets/css/style.css">
-
-  <!-- Icons -->
-  <link rel="icon" href="icons/icon-192.png">
+<meta charset="UTF-8">
+<title>POS PRO | الكاشير</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="manifest" href="manifest.json">
+<link rel="stylesheet" href="assets/css/style.css">
+<link rel="stylesheet" href="assets/css/theme.css">
 </head>
-<script src="assets/js/install.js"></script>
-<body>
 
-<!-- ===== TOP BAR ===== -->
+<body>
+<script src="assets/js/auth-guard.js"></script>
+
 <header class="top-bar">
-  <div class="logo">POS PRO</div>
-<button id="installBtn" class="install-btn" style="display:none">
-  ⬇️ تثبيت التطبيق
-</button>
+  <div class="logo">POS <span>PRO</span></div>
   <nav>
-    <button class="nav-btn active">الكاشير</button>
-    <button class="nav-btn" onclick="goSettings()">الإعدادات</button>
-    <button class="nav-btn danger" onclick="logout()">خروج</button>
+    <a href="index.html" class="active">كاشير</a>
+    <a href="pages/products.html">الأصناف</a>
+    <a href="pages/reports.html">التقارير</a>
+    <a href="pages/settings.html">الإعدادات</a>
+    <button onclick="logout()">خروج</button>
   </nav>
 </header>
 
-<!-- ===== MAIN ===== -->
-<main class="pos-container">
-
-  <!-- PRODUCTS -->
+<main class="pos-layout">
   <section class="products-panel">
-    <h2>المنتجات</h2>
-
-    <input
-      type="text"
-      id="searchInput"
-      placeholder="بحث بالاسم أو الباركود"
-      onkeyup="searchProduct(this.value)"
-    />
-
-    <div id="productsGrid" class="products-grid"></div>
+    <input id="search" placeholder="🔍 اسم الصنف أو الباركود">
+    <div id="productsGrid"></div>
   </section>
 
-  <!-- INVOICE -->
   <section class="invoice-panel">
     <h2>الفاتورة</h2>
-
-    <div id="invoiceItems" class="invoice-items">
-      <p class="empty">لا توجد أصناف</p>
-    </div>
-
-    <div class="total-box">
-      <span>الإجمالي</span>
-      <strong id="total">0.00 ج</strong>
-    </div>
-
-    <div class="actions">
-      <button class="btn primary" onclick="saveInvoice()">حفظ</button>
-      <button class="btn warning" onclick="clearInvoice()">تفريغ</button>
-    </div>
+    <div id="invoiceItems"></div>
+    <div class="total">الإجمالي: <span id="total">0</span> ج</div>
+    <button class="primary" onclick="saveInvoice()">حفظ الفاتورة</button>
+    <button onclick="clearInvoice()">تفريغ</button>
   </section>
-
 </main>
 
-<!-- ===== FOOTER ===== -->
-<footer class="footer">
-  POS PRO © 2025
-</footer>
-
-<!-- ===== SCRIPTS ===== -->
-<script src="assets/js/auth-guard.js"></script>
 <script src="assets/js/data.js"></script>
 <script src="assets/js/products.js"></script>
+<script src="assets/js/barcode.js"></script>
 <script src="assets/js/cashier.js"></script>
-
-<!-- PWA REGISTER -->
-<script>
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('service-worker.js');
-  }
-</script>
-<script>
-  if ("serviceWorker" in navigator) {
-    window.addEventListener("load", () => {
-      navigator.serviceWorker
-        .register("/service-worker.js")
-        .then(reg => {
-          console.log("Service Worker Registered", reg);
-        })
-        .catch(err => {
-          console.error("Service Worker Error", err);
-        });
-    });
-  }
-</script>
 </body>
 </html>
