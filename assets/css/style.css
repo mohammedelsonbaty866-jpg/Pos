@@ -1,7 +1,38 @@
-body { margin:0; font-family:tahoma; background:#f4f4f4; }
-.top-bar { background:#222; color:#fff; padding:10px; display:flex; justify-content:space-between; }
-.top-bar a, .top-bar button { color:#fff; margin:0 5px; }
-.pos-layout { display:flex; height:calc(100vh - 50px); }
-.products-panel { width:60%; padding:10px; overflow:auto; }
-.invoice-panel { width:40%; background:#fff; padding:10px; }
-.product-card { padding:10px; background:#ddd; margin:5px; cursor:pointer; }
+body{
+  margin:0;
+  font-family:Arial;
+  background:#f1f5f9;
+}
+.top-bar{
+  background:#0f172a;
+  color:#fff;
+  padding:10px;
+}
+.top-bar nav a{
+  color:#fff;
+  margin:0 5px;
+  text-decoration:none;
+}
+.top-bar nav a.active{font-weight:bold}
+.pos-layout{
+  display:flex;
+  height:calc(100vh - 60px);
+}
+.products-panel,.invoice-panel{
+  flex:1;
+  padding:10px;
+  overflow:auto;
+}
+#productsGrid div{
+  background:#fff;
+  padding:10px;
+  margin:5px;
+  border-radius:8px;
+  cursor:pointer;
+}
+#invoiceItems div{
+  background:#e5e7eb;
+  margin:5px;
+  padding:8px;
+}
+.actions button{margin:5px}
