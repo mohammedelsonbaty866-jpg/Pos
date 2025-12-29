@@ -1,3 +1,17 @@
-body { display:flex; justify-content:center; align-items:center; height:100vh; background:#222; }
-.auth-box { background:#fff; padding:20px; width:300px; }
-input,button { width:100%; margin:5px 0; }
+body{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  height:100vh;
+}
+.auth-box{
+  background:#fff;
+  padding:20px;
+  width:300px;
+  border-radius:10px;
+}
+.auth-box input,button{
+  width:100%;
+  padding:10px;
+  margin:5px 0;
+}
