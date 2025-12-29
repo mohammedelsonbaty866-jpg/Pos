@@ -1,3 +1,12 @@
-self.addEventListener("fetch", e => {
-  e.respondWith(fetch(e.request).catch(()=>caches.match(e.request)));
+self.addEventListener("install", e=>{
+  e.waitUntil(
+    caches.open("pos-pro").then(c=>c.addAll([
+      "/", "/index.html", "/login.html"
+    ]))
+  );
+});
+self.addEventListener("fetch", e=>{
+  e.respondWith(
+    caches.match(e.request).then(r=>r||fetch(e.request))
+  );
 });
