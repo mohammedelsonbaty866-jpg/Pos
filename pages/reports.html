@@ -6,17 +6,36 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="../assets/css/style.css">
 </head>
-
 <body>
+
 <script src="../assets/js/auth-guard.js"></script>
 
 <header class="top-bar">
-  <h2>التقارير</h2>
-  <a href="../index.html">⬅ رجوع</a>
+  <h1>التقارير</h1>
+  <nav>
+    <a href="../index.html">الكاشير</a>
+    <a href="products.html">الأصناف</a>
+    <a class="active">التقارير</a>
+    <a href="settings.html">الإعدادات</a>
+  </nav>
 </header>
 
-<main id="reportsContainer" style="padding:10px"></main>
+<main style="padding:10px">
+  <h3>الفواتير</h3>
+  <table width="100%" border="1">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>التاريخ</th>
+        <th>عدد الأصناف</th>
+        <th>الإجمالي</th>
+      </tr>
+    </thead>
+    <tbody id="rep"></tbody>
+  </table>
+</main>
 
+<script src="../assets/js/data.js"></script>
 <script src="../assets/js/reports.js"></script>
 </body>
 </html>
