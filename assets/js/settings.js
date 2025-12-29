@@ -1,13 +1,15 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const themeBtn = document.getElementById("toggleTheme");
+function setTheme(t){
+  document.body.className = t;
+  localStorage.theme = t;
+}
 
-  if (localStorage.theme === "dark") {
-    document.body.classList.add("dark");
+function resetData(){
+  if(confirm("متأكد؟")){
+    localStorage.clear();
+    location.href = "../login.html";
   }
+}
 
-  themeBtn?.addEventListener("click", () => {
-    document.body.classList.toggle("dark");
-    localStorage.theme =
-      document.body.classList.contains("dark") ? "dark" : "light";
-  });
-});
+if(localStorage.theme){
+  document.body.className = localStorage.theme;
+}
