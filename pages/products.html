@@ -1,2 +1,59 @@
-<h1>إدارة الأصناف</h1>
-(جاهزة للتوسعة)
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>الأصناف | POS PRO</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="../assets/css/style.css">
+</head>
+
+<body>
+<script src="../assets/js/auth-guard.js"></script>
+
+<header class="top-bar">
+  <h2>إدارة الأصناف</h2>
+  <a href="../index.html">⬅ رجوع</a>
+</header>
+
+<main style="padding:10px">
+  <input id="name" placeholder="اسم الصنف">
+  <input id="price" type="number" placeholder="السعر">
+  <input id="barcode" placeholder="الباركود">
+  <button onclick="addProduct()">إضافة</button>
+
+  <div id="list"></div>
+</main>
+
+<script src="../assets/js/data.js"></script>
+<script>
+function render(){
+  list.innerHTML="";
+  products.forEach((p,i)=>{
+    list.innerHTML+=`
+      <div>
+        ${p.name} - ${p.price} ج
+        <button onclick="del(${i})">❌</button>
+      </div>`;
+  });
+}
+
+function addProduct(){
+  products.push({
+    name:name.value,
+    price:Number(price.value),
+    barcode:barcode.value
+  });
+  saveAll();
+  render();
+}
+
+function del(i){
+  products.splice(i,1);
+  saveAll();
+  render();
+}
+
+render();
+</script>
+</body>
+</html>
