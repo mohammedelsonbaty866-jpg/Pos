@@ -7,17 +7,27 @@
 <link rel="stylesheet" href="../assets/css/style.css">
 <link rel="stylesheet" href="../assets/css/theme.css">
 </head>
-
 <body>
+
 <script src="../assets/js/auth-guard.js"></script>
 
 <header class="top-bar">
-  <h2>الإعدادات</h2>
-  <a href="../index.html">⬅ رجوع</a>
+  <h1>الإعدادات</h1>
+  <nav>
+    <a href="../index.html">الكاشير</a>
+    <a href="products.html">الأصناف</a>
+    <a href="reports.html">التقارير</a>
+    <a class="active">الإعدادات</a>
+  </nav>
 </header>
 
-<main style="padding:20px">
-  <button id="toggleTheme">🌗 الوضع الفاتح / الداكن</button>
+<main style="padding:10px">
+  <h3>المظهر</h3>
+  <button onclick="setTheme('light')">فاتح</button>
+  <button onclick="setTheme('dark')">داكن</button>
+
+  <h3>بيانات النظام</h3>
+  <button onclick="resetData()">مسح كل البيانات</button>
 </main>
 
 <script src="../assets/js/settings.js"></script>
