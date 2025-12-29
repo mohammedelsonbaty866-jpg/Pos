@@ -1,0 +1,13 @@
+:root{
+  --bg:#f1f5f9;
+  --card:#fff;
+  --text:#0f172a;
+  --primary:#0f172a;
+}
+
+.dark{
+  --bg:#020617;
+  --card:#020617;
+  --text:#e5e7eb;
+  --primary:#1e293b;
+}
