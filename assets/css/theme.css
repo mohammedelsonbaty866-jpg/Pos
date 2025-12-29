@@ -1,2 +1,5 @@
-body.dark { background:#111; color:#fff; }
-body.dark .invoice-panel { background:#222; }
+body.dark{
+  background:#020617;
+  color:#fff;
+}
+body.dark .top-bar{background:#020617}
