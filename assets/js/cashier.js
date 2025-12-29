@@ -1,34 +1,27 @@
-let cart = [];
+let cart=[];
 
-function addToInvoice(p) {
+function addToInvoice(p){
   cart.push(p);
   renderInvoice();
 }
 
-function renderInvoice() {
-  invoiceItems.innerHTML = "";
-  let total = 0;
-
-  cart.forEach(p => {
-    total += p.price;
-    invoiceItems.innerHTML += `<div>${p.name} - ${p.price}ج</div>`;
+function renderInvoice(){
+  invoiceItems.innerHTML="";
+  let t=0;
+  cart.forEach(i=>{
+    t+=i.price;
+    invoiceItems.innerHTML+=`<div>${i.name} - ${i.price}</div>`;
   });
-
-  document.getElementById("total").innerText = total;
+  total.innerText=t+" ج";
 }
 
-function clearInvoice() {
-  cart = [];
-  renderInvoice();
-}
-
-function saveInvoice() {
+function saveInvoice(){
   invoices.push({
-    date: new Date().toLocaleString(),
-    items: cart,
-    total: cart.reduce((s,p)=>s+p.price,0)
+    date:new Date().toLocaleString(),
+    total: total.innerText,
+    items: cart
   });
   saveAll();
-  clearInvoice();
-  alert("تم حفظ الفاتورة");
+  cart=[];
+  renderInvoice();
 }
