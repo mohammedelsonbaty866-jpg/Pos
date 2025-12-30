@@ -45,6 +45,18 @@
 
 <script src="assets/js/cashier.js"></script>
 <script src="assets/js/theme.js"></script>
+<script>
+function saveSale(total, itemsCount) {
+  const sales = JSON.parse(localStorage.getItem("sales")) || [];
 
+  sales.push({
+    total: total,
+    items: itemsCount,
+    date: new Date().toISOString()
+  });
+
+  localStorage.setItem("sales", JSON.stringify(sales));
+}
+</script>
 </body>
 </html>
