@@ -345,3 +345,67 @@ body.dark .report-card strong {
 body.dark .report-card span {
   color: #4da3ff;
 }
+body.dark {
+  background: radial-gradient(circle at top, #0a1a33, #000814);
+  color: #fff;
+  font-family: system-ui, -apple-system;
+}
+
+/* الهيدر */
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 15px;
+  background: linear-gradient(90deg, #020617, #0b1d3a);
+  color: #fff;
+}
+
+.icon-btn {
+  background: #1e90ff;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 10px;
+  color: #fff;
+  font-size: 16px;
+}
+
+/* الكارت */
+.card {
+  background: #1b1b1b;
+  border-radius: 20px;
+  padding: 20px;
+  margin: 15px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.5);
+}
+
+.card-title {
+  font-size: 22px;
+  margin-bottom: 15px;
+}
+
+/* القائمة */
+.list {
+  display: flex;
+  flex-direction: column;
+}
+
+.list-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 10px;
+  border-bottom: 1px solid rgba(255,255,255,.15);
+  font-size: 18px;
+}
+
+.list-item strong {
+  color: #4da3ff;
+}
+
+/* الفوتر */
+.footer {
+  text-align: center;
+  padding: 15px;
+  opacity: .6;
+}
