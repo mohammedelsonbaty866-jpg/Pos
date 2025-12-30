@@ -1,103 +1,13 @@
-/* ================================
-   THEME VARIABLES
-================================ */
-
-:root {
-    --bg-main: #f1f5f9;
-    --bg-card: #ffffff;
-    --text-main: #020617;
-    --text-muted: #64748b;
-    --primary: #2563eb;
-    --danger: #dc2626;
-    --border: #e5e7eb;
-}
-
-/* ===== DARK MODE ===== */
 body.dark {
-    --bg-main: #020617;
-    --bg-card: #0f172a;
-    --text-main: #f8fafc;
-    --text-muted: #94a3b8;
-    --primary: #3b82f6;
-    --danger: #ef4444;
-    --border: #1e293b;
+  background: #121212;
+  color: white;
 }
 
-/* ================================
-   GLOBAL THEME APPLY
-================================ */
-
-body {
-    background: var(--bg-main);
-    color: var(--text-main);
-    transition: background .3s, color .3s;
+body.dark .products,
+body.dark .cart {
+  background: #1e1e1e;
 }
 
-/* ===== CARDS ===== */
-.card {
-    background: var(--bg-card);
-    border-radius: 14px;
-    padding: 15px;
-    box-shadow: 0 6px 15px rgba(0,0,0,.08);
-    border: 1px solid var(--border);
-}
-
-/* ===== TEXT ===== */
-h1, h2, h3 {
-    color: var(--text-main);
-}
-
-small, .muted {
-    color: var(--text-muted);
-}
-
-/* ===== BUTTONS ===== */
-.btn {
-    padding: 10px 14px;
-    border-radius: 12px;
-    border: none;
-    cursor: pointer;
-    font-size: 15px;
-}
-
-.btn-primary {
-    background: var(--primary);
-    color: #fff;
-}
-
-.btn-danger {
-    background: var(--danger);
-    color: #fff;
-}
-
-/* ===== INPUTS ===== */
-input, select {
-    background: var(--bg-card);
-    color: var(--text-main);
-    border: 1px solid var(--border);
-}
-
-input::placeholder {
-    color: var(--text-muted);
-}
-
-/* ===== TABLE ===== */
-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-th, td {
-    border: 1px solid var(--border);
-    padding: 8px;
-    text-align: center;
-}
-
-th {
-    background: rgba(0,0,0,.04);
-}
-
-/* ===== TRANSITION ===== */
-* {
-    transition: background .25s, color .25s, border .25s;
+body.dark .product {
+  border-color: #333;
 }
