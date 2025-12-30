@@ -1,13 +1,21 @@
-// ===============================
-// AUTH-GUARD.JS - POS SUPER PRO
-// ===============================
+/* ============ AUTH GUARD ============ */
 
-// التحقق من الجلسة
-(function () {
-  const session = localStorage.getItem("pos_session");
+const SESSION_KEY = "currentUser";
 
-  if (!session) {
-    // مفيش تسجيل دخول → رجوع للوجين
+/* تحقق من تسجيل الدخول */
+function requireAuth() {
+  const user = JSON.parse(localStorage.getItem(SESSION_KEY));
+
+  if (!user) {
     window.location.replace("login.html");
   }
-})();
+}
+
+/* منع الرجوع لصفحة اللوجين بعد الدخول */
+function blockLoginPage() {
+  const user = JSON.parse(localStorage.getItem(SESSION_KEY));
+
+  if (user) {
+    window.location.replace("index.html");
+  }
+}
