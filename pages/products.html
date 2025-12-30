@@ -2,61 +2,44 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <title>إدارة الأصناف | POS Pro</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>إدارة الأصناف</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <!-- CSS -->
   <link rel="stylesheet" href="../assets/css/style.css">
-  <link rel="stylesheet" href="../assets/css/theme.css">
-
 </head>
+
 <body>
 
-<!-- ===== HEADER ===== -->
-<header class="top-bar">
-  <h1>إدارة الأصناف</h1>
-  <nav>
-    <a href="../index.html">الكاشير</a>
-    <a href="products.html" class="active">الأصناف</a>
-    <a href="reports.html">التقارير</a>
-    <a href="settings.html">الإعدادات</a>
-  </nav>
-</header>
-
-<!-- ===== MAIN ===== -->
-<main class="page-container">
+  <header>
+    <h2>📦 إدارة الأصناف</h2>
+    <a href="../index.html">⬅ رجوع للكاشير</a>
+  </header>
 
   <!-- إضافة صنف -->
-  <section class="card">
-    <h2>➕ إضافة صنف جديد</h2>
-
-    <div class="form-grid">
-      <input id="productName" type="text" placeholder="اسم الصنف">
-      <input id="productPrice" type="number" placeholder="السعر">
-      <input id="productBarcode" type="text" placeholder="الباركود (اختياري)">
-
-      <button onclick="addProduct()" class="btn-primary">
-        إضافة الصنف
-      </button>
-    </div>
+  <section>
+    <form id="addProductForm">
+      <input type="text" id="productName" placeholder="اسم الصنف" required>
+      <input type="number" id="productPrice" placeholder="السعر" required>
+      <input type="text" id="productBarcode" placeholder="الباركود (اختياري)">
+      <button type="submit">➕ إضافة</button>
+    </form>
   </section>
 
-  <!-- قائمة الأصناف -->
-  <section class="card">
-    <h2>📋 قائمة الأصناف</h2>
-
+  <!-- البحث -->
+  <section>
     <input
       type="text"
-      placeholder="بحث بالاسم أو الباركود..."
-      onkeyup="searchProducts(this.value)"
-      class="search-input"
+      id="searchProduct"
+      placeholder="🔍 بحث بالاسم أو الباركود"
     >
+  </section>
 
-    <table class="data-table">
+  <!-- جدول الأصناف -->
+  <section>
+    <table border="1" width="100%">
       <thead>
         <tr>
-          <th>#</th>
-          <th>الصنف</th>
+          <th>الاسم</th>
           <th>السعر</th>
           <th>الباركود</th>
           <th>حذف</th>
@@ -66,16 +49,8 @@
     </table>
   </section>
 
-</main>
-
-<!-- ===== FOOTER ===== -->
-<footer>
-  POS Pro ©
-</footer>
-
-<!-- ===== JS ===== -->
-<script src="../assets/js/data.js"></script>
-<script src="../assets/js/products.js"></script>
+  <!-- JS -->
+  <script src="../assets/js/products.js"></script>
 
 </body>
 </html>
