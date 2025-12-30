@@ -2,56 +2,196 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <title>POS Super Pro</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>POS سوبر برو</title>
 
+  <!-- PWA -->
   <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0d6efd">
+
+  <!-- CSS -->
   <link rel="stylesheet" href="assets/css/style.css">
-  <link rel="stylesheet" href="assets/css/theme.css">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Tahoma, Arial;
+      background: #f4f6f9;
+    }
+
+    header {
+      background: #0d6efd;
+      color: #fff;
+      padding: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    header h2 {
+      margin: 0;
+      font-size: 18px;
+    }
+
+    header .icons button {
+      background: transparent;
+      border: none;
+      color: #fff;
+      font-size: 18px;
+      margin-left: 8px;
+      cursor: pointer;
+    }
+
+    .container {
+      padding: 15px;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 15px;
+      margin-bottom: 15px;
+      box-shadow: 0 2px 6px rgba(0,0,0,.1);
+    }
+
+    .total {
+      font-size: 22px;
+      font-weight: bold;
+      text-align: center;
+      margin: 10px 0;
+    }
+
+    .pay-btn {
+      width: 100%;
+      padding: 15px;
+      font-size: 18px;
+      background: #0d6efd;
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      gap: 10px;
+    }
+
+    .product-btn {
+      padding: 12px;
+      background: #198754;
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      text-align: center;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .product-btn span {
+      display: block;
+      font-size: 12px;
+      margin-top: 5px;
+    }
+  </style>
 </head>
+
 <body>
 
-<header class="top-bar">
-  <h2>🧾 الكاشير</h2>
-  <div>
-    <button onclick="toggleTheme()">🌙</button>
-    <button onclick="startBarcode()">📷</button>
-    <a href="pages/settings.html" class="btn">⚙️</a>
-  </div>
-</header>
+  <!-- الهيدر -->
+  <header>
+    <div class="icons">
+      <button onclick="goSettings()">⚙</button>
+      <button onclick="toggleTheme()">🌙</button>
+    </div>
+    <h2>الكاشير</h2>
+    <div>🧾</div>
+  </header>
 
-<main class="pos-layout">
+  <div class="container">
 
-  <section class="products-panel">
-    <h3>المنتجات</h3>
-    <div id="productsList" class="products-grid"></div>
-  </section>
-
-  <section class="invoice-panel">
-    <h3>الفاتورة</h3>
-    <ul id="cartList"></ul>
-
-    <div class="total-box">
-      الإجمالي: <span id="total">0</span> جنيه
+    <!-- الفاتورة -->
+    <div class="card">
+      <h3>الفاتورة</h3>
+      <div class="total">
+        الإجمالي: <span id="total">0</span> جنيه
+      </div>
+      <button class="pay-btn" onclick="finishSale()">💰 إتمام البيع</button>
     </div>
 
-    <button class="pay-btn" onclick="checkout()">💵 إتمام البيع</button>
-  </section>
+    <!-- المنتجات -->
+    <div class="card">
+      <h3>المنتجات</h3>
+      <div id="productsList" class="products-grid"></div>
+    </div>
 
-</main>
+  </div>
 
-<!-- نافذة الكاميرا -->
-<div id="barcodeModal" class="modal">
-  <video id="camera" autoplay></video>
-  <button onclick="stopBarcode()">❌ إغلاق</button>
-</div>
+  <!-- JavaScript -->
+  <script>
+    // تسجيل Service Worker
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js');
+    }
 
-<audio id="beep" src="assets/sounds/beep.mp3"></audio>
+    let cart = [];
+    let total = 0;
 
-<script src="assets/js/data.js"></script>
-<script src="assets/js/cashier.js"></script>
-<script src="assets/js/barcode.js"></script>
-<script src="assets/js/settings.js"></script>
+    const productsList = document.getElementById("productsList");
+    const totalEl = document.getElementById("total");
+
+    // تحميل الأصناف
+    const products = JSON.parse(localStorage.getItem("products")) || [];
+
+    function renderProducts() {
+      productsList.innerHTML = "";
+
+      if (products.length === 0) {
+        productsList.innerHTML = "<p>لا توجد أصناف مضافة</p>";
+        return;
+      }
+
+      products.forEach(product => {
+        const btn = document.createElement("button");
+        btn.className = "product-btn";
+        btn.innerHTML = `
+          ${product.name}
+          <span>${product.price} جنيه</span>
+        `;
+        btn.onclick = () => addToCart(product);
+        productsList.appendChild(btn);
+      });
+    }
+
+    function addToCart(product) {
+      cart.push(product);
+      total += Number(product.price);
+      totalEl.textContent = total;
+    }
+
+    function finishSale() {
+      if (cart.length === 0) {
+        alert("لا توجد أصناف في الفاتورة");
+        return;
+      }
+
+      alert("تم إتمام البيع بنجاح ✔");
+      cart = [];
+      total = 0;
+      totalEl.textContent = "0";
+    }
+
+    function goSettings() {
+      window.location.href = "pages/settings.html";
+    }
+
+    function toggleTheme() {
+      document.body.classList.toggle("dark");
+    }
+
+    renderProducts();
+  </script>
 
 </body>
 </html>
