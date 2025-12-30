@@ -258,3 +258,69 @@ body.dark input {
     order: -1;
   }
 }
+body {
+  font-family: Tahoma;
+  margin: 0;
+}
+
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+}
+
+.pos-layout {
+  display: flex;
+  height: calc(100vh - 60px);
+}
+
+.products-panel,
+.invoice-panel {
+  padding: 10px;
+  overflow-y: auto;
+}
+
+.products-panel {
+  width: 65%;
+}
+
+.invoice-panel {
+  width: 35%;
+  border-right: 2px solid var(--border);
+}
+
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px,1fr));
+  gap: 10px;
+}
+
+.product-btn {
+  padding: 15px;
+  border-radius: 10px;
+  border: none;
+  font-size: 14px;
+}
+
+.total-box {
+  margin: 15px 0;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.pay-btn {
+  width: 100%;
+  padding: 15px;
+  font-size: 18px;
+}
+
+/* موبايل */
+@media (max-width: 768px) {
+  .pos-layout {
+    flex-direction: column;
+  }
+  .products-panel,
+  .invoice-panel {
+    width: 100%;
+  }
+}
