@@ -1,38 +1,184 @@
-body{
-  margin:0;
-  font-family:Arial;
-  background:#f1f5f9;
+/* ===== RESET ===== */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: "Tajawal", Arial, sans-serif;
 }
-.top-bar{
-  background:#0f172a;
-  color:#fff;
-  padding:10px;
+
+body {
+    background: var(--bg);
+    color: var(--text);
 }
-.top-bar nav a{
-  color:#fff;
-  margin:0 5px;
-  text-decoration:none;
+
+/* ===== VARIABLES ===== */
+:root {
+    --bg: #f1f5f9;
+    --card: #ffffff;
+    --primary: #2563eb;
+    --accent: #22c55e;
+    --danger: #ef4444;
+    --text: #020617;
+    --border: #e5e7eb;
 }
-.top-bar nav a.active{font-weight:bold}
-.pos-layout{
-  display:flex;
-  height:calc(100vh - 60px);
+
+/* ===== HEADER ===== */
+.top-bar {
+    background: linear-gradient(90deg, #020617, #0f172a);
+    color: #fff;
+    padding: 12px 16px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
 }
-.products-panel,.invoice-panel{
-  flex:1;
-  padding:10px;
-  overflow:auto;
+
+.top-bar h1 {
+    font-size: 20px;
 }
-#productsGrid div{
-  background:#fff;
-  padding:10px;
-  margin:5px;
-  border-radius:8px;
-  cursor:pointer;
+
+.top-bar nav {
+    display: flex;
+    gap: 10px;
 }
-#invoiceItems div{
-  background:#e5e7eb;
-  margin:5px;
-  padding:8px;
+
+.top-bar nav a {
+    color: #cbd5f5;
+    text-decoration: none;
+    font-size: 14px;
 }
-.actions button{margin:5px}
+
+.top-bar nav a.active {
+    color: #fff;
+    font-weight: bold;
+}
+
+/* ===== MAIN LAYOUT ===== */
+.pos-layout {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    height: calc(100vh - 70px);
+}
+
+/* ===== PRODUCTS ===== */
+.products-panel {
+    padding: 12px;
+    overflow-y: auto;
+}
+
+.products-panel h2 {
+    margin-bottom: 8px;
+}
+
+.products-panel input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    margin-bottom: 10px;
+}
+
+#productsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 10px;
+}
+
+.product {
+    background: var(--card);
+    border-radius: 14px;
+    padding: 10px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0,0,0,.08);
+    cursor: pointer;
+    transition: .2s;
+}
+
+.product:hover {
+    transform: scale(1.03);
+}
+
+.product b {
+    display: block;
+    margin-bottom: 6px;
+}
+
+/* ===== INVOICE ===== */
+.invoice-panel {
+    background: var(--card);
+    border-left: 2px solid var(--border);
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+}
+
+.invoice-panel h2 {
+    margin-bottom: 8px;
+}
+
+#invoiceItems {
+    flex: 1;
+    overflow-y: auto;
+    margin-bottom: 10px;
+}
+
+.invoice-item {
+    background: #f8fafc;
+    border-radius: 10px;
+    padding: 8px;
+    margin-bottom: 6px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+}
+
+.total-box {
+    font-size: 18px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+
+/* ===== ACTIONS ===== */
+.actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+
+.actions button {
+    padding: 12px;
+    border: none;
+    border-radius: 12px;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.btn-save {
+    background: var(--accent);
+    color: #fff;
+}
+
+.btn-clear {
+    background: var(--danger);
+    color: #fff;
+}
+
+/* ===== FOOTER ===== */
+footer {
+    text-align: center;
+    padding: 8px;
+    font-size: 13px;
+    color: #64748b;
+}
+
+/* ===== MOBILE ===== */
+@media (max-width: 768px) {
+    .pos-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .invoice-panel {
+        height: 45vh;
+    }
+}
