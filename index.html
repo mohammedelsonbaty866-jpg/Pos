@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>POS Super Pro | الكاشير</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <!-- PWA -->
   <link rel="manifest" href="manifest.json">
@@ -17,66 +17,76 @@
 
 <body>
 
-<!-- الهيدر بيتحقن تلقائي من layout.js -->
+<!-- ================= HEADER ================= -->
+<header class="app-header">
+  <div class="logo">🧾 POS Super Pro</div>
 
-<main class="page">
+  <nav class="nav">
+    <a href="index.html" class="active">الكاشير</a>
+    <a href="pages/products.html">الأصناف</a>
+    <a href="pages/reports.html">التقارير</a>
+    <a href="pages/settings.html">الإعدادات</a>
+  </nav>
+
+  <button class="theme-toggle" onclick="toggleTheme()">🌓</button>
+</header>
+
+<!-- ================= MAIN ================= -->
+<main class="container">
 
   <!-- ===== البحث ===== -->
-  <div class="card">
+  <section class="card">
     <h2>🔍 بحث / باركود</h2>
     <input
       id="searchInput"
-      placeholder="اكتب اسم الصنف أو الباركود"
+      placeholder="اسم الصنف أو الباركود"
       onkeyup="searchProduct(this.value)"
     >
-  </div>
+  </section>
 
   <!-- ===== المنتجات ===== -->
-  <div class="card">
-    <h2>🧾 المنتجات</h2>
-    <div id="productsGrid" class="grid">
-      <!-- يتم التحميل من products.js -->
+  <section class="card">
+    <h2>📦 المنتجات</h2>
+    <div id="productsGrid" class="products-grid">
+      <!-- يتم التحميل تلقائياً -->
     </div>
-  </div>
+  </section>
 
   <!-- ===== الفاتورة ===== -->
-  <div class="card">
+  <section class="card invoice">
     <h2>🧮 الفاتورة</h2>
 
-    <div id="invoiceItems">
+    <div id="invoiceItems" class="invoice-items">
       <small>لم يتم إضافة أصناف بعد</small>
     </div>
 
-    <hr>
-
-    <div style="display:flex;justify-content:space-between;align-items:center">
-      <strong>الإجمالي:</strong>
+    <div class="invoice-total">
+      <span>الإجمالي</span>
       <strong id="total">0 ج</strong>
     </div>
 
-    <div style="margin-top:10px;display:flex;gap:10px">
+    <div class="invoice-actions">
       <button class="btn-primary" onclick="saveInvoice()">💾 حفظ</button>
-      <button onclick="clearInvoice()">🗑️ تفريغ</button>
+      <button class="btn-danger" onclick="clearInvoice()">🗑️ تفريغ</button>
     </div>
-  </div>
+  </section>
 
 </main>
 
-<!-- ===== الأصوات ===== -->
+<!-- ================= AUDIO ================= -->
 <audio id="beepSound" src="assets/sounds/beep.mp3"></audio>
 
-<!-- ===== JS ===== -->
+<!-- ================= JS ================= -->
 <script src="assets/js/theme.js"></script>
-<script src="assets/js/layout.js"></script>
 <script src="assets/js/data.js"></script>
 <script src="assets/js/products.js"></script>
 <script src="assets/js/cashier.js"></script>
 <script src="assets/js/barcode.js"></script>
 
-<!-- Service Worker -->
+<!-- ================= SW ================= -->
 <script>
   if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("/sw.js");
+    navigator.serviceWorker.register("sw.js");
   }
 </script>
 
