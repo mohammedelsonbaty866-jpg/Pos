@@ -1,196 +1,93 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>POS سوبر برو</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>POS Super Pro</title>
 
   <!-- PWA -->
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#0d6efd">
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#0d6efd" />
 
   <!-- CSS -->
-  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <link rel="stylesheet" href="assets/css/theme.css" />
 
-  <style>
-    body {
-      margin: 0;
-      font-family: Tahoma, Arial;
-      background: #f4f6f9;
-    }
-
-    header {
-      background: #0d6efd;
-      color: #fff;
-      padding: 12px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    header h2 {
-      margin: 0;
-      font-size: 18px;
-    }
-
-    header .icons button {
-      background: transparent;
-      border: none;
-      color: #fff;
-      font-size: 18px;
-      margin-left: 8px;
-      cursor: pointer;
-    }
-
-    .container {
-      padding: 15px;
-    }
-
-    .card {
-      background: #fff;
-      border-radius: 12px;
-      padding: 15px;
-      margin-bottom: 15px;
-      box-shadow: 0 2px 6px rgba(0,0,0,.1);
-    }
-
-    .total {
-      font-size: 22px;
-      font-weight: bold;
-      text-align: center;
-      margin: 10px 0;
-    }
-
-    .pay-btn {
-      width: 100%;
-      padding: 15px;
-      font-size: 18px;
-      background: #0d6efd;
-      color: #fff;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-    }
-
-    .products-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-      gap: 10px;
-    }
-
-    .product-btn {
-      padding: 12px;
-      background: #198754;
-      color: #fff;
-      border: none;
-      border-radius: 10px;
-      text-align: center;
-      cursor: pointer;
-      font-size: 14px;
-    }
-
-    .product-btn span {
-      display: block;
-      font-size: 12px;
-      margin-top: 5px;
-    }
-  </style>
+  <!-- Icons -->
+  <link rel="icon" href="assets/icons/icon-192.png" />
 </head>
 
-<body>
+<body class="light">
 
-  <!-- الهيدر -->
-  <header>
-    <div class="icons">
-      <button onclick="goSettings()">⚙</button>
-      <button onclick="toggleTheme()">🌙</button>
-    </div>
-    <h2>الكاشير</h2>
-    <div>🧾</div>
+  <!-- Header -->
+  <header class="top-bar">
+    <h1>🧾 POS Super Pro</h1>
+    <button id="themeToggle">🌙</button>
   </header>
 
-  <div class="container">
+  <!-- Main Cashier -->
+  <main class="cashier-container">
 
-    <!-- الفاتورة -->
-    <div class="card">
-      <h3>الفاتورة</h3>
+    <!-- Search -->
+    <section class="search-box">
+      <input type="text" id="searchInput" placeholder="🔍 بحث بالاسم أو الباركود">
+      <button id="scanBarcode">📷</button>
+    </section>
+
+    <!-- Products List -->
+    <section class="products-list" id="productsList">
+      <!-- يتم تحميل الأصناف هنا -->
+    </section>
+
+    <!-- Cart -->
+    <section class="cart">
+      <h2>🛒 الفاتورة</h2>
+      <ul id="cartItems"></ul>
       <div class="total">
-        الإجمالي: <span id="total">0</span> جنيه
+        الإجمالي: <span id="totalPrice">0</span> ج
       </div>
-      <button class="pay-btn" onclick="finishSale()">💰 إتمام البيع</button>
-    </div>
+      <button id="payBtn" class="pay-btn">💰 دفع</button>
+    </section>
 
-    <!-- المنتجات -->
-    <div class="card">
-      <h3>المنتجات</h3>
-      <div id="productsList" class="products-grid"></div>
-    </div>
+  </main>
 
-  </div>
+  <!-- Bottom Navigation -->
+  <nav class="bottom-nav">
+    <a href="index.html">🏠 الكاشير</a>
+    <a href="pages/products.html">📦 الأصناف</a>
+    <a href="pages/reports.html">📊 التقارير</a>
+    <a href="pages/settings.html">⚙️ الإعدادات</a>
+  </nav>
 
-  <!-- JavaScript -->
+  <!-- JS -->
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/products.js"></script>
+  <script src="assets/js/cashier.js"></script>
+  <script src="assets/js/barcode.js"></script>
+
+  <!-- Theme Script -->
   <script>
-    // تسجيل Service Worker
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('sw.js');
-    }
-
-    let cart = [];
-    let total = 0;
-
-    const productsList = document.getElementById("productsList");
-    const totalEl = document.getElementById("total");
-
-    // تحميل الأصناف
-    const products = JSON.parse(localStorage.getItem("products")) || [];
-
-    function renderProducts() {
-      productsList.innerHTML = "";
-
-      if (products.length === 0) {
-        productsList.innerHTML = "<p>لا توجد أصناف مضافة</p>";
-        return;
-      }
-
-      products.forEach(product => {
-        const btn = document.createElement("button");
-        btn.className = "product-btn";
-        btn.innerHTML = `
-          ${product.name}
-          <span>${product.price} جنيه</span>
-        `;
-        btn.onclick = () => addToCart(product);
-        productsList.appendChild(btn);
-      });
-    }
-
-    function addToCart(product) {
-      cart.push(product);
-      total += Number(product.price);
-      totalEl.textContent = total;
-    }
-
-    function finishSale() {
-      if (cart.length === 0) {
-        alert("لا توجد أصناف في الفاتورة");
-        return;
-      }
-
-      alert("تم إتمام البيع بنجاح ✔");
-      cart = [];
-      total = 0;
-      totalEl.textContent = "0";
-    }
-
-    function goSettings() {
-      window.location.href = "pages/settings.html";
-    }
-
-    function toggleTheme() {
+    const toggle = document.getElementById("themeToggle");
+    toggle.onclick = () => {
       document.body.classList.toggle("dark");
-    }
+      document.body.classList.toggle("light");
+      localStorage.setItem(
+        "theme",
+        document.body.classList.contains("dark") ? "dark" : "light"
+      );
+    };
 
-    renderProducts();
+    if (localStorage.getItem("theme") === "dark") {
+      document.body.classList.remove("light");
+      document.body.classList.add("dark");
+    }
+  </script>
+
+  <!-- Service Worker -->
+  <script>
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("sw.js");
+    }
   </script>
 
 </body>
