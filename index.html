@@ -2,13 +2,13 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8" />
-  <title>POS Super Pro</title>
+  <title>POS Super Pro | الكاشير</title>
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#0d6efd" />
 
   <!-- PWA -->
   <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#0d6efd" />
 
   <!-- CSS -->
   <link rel="stylesheet" href="assets/css/style.css" />
@@ -18,95 +18,93 @@
   <link rel="icon" href="assets/icons/icon-192.png" />
 </head>
 
-<body class="light">
+<body>
 
-  <!-- ================= HEADER ================= -->
-  <header class="app-header">
-    <div class="logo">🧾 POS Super Pro</div>
-    <div class="header-actions">
-      <button id="themeToggle" title="الوضع الليلي">🌙</button>
-    </div>
-  </header>
+<!-- ===== حماية الصفحة (تسجيل الدخول) ===== -->
+<script src="assets/js/auth-guard.js"></script>
 
-  <!-- ================= MAIN ================= -->
-  <main class="cashier-page">
+<!-- ===== HEADER ===== -->
+<header class="top-bar">
+  <div class="logo">POS Super Pro</div>
 
-    <!-- Search & Barcode -->
-    <section class="search-section">
-      <input
-        type="text"
-        id="searchInput"
-        placeholder="🔍 بحث بالاسم أو الباركود"
-      />
-      <button id="barcodeBtn" title="قراءة باركود">📷</button>
-    </section>
-
-    <!-- Products -->
-    <section class="products-section">
-      <h2>📦 الأصناف</h2>
-      <div id="productsList" class="products-grid">
-        <!-- المنتجات تظهر هنا -->
-      </div>
-    </section>
-
-    <!-- Cart -->
-    <aside class="cart-section">
-      <h2>🛒 الفاتورة</h2>
-
-      <ul id="cartItems" class="cart-items"></ul>
-
-      <div class="cart-summary">
-        <div>
-          الإجمالي:
-          <strong><span id="totalPrice">0</span> ج</strong>
-        </div>
-        <button id="payBtn" class="pay-btn">💰 إتمام البيع</button>
-      </div>
-    </aside>
-
-  </main>
-
-  <!-- ================= NAV ================= -->
-  <nav class="bottom-nav">
-    <a href="index.html" class="active">🏠 الكاشير</a>
-    <a href="pages/products.html">📦 الأصناف</a>
-    <a href="pages/reports.html">📊 التقارير</a>
-    <a href="pages/settings.html">⚙️ الإعدادات</a>
+  <nav class="main-nav">
+    <a href="index.html" class="active">الكاشير</a>
+    <a href="pages/products.html">الأصناف</a>
+    <a href="pages/reports.html">التقارير</a>
+    <a href="pages/settings.html">الإعدادات</a>
+    <button onclick="logout()" class="logout-btn">خروج</button>
   </nav>
+</header>
 
-  <!-- ================= JS ================= -->
-  <script src="assets/js/data.js"></script>
-  <script src="assets/js/products.js"></script>
-  <script src="assets/js/cashier.js"></script>
-  <script src="assets/js/barcode.js"></script>
+<!-- ===== MAIN ===== -->
+<main class="pos-layout">
 
-  <!-- Theme -->
-  <script>
-    const toggle = document.getElementById("themeToggle");
+  <!-- ===== المنتجات ===== -->
+  <section class="products-panel">
+    <h2>المنتجات</h2>
 
-    toggle.onclick = () => {
-      document.body.classList.toggle("dark");
-      document.body.classList.toggle("light");
+    <!-- بحث -->
+    <input
+      type="text"
+      id="searchInput"
+      placeholder="بحث بالاسم أو الباركود"
+      onkeyup="searchProduct(this.value)"
+    />
 
-      localStorage.setItem(
-        "theme",
-        document.body.classList.contains("dark") ? "dark" : "light"
-      );
-    };
+    <!-- أزرار -->
+    <div class="product-actions">
+      <button onclick="openBarcodeScanner()">📷 باركود</button>
+      <button onclick="openAddProduct()">➕ إضافة صنف</button>
+    </div>
 
-    const savedTheme = localStorage.getItem("theme");
-    if (savedTheme === "dark") {
-      document.body.classList.remove("light");
-      document.body.classList.add("dark");
-    }
-  </script>
+    <!-- شبكة المنتجات -->
+    <div id="productsGrid" class="products-grid"></div>
+  </section>
 
-  <!-- Service Worker -->
-  <script>
-    if ("serviceWorker" in navigator) {
-      navigator.serviceWorker.register("sw.js");
-    }
-  </script>
+  <!-- ===== الفاتورة ===== -->
+  <section class="invoice-panel">
+    <h2>الفاتورة</h2>
+
+    <div id="invoiceItems" class="invoice-items"></div>
+
+    <div class="total-box">
+      <span>الإجمالي</span>
+      <strong id="total">0 ج</strong>
+    </div>
+
+    <div class="invoice-actions">
+      <button class="btn-save" onclick="saveInvoice()">حفظ</button>
+      <button class="btn-clear" onclick="clearInvoice()">تفريغ</button>
+    </div>
+  </section>
+
+</main>
+
+<!-- ===== Barcode Camera Modal ===== -->
+<div id="barcodeModal" class="modal hidden">
+  <div class="modal-content">
+    <h3>مسح الباركود</h3>
+    <video id="barcodeVideo"></video>
+    <button onclick="closeBarcodeScanner()">إغلاق</button>
+  </div>
+</div>
+
+<!-- ===== Audio ===== -->
+<audio id="beepSound" src="assets/sounds/beep.mp3"></audio>
+
+<!-- ===== JS ===== -->
+<script src="assets/js/data.js"></script>
+<script src="assets/js/products.js"></script>
+<script src="assets/js/cashier.js"></script>
+<script src="assets/js/barcode.js"></script>
+<script src="assets/js/settings.js"></script>
+
+<!-- ===== Service Worker ===== -->
+<script>
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("sw.js");
+  }
+</script>
 
 </body>
 </html>
