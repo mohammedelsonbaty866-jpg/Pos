@@ -12,7 +12,18 @@ body {
   background: var(--bg);
   color: var(--text);
 }
+body.dark .product-btn {
+  background: #1e1e1e;
+  color: #fff !important;
+}
 
+body.dark .product-btn strong {
+  color: #ffffff !important;
+}
+
+body.dark .product-btn span {
+  color: #4da3ff !important;
+}
 /* ===== HEADER ===== */
 .top-bar {
   position: sticky;
