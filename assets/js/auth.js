@@ -1,82 +1,21 @@
-/* auth.js | POS PRO AUTH SYSTEM */
+/* auth.js | Authentication Logic */
 
-const USERS_KEY = "pos_users";
-const SESSION_KEY = "pos_session";
-
-/* =========================
-   Helpers
-========================= */
-function getUsers() {
-  return JSON.parse(localStorage.getItem(USERS_KEY)) || [];
-}
-
-function saveUsers(users) {
-  localStorage.setItem(USERS_KEY, JSON.stringify(users));
-}
-
-function setSession(user) {
-  localStorage.setItem(SESSION_KEY, JSON.stringify(user));
-}
-
-function getSession() {
-  return JSON.parse(localStorage.getItem(SESSION_KEY));
-}
-
-function logout() {
-  localStorage.removeItem(SESSION_KEY);
-  window.location.href = "login.html";
-}
-
-/* =========================
-   Register
-========================= */
-function register() {
-  const username = document.getElementById("regUsername").value.trim();
-  const password = document.getElementById("regPassword").value.trim();
-
-  if (!username || !password) {
-    alert("من فضلك ادخل اسم المستخدم وكلمة المرور");
-    return;
-  }
-
-  let users = getUsers();
-
-  const exists = users.find(u => u.username === username);
-  if (exists) {
-    alert("اسم المستخدم موجود بالفعل");
-    return;
-  }
-
-  const newUser = {
-    id: Date.now(),
-    username,
-    password,
-    role: "admin", // اول حساب مدير
-    createdAt: new Date().toISOString()
-  };
-
-  users.push(newUser);
-  saveUsers(users);
-
-  alert("تم إنشاء الحساب بنجاح ✅");
-  setSession(newUser);
-  window.location.href = "index.html";
-}
+const SESSION_KEY = "pos_user_session";
 
 /* =========================
    Login
 ========================= */
 function login() {
-  const username = document.getElementById("loginUsername").value.trim();
-  const password = document.getElementById("loginPassword").value.trim();
+  const username = document.getElementById("username").value.trim();
+  const password = document.getElementById("password").value.trim();
 
   if (!username || !password) {
-    alert("ادخل اسم المستخدم وكلمة المرور");
+    alert("من فضلك أدخل اسم المستخدم وكلمة المرور");
     return;
   }
 
-  const users = getUsers();
-  const user = users.find(
+  const db = loadDB();
+  const user = db.users.find(
     u => u.username === username && u.password === password
   );
 
@@ -85,48 +24,22 @@ function login() {
     return;
   }
 
-  setSession(user);
+  localStorage.setItem(SESSION_KEY, JSON.stringify(user));
   window.location.href = "index.html";
 }
 
 /* =========================
-   Create Cashier
+   Logout
 ========================= */
-function createCashier() {
-  const username = document.getElementById("cashierUsername").value.trim();
-  const password = document.getElementById("cashierPassword").value.trim();
-
-  if (!username || !password) {
-    alert("ادخل بيانات الكاشير");
-    return;
-  }
-
-  let users = getUsers();
-
-  if (users.find(u => u.username === username)) {
-    alert("اسم المستخدم موجود");
-    return;
-  }
-
-  users.push({
-    id: Date.now(),
-    username,
-    password,
-    role: "cashier",
-    createdAt: new Date().toISOString()
-  });
-
-  saveUsers(users);
-  alert("تم إضافة الكاشير بنجاح ✅");
+function logout() {
+  localStorage.removeItem(SESSION_KEY);
+  window.location.href = "login.html";
 }
 
 /* =========================
-   Auto Redirect (Login Page)
+   Current User
 ========================= */
-(function () {
-  if (window.location.pathname.includes("login.html")) {
-    if (getSession()) {
-      window.location.href = "index.html";
-    }
-  }
-})();
+function getCurrentUser() {
+  const user = localStorage.getItem(SESSION_KEY);
+  return user ? JSON.parse(user) : null;
+}
