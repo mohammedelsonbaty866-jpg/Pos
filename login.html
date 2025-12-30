@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>تسجيل الدخول | POS Pro</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="assets/css/auth.css">
+  <link rel="stylesheet" href="assets/css/theme.css">
+
+  <!-- منع الدخول لو مسجل -->
+  <script src="assets/js/auth-guard.js"></script>
+</head>
+
+<body class="auth-body">
+
+  <div class="auth-container">
+
+    <h1>POS Super Pro</h1>
+    <p class="subtitle">تسجيل الدخول أو إنشاء حساب</p>
+
+    <!-- ===== LOGIN FORM ===== -->
+    <form id="loginForm">
+      <input
+        type="text"
+        id="loginUsername"
+        placeholder="اسم المستخدم"
+        required
+      />
+
+      <input
+        type="password"
+        id="loginPassword"
+        placeholder="كلمة المرور"
+        required
+      />
+
+      <button type="submit" class="btn primary">
+        تسجيل الدخول
+      </button>
+    </form>
+
+    <hr>
+
+    <!-- ===== REGISTER FORM ===== -->
+    <form id="registerForm">
+      <h3>إنشاء حساب جديد</h3>
+
+      <input
+        type="text"
+        id="registerUsername"
+        placeholder="اسم المستخدم"
+        required
+      />
+
+      <input
+        type="password"
+        id="registerPassword"
+        placeholder="كلمة المرور"
+        required
+      />
+
+      <button type="submit" class="btn secondary">
+        إنشاء الحساب
+      </button>
+    </form>
+
+    <p id="authMessage"></p>
+
+  </div>
+
+  <!-- JS -->
+  <script src="assets/js/auth.js"></script>
+
+</body>
+</html>
