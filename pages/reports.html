@@ -2,97 +2,55 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <title>التقارير</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="../assets/css/style.css">
-
-  <style>
-    body {
-      font-family: Tahoma, Arial;
-      background: #f4f6f9;
-      margin: 0;
-    }
-
-    header {
-      background: #0d6efd;
-      color: #fff;
-      padding: 12px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .container {
-      padding: 15px;
-    }
-
-    .card {
-      background: #fff;
-      padding: 15px;
-      border-radius: 12px;
-      margin-bottom: 15px;
-      box-shadow: 0 2px 6px rgba(0,0,0,.15);
-    }
-
-    .invoice {
-      border-bottom: 1px solid #ddd;
-      padding-bottom: 10px;
-      margin-bottom: 10px;
-    }
-  </style>
+  <title>التقارير | POS Super Pro</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="../assets/css/theme.css">
+  <link rel="stylesheet" href="../assets/css/layout.css">
 </head>
 
 <body>
 
-<header>
-  <button onclick="goBack()">⬅</button>
-  <h3>التقارير</h3>
-  <div>📊</div>
+<header class="app-header">
+  <div class="logo">📊 التقارير</div>
+  <nav class="nav">
+    <a href="../index.html">الكاشير</a>
+    <a href="products.html">الأصناف</a>
+    <a href="reports.html" class="active">التقارير</a>
+    <a href="settings.html">الإعدادات</a>
+  </nav>
 </header>
 
-<div class="container">
+<main class="container">
 
-  <div class="card">
-    <h4>ملخص</h4>
-    <p>عدد الفواتير: <strong id="count">0</strong></p>
-    <p>إجمالي المبيعات: <strong id="sum">0</strong></p>
-  </div>
+  <section class="card stats">
+    <div class="stat">
+      <h3>💰 إجمالي المبيعات</h3>
+      <strong id="sales">0 ج</strong>
+    </div>
 
-  <div class="card">
-    <h4>تفاصيل الفواتير</h4>
-    <div id="reportsList"></div>
-  </div>
+    <div class="stat">
+      <h3>🧾 عدد الفواتير</h3>
+      <strong id="invoices">0</strong>
+    </div>
 
-</div>
+    <div class="stat">
+      <h3>📦 عدد الأصناف</h3>
+      <strong id="products">0</strong>
+    </div>
+  </section>
+
+</main>
 
 <script>
-  const sales = JSON.parse(localStorage.getItem("sales")) || [];
-  const settings = JSON.parse(localStorage.getItem("settings")) || { currency: "جنيه" };
+const invoices = JSON.parse(localStorage.getItem("invoices") || "[]");
+const products = JSON.parse(localStorage.getItem("products") || "[]");
 
-  const countEl = document.getElementById("count");
-  const sumEl = document.getElementById("sum");
-  const list = document.getElementById("reportsList");
+document.getElementById("invoices").innerText = invoices.length;
+document.getElementById("products").innerText = products.length;
 
-  countEl.textContent = sales.length;
-
-  let totalSum = 0;
-
-  sales.forEach(sale => {
-    totalSum += sale.total;
-
-    list.innerHTML += `
-      <div class="invoice">
-        <div>📅 ${sale.date}</div>
-        <div>💰 ${sale.total} ${settings.currency}</div>
-      </div>
-    `;
-  });
-
-  sumEl.textContent = totalSum + " " + settings.currency;
-
-  function goBack() {
-    window.location.href = "../index.html";
-  }
+let total = 0;
+invoices.forEach(i => total += i.total);
+document.getElementById("sales").innerText = total + " ج";
 </script>
 
 </body>
