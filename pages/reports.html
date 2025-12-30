@@ -2,56 +2,56 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>التقارير | POS Super Pro</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="../assets/css/theme.css">
-  <link rel="stylesheet" href="../assets/css/layout.css">
+
+  <!-- نفس ملفات الكاشير -->
+  <link rel="stylesheet" href="../assets/css/style.css">
 </head>
 
-<body>
+<body class="dark">
 
-<header class="app-header">
-  <div class="logo">📊 التقارير</div>
-  <nav class="nav">
-    <a href="../index.html">الكاشير</a>
-    <a href="products.html">الأصناف</a>
-    <a href="reports.html" class="active">التقارير</a>
-    <a href="settings.html">الإعدادات</a>
-  </nav>
-</header>
+  <!-- الهيدر -->
+  <header class="top-bar">
+    <h1>POS Super Pro</h1>
+    <nav>
+      <a href="../index.html">الكاشير</a>
+      <a href="products.html">الأصناف</a>
+      <a class="active" href="reports.html">التقارير</a>
+      <a href="settings.html">الإعدادات</a>
+    </nav>
+  </header>
 
-<main class="container">
+  <!-- المحتوى -->
+  <main class="container">
 
-  <section class="card stats">
-    <div class="stat">
-      <h3>💰 إجمالي المبيعات</h3>
-      <strong id="sales">0 ج</strong>
-    </div>
+    <section class="card">
+      <h2>📊 التقارير</h2>
 
-    <div class="stat">
-      <h3>🧾 عدد الفواتير</h3>
-      <strong id="invoices">0</strong>
-    </div>
+      <div class="reports-grid">
+        <button class="report-card">
+          <strong>مبيعات اليوم</strong>
+          <span>0 ج</span>
+        </button>
 
-    <div class="stat">
-      <h3>📦 عدد الأصناف</h3>
-      <strong id="products">0</strong>
-    </div>
-  </section>
+        <button class="report-card">
+          <strong>عدد الفواتير</strong>
+          <span>0</span>
+        </button>
 
-</main>
+        <button class="report-card">
+          <strong>إجمالي الشهر</strong>
+          <span>0 ج</span>
+        </button>
 
-<script>
-const invoices = JSON.parse(localStorage.getItem("invoices") || "[]");
-const products = JSON.parse(localStorage.getItem("products") || "[]");
+        <button class="report-card">
+          <strong>أعلى صنف</strong>
+          <span>—</span>
+        </button>
+      </div>
+    </section>
 
-document.getElementById("invoices").innerText = invoices.length;
-document.getElementById("products").innerText = products.length;
-
-let total = 0;
-invoices.forEach(i => total += i.total);
-document.getElementById("sales").innerText = total + " ج";
-</script>
+  </main>
 
 </body>
 </html>
