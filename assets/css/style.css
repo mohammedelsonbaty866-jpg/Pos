@@ -1,205 +1,72 @@
-/* =========================
-   GLOBAL
-========================= */
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
 body {
-  font-family: "Cairo", system-ui, sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  direction: rtl;
+  margin: 0;
+  font-family: Tahoma, Arial;
+  background: #f4f6f9;
 }
 
-/* =========================
-   THEME VARIABLES
-========================= */
-:root {
-  --bg: #f1f5f9;
-  --text: #0f172a;
-  --card-bg: #ffffff;
-  --primary: #2563eb;
-  --danger: #dc2626;
-  --border: #e5e7eb;
-}
-
-[data-theme="dark"] {
-  --bg: #020617;
-  --text: #f8fafc;
-  --card-bg: #0f172a;
-  --border: #1e293b;
-}
-
-/* =========================
-   HEADER
-========================= */
 .top-bar {
-  background: var(--card-bg);
-  padding: 14px 20px;
-  border-bottom: 1px solid var(--border);
+  background: #0d6efd;
+  color: white;
+  padding: 12px;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.top-bar h1 {
-  font-size: 18px;
-}
-
-.top-bar nav a {
-  margin: 0 6px;
-  text-decoration: none;
-  color: var(--text);
-  font-weight: 600;
-}
-
-.top-bar nav a.active {
-  color: var(--primary);
-}
-
-/* =========================
-   LAYOUT
-========================= */
-.pos-layout {
-  display: grid;
-  grid-template-columns: 2fr 1fr;
-  gap: 16px;
-  padding: 16px;
-}
-
-/* =========================
-   PRODUCTS PANEL
-========================= */
-.products-panel {
-  background: var(--card-bg);
-  border-radius: 14px;
-  padding: 16px;
-}
-
-.products-panel h2 {
-  margin-bottom: 10px;
-}
-
-.products-panel input {
-  width: 100%;
+.cashier-container {
+  display: flex;
   padding: 10px;
-  border-radius: 10px;
-  border: 1px solid var(--border);
-  margin-bottom: 12px;
-}
-
-#productsGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-  gap: 12px;
-}
-
-.product-card {
-  background: var(--bg);
-  border-radius: 12px;
-  padding: 12px;
-  text-align: center;
-  cursor: pointer;
-  transition: 0.2s;
-}
-
-.product-card:hover {
-  background: var(--primary);
-  color: #fff;
-}
-
-.product-card strong {
-  display: block;
-  font-size: 14px;
-}
-
-/* =========================
-   INVOICE PANEL
-========================= */
-.invoice-panel {
-  background: var(--card-bg);
-  border-radius: 14px;
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-}
-
-.invoice-panel h2 {
-  margin-bottom: 10px;
-}
-
-#invoiceItems {
-  flex: 1;
-  overflow-y: auto;
-  margin-bottom: 10px;
-}
-
-.invoice-item {
-  display: flex;
-  justify-content: space-between;
-  padding: 10px;
-  border-bottom: 1px dashed var(--border);
-  font-size: 14px;
-}
-
-.total-box {
-  display: flex;
-  justify-content: space-between;
-  font-size: 18px;
-  margin: 10px 0;
-  font-weight: bold;
-}
-
-/* =========================
-   BUTTONS
-========================= */
-.actions {
-  display: flex;
   gap: 10px;
 }
 
-button {
-  flex: 1;
-  padding: 14px;
-  border-radius: 12px;
-  border: none;
-  font-size: 16px;
+.products, .cart {
+  background: white;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.products {
+  width: 60%;
+}
+
+.cart {
+  width: 40%;
+}
+
+.product {
+  border: 1px solid #ddd;
+  padding: 10px;
+  margin-bottom: 8px;
+  border-radius: 8px;
   cursor: pointer;
 }
 
-.btn-save {
-  background: var(--primary);
-  color: #fff;
+.product:hover {
+  background: #f1f1f1;
 }
 
-.btn-clear {
-  background: var(--danger);
-  color: #fff;
+table {
+  width: 100%;
+  border-collapse: collapse;
 }
 
-/* =========================
-   FOOTER
-========================= */
-footer {
+table th, table td {
+  border-bottom: 1px solid #ddd;
+  padding: 6px;
   text-align: center;
-  padding: 10px;
-  font-size: 13px;
-  color: #64748b;
 }
 
-/* =========================
-   MOBILE
-========================= */
-@media (max-width: 768px) {
-  .pos-layout {
-    grid-template-columns: 1fr;
-  }
+.total {
+  font-size: 18px;
+  margin-top: 10px;
+}
 
-  .top-bar {
-    flex-direction: column;
-    gap: 8px;
-  }
+.pay-btn {
+  width: 100%;
+  padding: 12px;
+  background: #198754;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 18px;
 }
