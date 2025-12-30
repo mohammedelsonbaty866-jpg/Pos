@@ -2,55 +2,175 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>إدارة الأصناف</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <link rel="stylesheet" href="../assets/css/style.css">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Tahoma, Arial;
+      background: #f4f6f9;
+    }
+
+    header {
+      background: #198754;
+      color: #fff;
+      padding: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    header h2 {
+      margin: 0;
+      font-size: 18px;
+    }
+
+    .container {
+      padding: 15px;
+    }
+
+    .card {
+      background: #fff;
+      padding: 15px;
+      border-radius: 12px;
+      margin-bottom: 15px;
+      box-shadow: 0 2px 6px rgba(0,0,0,.1);
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 10px;
+      font-size: 16px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    .add-btn {
+      background: #198754;
+      color: #fff;
+    }
+
+    .product-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 8px;
+    }
+
+    .delete-btn {
+      background: #dc3545;
+      color: #fff;
+      padding: 6px 10px;
+      font-size: 14px;
+      width: auto;
+    }
+
+    .back-btn {
+      background: #0d6efd;
+      color: #fff;
+      margin-top: 10px;
+    }
+  </style>
 </head>
 
 <body>
 
-  <header>
-    <h2>📦 إدارة الأصناف</h2>
-    <a href="../index.html">⬅ رجوع للكاشير</a>
-  </header>
+<header>
+  <button onclick="goBack()">⬅</button>
+  <h2>إدارة الأصناف</h2>
+  <div>📦</div>
+</header>
+
+<div class="container">
 
   <!-- إضافة صنف -->
-  <section>
-    <form id="addProductForm">
-      <input type="text" id="productName" placeholder="اسم الصنف" required>
-      <input type="number" id="productPrice" placeholder="السعر" required>
-      <input type="text" id="productBarcode" placeholder="الباركود (اختياري)">
-      <button type="submit">➕ إضافة</button>
-    </form>
-  </section>
+  <div class="card">
+    <h3>إضافة صنف جديد</h3>
+    <input type="text" id="name" placeholder="اسم الصنف">
+    <input type="number" id="price" placeholder="السعر">
+    <button class="add-btn" onclick="addProduct()">➕ إضافة</button>
+  </div>
 
-  <!-- البحث -->
-  <section>
-    <input
-      type="text"
-      id="searchProduct"
-      placeholder="🔍 بحث بالاسم أو الباركود"
-    >
-  </section>
+  <!-- قائمة الأصناف -->
+  <div class="card">
+    <h3>الأصناف</h3>
+    <div id="productsList"></div>
+  </div>
 
-  <!-- جدول الأصناف -->
-  <section>
-    <table border="1" width="100%">
-      <thead>
-        <tr>
-          <th>الاسم</th>
-          <th>السعر</th>
-          <th>الباركود</th>
-          <th>حذف</th>
-        </tr>
-      </thead>
-      <tbody id="productsTable"></tbody>
-    </table>
-  </section>
+</div>
 
-  <!-- JS -->
-  <script src="../assets/js/products.js"></script>
+<script>
+  let products = JSON.parse(localStorage.getItem("products")) || [];
+  const list = document.getElementById("productsList");
+
+  function renderProducts() {
+    list.innerHTML = "";
+
+    if (products.length === 0) {
+      list.innerHTML = "<p>لا توجد أصناف</p>";
+      return;
+    }
+
+    products.forEach((p, i) => {
+      const div = document.createElement("div");
+      div.className = "product-item";
+      div.innerHTML = `
+        <div>
+          <strong>${p.name}</strong><br>
+          <small>${p.price} جنيه</small>
+        </div>
+        <button class="delete-btn" onclick="deleteProduct(${i})">حذف</button>
+      `;
+      list.appendChild(div);
+    });
+  }
+
+  function addProduct() {
+    const name = document.getElementById("name").value.trim();
+    const price = document.getElementById("price").value;
+
+    if (!name || !price) {
+      alert("أدخل اسم وسعر الصنف");
+      return;
+    }
+
+    products.push({ name, price });
+    localStorage.setItem("products", JSON.stringify(products));
+
+    document.getElementById("name").value = "";
+    document.getElementById("price").value = "";
+
+    renderProducts();
+  }
+
+  function deleteProduct(index) {
+    if (!confirm("حذف الصنف؟")) return;
+    products.splice(index, 1);
+    localStorage.setItem("products", JSON.stringify(products));
+    renderProducts();
+  }
+
+  function goBack() {
+    window.location.href = "../index.html";
+  }
+
+  renderProducts();
+</script>
 
 </body>
 </html>
