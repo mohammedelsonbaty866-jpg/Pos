@@ -3,90 +3,99 @@
 <head>
   <meta charset="UTF-8">
   <title>POS Super Pro | الكاشير</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <!-- PWA -->
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#0d6efd">
 
   <!-- CSS -->
+  <link rel="stylesheet" href="assets/css/style.css">
   <link rel="stylesheet" href="assets/css/theme.css">
-  <link rel="stylesheet" href="assets/css/layout.css">
-  <link rel="stylesheet" href="assets/css/components.css">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon" href="assets/icons/icon-192.png">
 </head>
 
-<body>
+<body class="light">
 
-<!-- ================= HEADER ================= -->
-<header class="app-header">
-  <div class="logo">🧾 POS Super Pro</div>
+<!-- ===== HEADER ===== -->
+<header class="top-bar">
+  <div class="logo">POS <span>Super Pro</span></div>
 
-  <nav class="nav">
+  <nav class="nav-links">
     <a href="index.html" class="active">الكاشير</a>
     <a href="pages/products.html">الأصناف</a>
     <a href="pages/reports.html">التقارير</a>
     <a href="pages/settings.html">الإعدادات</a>
   </nav>
 
-  <button class="theme-toggle" onclick="toggleTheme()">🌓</button>
+  <div class="top-actions">
+    <button onclick="toggleTheme()" title="فاتح / داكن">🌙</button>
+    <button onclick="logout()" title="تسجيل خروج">⏻</button>
+  </div>
 </header>
 
-<!-- ================= MAIN ================= -->
-<main class="container">
+<!-- ===== MAIN ===== -->
+<main class="pos-layout">
 
-  <!-- ===== البحث ===== -->
-  <section class="card">
-    <h2>🔍 بحث / باركود</h2>
-    <input
-      id="searchInput"
-      placeholder="اسم الصنف أو الباركود"
-      onkeyup="searchProduct(this.value)"
-    >
-  </section>
+  <!-- ===== PRODUCTS ===== -->
+  <section class="products-panel">
+    <h2>المنتجات</h2>
 
-  <!-- ===== المنتجات ===== -->
-  <section class="card">
-    <h2>📦 المنتجات</h2>
+    <div class="search-box">
+      <input
+        type="text"
+        id="searchInput"
+        placeholder="بحث بالاسم أو الباركود"
+        oninput="searchProducts(this.value)"
+      >
+      <button onclick="startBarcodeScan()">📷</button>
+    </div>
+
     <div id="productsGrid" class="products-grid">
-      <!-- يتم التحميل تلقائياً -->
+      <!-- المنتجات تظهر هنا -->
     </div>
   </section>
 
-  <!-- ===== الفاتورة ===== -->
-  <section class="card invoice">
-    <h2>🧮 الفاتورة</h2>
+  <!-- ===== INVOICE ===== -->
+  <section class="invoice-panel">
+    <h2>الفاتورة</h2>
 
     <div id="invoiceItems" class="invoice-items">
-      <small>لم يتم إضافة أصناف بعد</small>
+      <!-- عناصر الفاتورة -->
     </div>
 
-    <div class="invoice-total">
+    <div class="total-box">
       <span>الإجمالي</span>
       <strong id="total">0 ج</strong>
     </div>
 
     <div class="invoice-actions">
-      <button class="btn-primary" onclick="saveInvoice()">💾 حفظ</button>
-      <button class="btn-danger" onclick="clearInvoice()">🗑️ تفريغ</button>
+      <button class="btn-save" onclick="saveInvoice()">💾 حفظ</button>
+      <button class="btn-clear" onclick="clearInvoice()">🗑 تفريغ</button>
     </div>
   </section>
 
 </main>
 
-<!-- ================= AUDIO ================= -->
-<audio id="beepSound" src="assets/sounds/beep.mp3"></audio>
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+  POS Super Pro © 2025
+</footer>
 
-<!-- ================= JS ================= -->
-<script src="assets/js/theme.js"></script>
+<!-- ===== JS ===== -->
+<script src="assets/js/auth-guard.js"></script>
 <script src="assets/js/data.js"></script>
 <script src="assets/js/products.js"></script>
-<script src="assets/js/cashier.js"></script>
 <script src="assets/js/barcode.js"></script>
+<script src="assets/js/cashier.js"></script>
+<script src="assets/js/settings.js"></script>
 
-<!-- ================= SW ================= -->
+<!-- ===== SERVICE WORKER ===== -->
 <script>
-  if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("sw.js");
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js');
   }
 </script>
 
