@@ -1,105 +1,94 @@
 /*************************************************
- * PRODUCTS MANAGEMENT - POS PRO
+ * PRODUCTS SYSTEM - POS SUPER PRO
  *************************************************/
 
-let products = JSON.parse(localStorage.getItem("products")) || [];
+const PRODUCTS_KEY = "pos_products";
+
+/* ===== تحميل الأصناف ===== */
+function loadProducts() {
+  return JSON.parse(localStorage.getItem(PRODUCTS_KEY)) || [];
+}
 
 /* ===== حفظ الأصناف ===== */
-function saveProducts() {
-  localStorage.setItem("products", JSON.stringify(products));
+function saveProducts(products) {
+  localStorage.setItem(PRODUCTS_KEY, JSON.stringify(products));
 }
+
+/* ===== عناصر الصفحة ===== */
+const productNameInput = document.getElementById("productName");
+const productPriceInput = document.getElementById("productPrice");
+const productBarcodeInput = document.getElementById("productBarcode");
+const productsTable = document.getElementById("productsTable");
 
 /* ===== إضافة صنف ===== */
 function addProduct() {
-  const nameInput = document.getElementById("productName");
-  const priceInput = document.getElementById("productPrice");
-  const barcodeInput = document.getElementById("productBarcode");
-
-  const name = nameInput.value.trim();
-  const price = parseFloat(priceInput.value);
-  const barcode = barcodeInput.value.trim();
+  const name = productNameInput.value.trim();
+  const price = parseFloat(productPriceInput.value);
+  const barcode = productBarcodeInput.value.trim();
 
   if (!name || isNaN(price)) {
-    alert("من فضلك أدخل اسم الصنف والسعر");
+    alert("❌ أدخل اسم وسعر الصنف");
     return;
   }
 
-  // منع تكرار الباركود
-  if (barcode && products.some(p => p.barcode === barcode)) {
-    alert("الباركود مستخدم بالفعل");
-    return;
-  }
+  const products = loadProducts();
 
-  const product = {
+  products.push({
     id: Date.now(),
     name,
     price,
     barcode
-  };
+  });
 
-  products.push(product);
-  saveProducts();
+  saveProducts(products);
   renderProducts();
 
-  nameInput.value = "";
-  priceInput.value = "";
-  barcodeInput.value = "";
+  productNameInput.value = "";
+  productPriceInput.value = "";
+  productBarcodeInput.value = "";
 }
 
 /* ===== عرض الأصناف ===== */
-function renderProducts(filtered = null) {
-  const table = document.getElementById("productsTable");
-  if (!table) return;
+function renderProducts(filter = "") {
+  const products = loadProducts();
+  productsTable.innerHTML = "";
 
-  const list = filtered || products;
-  table.innerHTML = "";
+  products
+    .filter(p =>
+      p.name.includes(filter) ||
+      (p.barcode && p.barcode.includes(filter))
+    )
+    .forEach((product, index) => {
+      const tr = document.createElement("tr");
 
-  list.forEach((product, index) => {
-    const row = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${index + 1}</td>
+        <td>${product.name}</td>
+        <td>${product.price}</td>
+        <td>${product.barcode || "-"}</td>
+        <td>
+          <button onclick="deleteProduct(${product.id})">❌</button>
+        </td>
+      `;
 
-    row.innerHTML = `
-      <td>${index + 1}</td>
-      <td>${product.name}</td>
-      <td>${product.price.toFixed(2)}</td>
-      <td>${product.barcode || "-"}</td>
-      <td>
-        <button class="btn-danger" onclick="deleteProduct(${product.id})">
-          حذف
-        </button>
-      </td>
-    `;
-
-    table.appendChild(row);
-  });
+      productsTable.appendChild(tr);
+    });
 }
 
 /* ===== حذف صنف ===== */
 function deleteProduct(id) {
-  if (!confirm("هل أنت متأكد من حذف الصنف؟")) return;
-
+  let products = loadProducts();
   products = products.filter(p => p.id !== id);
-  saveProducts();
+  saveProducts(products);
   renderProducts();
 }
 
-/* ===== بحث ===== */
-function searchProducts(keyword) {
-  keyword = keyword.trim().toLowerCase();
-
-  if (!keyword) {
-    renderProducts();
-    return;
-  }
-
-  const filtered = products.filter(p =>
-    p.name.toLowerCase().includes(keyword) ||
-    (p.barcode && p.barcode.includes(keyword))
-  );
-
-  renderProducts(filtered);
+/* ===== البحث ===== */
+function searchProduct(value) {
+  renderProducts(value);
 }
 
-/* ===== تحميل تلقائي ===== */
+/* ===== تشغيل تلقائي ===== */
 document.addEventListener("DOMContentLoaded", () => {
   renderProducts();
 });
