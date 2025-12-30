@@ -217,3 +217,16 @@ body {
 .product-card:active {
   transform: scale(0.95);
 }
+.card {
+  background: var(--card-bg);
+  padding: 15px;
+  border-radius: 14px;
+  margin-bottom: 15px;
+}
+
+.products-list .product-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
