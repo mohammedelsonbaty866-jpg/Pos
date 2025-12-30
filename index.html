@@ -49,14 +49,15 @@
         id="searchInput"
         placeholder="بحث بالاسم أو الباركود"
         oninput="searchProducts(this.value)"
-      >
-      <button onclick="startBarcodeScan()">📷</button>
-    </div>
-
-    <section class="products-panel">
+      <section class="products-panel">
   <h2>المنتجات</h2>
-  <input type="text" placeholder="بحث..." onkeyup="searchProduct(this.value)">
-  <div id="productsGrid"></div>
+
+  <div class="search-bar">
+    <input type="text" placeholder="بحث بالاسم أو الباركود" onkeyup="searchProduct(this.value)">
+    <button onclick="openBarcode()">📷</button>
+  </div>
+
+  <div id="productsGrid" class="products-grid"></div>
 </section>
       <!-- المنتجات تظهر هنا -->
     </div>
