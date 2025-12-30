@@ -79,3 +79,19 @@ function reloadApp() {
 function goCashier() {
   window.location.href = "../index.html";
 }
+// تحميل الوضع المحفوظ
+document.addEventListener("DOMContentLoaded", () => {
+  const theme = localStorage.getItem("theme") || "light";
+  applyTheme(theme);
+});
+
+function toggleTheme() {
+  const current = document.documentElement.getAttribute("data-theme");
+  const newTheme = current === "dark" ? "light" : "dark";
+  applyTheme(newTheme);
+  localStorage.setItem("theme", newTheme);
+}
+
+function applyTheme(theme) {
+  document.documentElement.setAttribute("data-theme", theme);
+}
