@@ -1,75 +1,71 @@
-/********************************
- * SETTINGS MODULE - POS SUPER PRO
- ********************************/
+/* =========================
+   SETTINGS.JS – POS SUPER PRO
+   ========================= */
 
+/* ===== عناصر الصفحة ===== */
+const darkModeToggle = document.getElementById("darkModeToggle");
+const barcodeSoundToggle = document.getElementById("barcodeSoundToggle");
+
+/* ===== تحميل الإعدادات ===== */
 document.addEventListener("DOMContentLoaded", () => {
-  loadSettings();
-  bindSettingsEvents();
+  loadTheme();
+  loadSoundSetting();
 });
 
-/* ==============================
-   تحميل الإعدادات
-================================ */
-function loadSettings() {
+/* ===== الوضع الداكن ===== */
+function loadTheme() {
   const theme = localStorage.getItem("theme") || "light";
-  applyTheme(theme);
 
-  const storeName = localStorage.getItem("storeName") || "";
-  const storePhone = localStorage.getItem("storePhone") || "";
-
-  if (document.getElementById("storeName")) {
-    document.getElementById("storeName").value = storeName;
-  }
-
-  if (document.getElementById("storePhone")) {
-    document.getElementById("storePhone").value = storePhone;
+  if (theme === "dark") {
+    document.body.classList.add("dark");
+    if (darkModeToggle) darkModeToggle.checked = true;
   }
 }
 
-/* ==============================
-   ربط الأحداث
-================================ */
-function bindSettingsEvents() {
-  const themeToggle = document.getElementById("themeToggle");
-  if (themeToggle) {
-    themeToggle.addEventListener("change", e => {
-      const theme = e.target.checked ? "dark" : "light";
-      localStorage.setItem("theme", theme);
-      applyTheme(theme);
-    });
+if (darkModeToggle) {
+  darkModeToggle.addEventListener("change", () => {
+    if (darkModeToggle.checked) {
+      document.body.classList.add("dark");
+      localStorage.setItem("theme", "dark");
+    } else {
+      document.body.classList.remove("dark");
+      localStorage.setItem("theme", "light");
+    }
+  });
+}
+
+/* ===== صوت الباركود ===== */
+function loadSoundSetting() {
+  const sound = localStorage.getItem("barcodeSound");
+
+  if (sound === "off") {
+    if (barcodeSoundToggle) barcodeSoundToggle.checked = false;
+  } else {
+    if (barcodeSoundToggle) barcodeSoundToggle.checked = true;
   }
 }
 
-/* ==============================
-   تطبيق الثيم
-================================ */
-function applyTheme(theme) {
-  document.body.setAttribute("data-theme", theme);
-
-  const toggle = document.getElementById("themeToggle");
-  if (toggle) toggle.checked = theme === "dark";
+if (barcodeSoundToggle) {
+  barcodeSoundToggle.addEventListener("change", () => {
+    if (barcodeSoundToggle.checked) {
+      localStorage.setItem("barcodeSound", "on");
+    } else {
+      localStorage.setItem("barcodeSound", "off");
+    }
+  });
 }
 
-/* ==============================
-   حفظ بيانات المتجر
-================================ */
-function saveStoreInfo() {
-  const name = document.getElementById("storeName").value.trim();
-  const phone = document.getElementById("storePhone").value.trim();
+/* ===== مسح كل البيانات ===== */
+function resetData() {
+  const confirmDelete = confirm(
+    "هل أنت متأكد؟ سيتم حذف جميع البيانات نهائيًا!"
+  );
 
-  localStorage.setItem("storeName", name);
-  localStorage.setItem("storePhone", phone);
+  if (!confirmDelete) return;
 
-  alert("✅ تم حفظ الإعدادات");
-}
+  localStorage.removeItem("products");
+  localStorage.removeItem("invoices");
+  localStorage.removeItem("currentInvoice");
 
-/* ==============================
-   إعادة ضبط البرنامج
-================================ */
-function resetApp() {
-  if (!confirm("⚠️ سيتم مسح كل البيانات، هل أنت متأكد؟")) return;
-
-  localStorage.clear();
-  alert("✅ تم إعادة ضبط البرنامج");
-  location.href = "login.html";
+  alert("✅ تم مسح جميع البيانات بنجاح");
 }
