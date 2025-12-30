@@ -1,143 +1,148 @@
-/* ===========================
-   POS SUPER PRO - GLOBAL CSS
-=========================== */
-
 :root {
   --primary: #0d6efd;
-  --dark: #1e1e2f;
-  --light: #f5f6fa;
+  --bg: #f4f6f9;
   --card: #ffffff;
   --text: #222;
-  --danger: #dc3545;
-  --success: #198754;
-  --radius: 12px;
-}
-
-/* ===== RESET ===== */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: "Segoe UI", Tahoma, sans-serif;
+  --border: #e0e0e0;
 }
 
 body {
-  background: var(--light);
+  margin: 0;
+  font-family: "Segoe UI", Tahoma, sans-serif;
+  background: var(--bg);
   color: var(--text);
-  min-height: 100vh;
 }
 
 /* ===== HEADER ===== */
 .top-bar {
-  background: var(--primary);
-  color: #fff;
-  padding: 12px 16px;
+  position: sticky;
+  top: 0;
+  background: var(--card);
+  border-bottom: 1px solid var(--border);
+  padding: 10px 16px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  z-index: 100;
 }
 
-.top-bar h1 {
-  font-size: 18px;
-}
-
-.top-bar nav a,
-.top-bar nav button {
-  color: #fff;
-  background: transparent;
-  border: none;
-  margin-inline: 6px;
-  font-size: 14px;
-  cursor: pointer;
-  text-decoration: none;
-}
-
-.top-bar nav a.active {
+.logo {
   font-weight: bold;
-  text-decoration: underline;
+  color: var(--primary);
+}
+
+.main-nav a,
+.logout-btn {
+  margin: 0 6px;
+  text-decoration: none;
+  color: #555;
+  font-weight: 500;
+}
+
+.main-nav a.active {
+  color: var(--primary);
+}
+
+.logout-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: red;
 }
 
 /* ===== LAYOUT ===== */
 .pos-layout {
   display: grid;
   grid-template-columns: 1fr 380px;
-  gap: 16px;
-  padding: 16px;
+  gap: 12px;
+  padding: 12px;
 }
 
 /* ===== PRODUCTS ===== */
 .products-panel {
   background: var(--card);
-  border-radius: var(--radius);
+  border-radius: 8px;
   padding: 12px;
 }
 
 .products-panel h2 {
-  margin-bottom: 10px;
+  margin-top: 0;
 }
 
 .products-panel input {
   width: 100%;
   padding: 10px;
-  border-radius: var(--radius);
-  border: 1px solid #ddd;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
 }
 
-#productsGrid {
+.product-actions {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.product-actions button {
+  flex: 1;
+  padding: 10px;
+  border-radius: 6px;
+  border: none;
+  background: var(--primary);
+  color: #fff;
+  cursor: pointer;
+}
+
+/* شبكة المنتجات */
+.products-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
   gap: 10px;
 }
 
 .product-card {
-  background: var(--light);
+  background: #f9f9f9;
+  border-radius: 8px;
   padding: 10px;
-  border-radius: var(--radius);
   text-align: center;
   cursor: pointer;
-  transition: 0.2s;
+  border: 1px solid var(--border);
 }
 
 .product-card:hover {
-  background: var(--primary);
-  color: #fff;
+  background: #eef4ff;
+}
+
+.product-card h4 {
+  margin: 6px 0;
+  font-size: 14px;
 }
 
 .product-card span {
-  display: block;
-  font-size: 13px;
-}
-
-.product-card strong {
-  font-size: 14px;
+  color: var(--primary);
+  font-weight: bold;
 }
 
 /* ===== INVOICE ===== */
 .invoice-panel {
   background: var(--card);
-  border-radius: var(--radius);
+  border-radius: 8px;
   padding: 12px;
   display: flex;
   flex-direction: column;
 }
 
-.invoice-panel h2 {
-  margin-bottom: 10px;
-}
-
-#invoiceItems {
+.invoice-items {
   flex: 1;
   overflow-y: auto;
-  margin-bottom: 10px;
 }
 
 .invoice-item {
   display: flex;
   justify-content: space-between;
-  padding: 8px;
-  border-bottom: 1px dashed #ccc;
-  font-size: 14px;
+  margin-bottom: 6px;
+  border-bottom: 1px dashed var(--border);
+  padding-bottom: 4px;
 }
 
 .total-box {
@@ -147,105 +152,43 @@ body {
   margin: 10px 0;
 }
 
-.actions {
-  display: flex;
-  gap: 10px;
-}
-
-.actions button {
-  flex: 1;
+.invoice-actions button {
+  width: 100%;
   padding: 12px;
-  border-radius: var(--radius);
+  margin-top: 6px;
+  border-radius: 6px;
   border: none;
-  font-size: 15px;
   cursor: pointer;
 }
 
 .btn-save {
-  background: var(--success);
+  background: green;
   color: #fff;
 }
 
 .btn-clear {
-  background: var(--danger);
+  background: red;
   color: #fff;
 }
 
-/* ===== REPORTS ===== */
-.reports-layout {
+/* ===== MODAL ===== */
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background: #fff;
   padding: 16px;
+  border-radius: 8px;
 }
 
-.summary {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: 12px;
-  margin-bottom: 20px;
-}
-
-.card {
-  background: var(--card);
-  padding: 14px;
-  border-radius: var(--radius);
-  text-align: center;
-}
-
-.card span {
-  font-size: 20px;
-  font-weight: bold;
-  display: block;
-  margin-top: 6px;
-}
-
-.table-section table {
-  width: 100%;
-  border-collapse: collapse;
-  background: var(--card);
-  border-radius: var(--radius);
-  overflow: hidden;
-}
-
-.table-section th,
-.table-section td {
-  padding: 10px;
-  border-bottom: 1px solid #eee;
-  text-align: center;
-}
-
-/* ===== FOOTER ===== */
-footer {
-  text-align: center;
-  padding: 10px;
-  font-size: 13px;
-  opacity: 0.6;
-}
-
-/* ===== DARK MODE ===== */
-body.dark {
-  background: var(--dark);
-  color: #fff;
-}
-
-body.dark .top-bar {
-  background: #000;
-}
-
-body.dark .products-panel,
-body.dark .invoice-panel,
-body.dark .card,
-body.dark table {
-  background: #2b2b3d;
-  color: #fff;
-}
-
-body.dark .product-card {
-  background: #3a3a52;
-}
-
-body.dark input {
-  background: #444;
-  color: #fff;
-  border: none;
+.hidden {
+  display: none;
 }
 
 /* ===== MOBILE ===== */
@@ -253,118 +196,4 @@ body.dark input {
   .pos-layout {
     grid-template-columns: 1fr;
   }
-
-  .invoice-panel {
-    order: -1;
-  }
-}
-body {
-  font-family: Tahoma;
-  margin: 0;
-}
-
-.top-bar {
-  display: flex;
-  justify-content: space-between;
-  padding: 10px;
-}
-
-.pos-layout {
-  display: flex;
-  height: calc(100vh - 60px);
-}
-
-.products-panel,
-.invoice-panel {
-  padding: 10px;
-  overflow-y: auto;
-}
-
-.products-panel {
-  width: 65%;
-}
-
-.invoice-panel {
-  width: 35%;
-  border-right: 2px solid var(--border);
-}
-
-.products-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(100px,1fr));
-  gap: 10px;
-}
-
-.product-btn {
-  padding: 15px;
-  border-radius: 10px;
-  border: none;
-  font-size: 14px;
-}
-
-.total-box {
-  margin: 15px 0;
-  font-size: 18px;
-  font-weight: bold;
-}
-
-.pay-btn {
-  width: 100%;
-  padding: 15px;
-  font-size: 18px;
-}
-
-/* موبايل */
-@media (max-width: 768px) {
-  .pos-layout {
-    flex-direction: column;
-  }
-  .products-panel,
-  .invoice-panel {
-    width: 100%;
-  }
-}
-.modal {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,.9);
-  display: none;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  z-index: 999;
-}
-
-.modal video {
-  width: 90%;
-  max-width: 400px;
-  border-radius: 12px;
-}
-
-.modal button {
-  margin-top: 15px;
-  padding: 10px 20px;
-  font-size: 18px;
-}
-.modal {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,.95);
-  display: none;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  z-index: 9999;
-}
-
-.modal video {
-  width: 90%;
-  max-width: 420px;
-  border-radius: 16px;
-}
-
-.modal button {
-  margin-top: 15px;
-  padding: 10px 22px;
-  font-size: 18px;
 }
