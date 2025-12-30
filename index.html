@@ -68,5 +68,31 @@ function completeSale() {
   alert("تم حفظ الفاتورة ✔️");
 }
 </script>  
+  <script>
+function completeSale() {
+  const totalEl = document.getElementById("totalAmount");
+  if (!totalEl) {
+    alert("عنصر الإجمالي غير موجود");
+    return;
+  }
+
+  const total = Number(totalEl.innerText);
+  if (total <= 0) {
+    alert("الإجمالي صفر");
+    return;
+  }
+
+  const sales = JSON.parse(localStorage.getItem("sales")) || [];
+
+  sales.push({
+    total: total,
+    date: new Date().toISOString()
+  });
+
+  localStorage.setItem("sales", JSON.stringify(sales));
+
+  alert("تم تسجيل البيع ✔️");
+}
+</script>
 </body>
 </html>
