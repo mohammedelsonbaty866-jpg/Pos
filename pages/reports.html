@@ -2,73 +2,174 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <title>التقارير | POS Pro</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>التقارير</title>
 
-  <!-- CSS -->
   <link rel="stylesheet" href="../assets/css/style.css">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Tahoma, Arial;
+      background: #f4f6f9;
+    }
+
+    header {
+      background: #6f42c1;
+      color: #fff;
+      padding: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    header h2 {
+      margin: 0;
+      font-size: 18px;
+    }
+
+    .container {
+      padding: 15px;
+    }
+
+    .card {
+      background: #fff;
+      padding: 15px;
+      border-radius: 12px;
+      margin-bottom: 15px;
+      box-shadow: 0 2px 6px rgba(0,0,0,.1);
+    }
+
+    .stat {
+      font-size: 20px;
+      font-weight: bold;
+      color: #198754;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+
+    th, td {
+      padding: 10px;
+      border-bottom: 1px solid #eee;
+      text-align: center;
+      font-size: 14px;
+    }
+
+    th {
+      background: #f1f1f1;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    .clear-btn {
+      background: #dc3545;
+      color: #fff;
+    }
+
+    .back-btn {
+      background: #0d6efd;
+      color: #fff;
+      margin-top: 10px;
+    }
+  </style>
 </head>
 
 <body>
 
-<!-- ===== HEADER ===== -->
-<header class="top-bar">
-  <h1>📊 التقارير</h1>
-  <nav>
-    <a href="../index.html">⬅ رجوع للكاشير</a>
-  </nav>
+<header>
+  <button onclick="goBack()">⬅</button>
+  <h2>التقارير</h2>
+  <div>📊</div>
 </header>
 
-<!-- ===== MAIN ===== -->
-<main class="reports-page">
+<div class="container">
 
-  <!-- ملخص سريع -->
-  <section class="stats-grid">
-
-    <div class="stat-card">
-      <h3>💰 إجمالي المبيعات</h3>
-      <p id="totalSales">0 ج</p>
-    </div>
-
-    <div class="stat-card">
-      <h3>🧾 عدد الفواتير</h3>
-      <p id="totalInvoices">0</p>
-    </div>
-
-    <div class="stat-card">
-      <h3>📦 عدد الأصناف المباعة</h3>
-      <p id="totalItems">0</p>
-    </div>
-
-  </section>
+  <!-- إحصائيات -->
+  <div class="card">
+    <h3>ملخص</h3>
+    <p>إجمالي المبيعات: <span class="stat" id="totalSales">0</span> جنيه</p>
+    <p>عدد الفواتير: <span class="stat" id="totalInvoices">0</span></p>
+  </div>
 
   <!-- جدول الفواتير -->
-  <section class="card">
-    <h2>🧾 سجل الفواتير</h2>
-
-    <table class="reports-table">
+  <div class="card">
+    <h3>الفواتير</h3>
+    <table>
       <thead>
         <tr>
           <th>#</th>
-          <th>التاريخ</th>
-          <th>عدد الأصناف</th>
           <th>الإجمالي</th>
+          <th>التاريخ</th>
         </tr>
       </thead>
-      <tbody id="invoicesTable"></tbody>
+      <tbody id="reportsTable"></tbody>
     </table>
-  </section>
+  </div>
 
-</main>
+  <!-- مسح التقارير -->
+  <div class="card">
+    <button class="clear-btn" onclick="clearReports()">🗑 مسح كل التقارير</button>
+  </div>
 
-<!-- ===== FOOTER ===== -->
-<footer>
-  POS Super Pro © 2025
-</footer>
+</div>
 
-<!-- ===== JS ===== -->
-<script src="../assets/js/auth-guard.js"></script>
-<script src="../assets/js/reports.js"></script>
+<script>
+  const sales = JSON.parse(localStorage.getItem("sales")) || [];
+  const table = document.getElementById("reportsTable");
+  const totalSalesEl = document.getElementById("totalSales");
+  const totalInvoicesEl = document.getElementById("totalInvoices");
+
+  function renderReports() {
+    table.innerHTML = "";
+
+    let total = 0;
+
+    if (sales.length === 0) {
+      table.innerHTML = "<tr><td colspan='3'>لا توجد فواتير</td></tr>";
+      totalSalesEl.textContent = 0;
+      totalInvoicesEl.textContent = 0;
+      return;
+    }
+
+    sales.forEach((sale, index) => {
+      total += sale.total;
+
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${index + 1}</td>
+        <td>${sale.total} جنيه</td>
+        <td>${sale.date}</td>
+      `;
+      table.appendChild(tr);
+    });
+
+    totalSalesEl.textContent = total;
+    totalInvoicesEl.textContent = sales.length;
+  }
+
+  function clearReports() {
+    if (!confirm("هل تريد مسح كل التقارير؟")) return;
+    localStorage.removeItem("sales");
+    renderReports();
+  }
+
+  function goBack() {
+    window.location.href = "../index.html";
+  }
+
+  renderReports();
+</script>
 
 </body>
 </html>
