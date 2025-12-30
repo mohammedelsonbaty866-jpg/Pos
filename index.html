@@ -58,5 +58,15 @@ function saveSale(total, itemsCount) {
   localStorage.setItem("sales", JSON.stringify(sales));
 }
 </script>
+<script>
+function completeSale() {
+  const total = Number(document.getElementById("total").innerText);
+  const itemsCount = document.querySelectorAll(".invoice-item").length;
+
+  saveSale(total, itemsCount);
+
+  alert("تم حفظ الفاتورة ✔️");
+}
+</script>  
 </body>
 </html>
