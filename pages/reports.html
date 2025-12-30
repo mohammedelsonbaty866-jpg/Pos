@@ -5,53 +5,56 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>التقارير | POS Super Pro</title>
 
-  <!-- نفس ملفات الكاشير -->
   <link rel="stylesheet" href="../assets/css/style.css">
 </head>
 
 <body class="dark">
 
-  <!-- الهيدر -->
-  <header class="top-bar">
-    <h1>POS Super Pro</h1>
-    <nav>
-      <a href="../index.html">الكاشير</a>
-      <a href="products.html">الأصناف</a>
-      <a class="active" href="reports.html">التقارير</a>
-      <a href="settings.html">الإعدادات</a>
-    </nav>
-  </header>
+<!-- الهيدر -->
+<header class="top-bar">
+  <button class="icon-btn" onclick="history.back()">⬅</button>
+  <h1>التقارير</h1>
+  <button class="icon-btn">🌙</button>
+</header>
 
-  <!-- المحتوى -->
-  <main class="container">
+<main class="container">
 
-    <section class="card">
-      <h2>📊 التقارير</h2>
+  <!-- كارت التقارير -->
+  <section class="card">
 
-      <div class="reports-grid">
-        <button class="report-card">
-          <strong>مبيعات اليوم</strong>
-          <span>0 ج</span>
-        </button>
+    <h2 class="card-title">📊 تقارير المبيعات</h2>
 
-        <button class="report-card">
-          <strong>عدد الفواتير</strong>
-          <span>0</span>
-        </button>
+    <div class="list">
 
-        <button class="report-card">
-          <strong>إجمالي الشهر</strong>
-          <span>0 ج</span>
-        </button>
-
-        <button class="report-card">
-          <strong>أعلى صنف</strong>
-          <span>—</span>
-        </button>
+      <div class="list-item">
+        <span>مبيعات اليوم</span>
+        <strong>0 ج</strong>
       </div>
-    </section>
 
-  </main>
+      <div class="list-item">
+        <span>عدد الفواتير</span>
+        <strong>0</strong>
+      </div>
+
+      <div class="list-item">
+        <span>إجمالي الشهر</span>
+        <strong>0 ج</strong>
+      </div>
+
+      <div class="list-item">
+        <span>أعلى صنف</span>
+        <strong>—</strong>
+      </div>
+
+    </div>
+
+  </section>
+
+</main>
+
+<footer class="footer">
+  POS Super Pro © 2025
+</footer>
 
 </body>
 </html>
