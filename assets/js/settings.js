@@ -1,58 +1,75 @@
 /********************************
- * SETTINGS LOGIC - POS SUPER PRO
+ * SETTINGS MODULE - POS SUPER PRO
  ********************************/
+
+document.addEventListener("DOMContentLoaded", () => {
+  loadSettings();
+  bindSettingsEvents();
+});
 
 /* ==============================
    تحميل الإعدادات
 ================================ */
 function loadSettings() {
-  const settings = JSON.parse(localStorage.getItem("settings")) || {};
+  const theme = localStorage.getItem("theme") || "light";
+  applyTheme(theme);
 
-  // اسم المحل
-  if (settings.shopName) {
-    const shopNameEl = document.getElementById("shopName");
-    if (shopNameEl) shopNameEl.textContent = settings.shopName;
+  const storeName = localStorage.getItem("storeName") || "";
+  const storePhone = localStorage.getItem("storePhone") || "";
+
+  if (document.getElementById("storeName")) {
+    document.getElementById("storeName").value = storeName;
   }
 
-  // الوضع الليلي
-  if (settings.theme === "dark") {
-    document.body.classList.add("dark");
+  if (document.getElementById("storePhone")) {
+    document.getElementById("storePhone").value = storePhone;
   }
 }
 
 /* ==============================
-   حفظ الإعدادات
+   ربط الأحداث
 ================================ */
-function saveSettings() {
-  const shopNameInput = document.getElementById("shopNameInput");
-  const darkModeToggle = document.getElementById("darkModeToggle");
+function bindSettingsEvents() {
+  const themeToggle = document.getElementById("themeToggle");
+  if (themeToggle) {
+    themeToggle.addEventListener("change", e => {
+      const theme = e.target.checked ? "dark" : "light";
+      localStorage.setItem("theme", theme);
+      applyTheme(theme);
+    });
+  }
+}
 
-  const settings = {
-    shopName: shopNameInput ? shopNameInput.value : "POS Pro",
-    theme: darkModeToggle && darkModeToggle.checked ? "dark" : "light"
-  };
+/* ==============================
+   تطبيق الثيم
+================================ */
+function applyTheme(theme) {
+  document.body.setAttribute("data-theme", theme);
 
-  localStorage.setItem("settings", JSON.stringify(settings));
+  const toggle = document.getElementById("themeToggle");
+  if (toggle) toggle.checked = theme === "dark";
+}
+
+/* ==============================
+   حفظ بيانات المتجر
+================================ */
+function saveStoreInfo() {
+  const name = document.getElementById("storeName").value.trim();
+  const phone = document.getElementById("storePhone").value.trim();
+
+  localStorage.setItem("storeName", name);
+  localStorage.setItem("storePhone", phone);
+
   alert("✅ تم حفظ الإعدادات");
-
-  loadSettings();
 }
 
 /* ==============================
-   تبديل الوضع الداكن فورًا
+   إعادة ضبط البرنامج
 ================================ */
-function toggleTheme() {
-  document.body.classList.toggle("dark");
+function resetApp() {
+  if (!confirm("⚠️ سيتم مسح كل البيانات، هل أنت متأكد؟")) return;
 
-  const settings = JSON.parse(localStorage.getItem("settings")) || {};
-  settings.theme = document.body.classList.contains("dark") ? "dark" : "light";
-
-  localStorage.setItem("settings", JSON.stringify(settings));
+  localStorage.clear();
+  alert("✅ تم إعادة ضبط البرنامج");
+  location.href = "login.html";
 }
-
-/* ==============================
-   تهيئة الصفحة
-================================ */
-document.addEventListener("DOMContentLoaded", () => {
-  loadSettings();
-});
