@@ -1,173 +1,88 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>POS | الكاشير</title>
+  <meta charset="UTF-8">
+  <title>POS | الكاشير</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<style>
-:root{
-  --bg:#f5f6fa;
-  --card:#ffffff;
-  --text:#222;
-  --primary:#2563eb;
-}
-.dark{
-  --bg:#0f172a;
-  --card:#1e293b;
-  --text:#f1f5f9;
-  --primary:#38bdf8;
-}
+  <!-- CSS -->
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/theme.css">
 
-body{
-  margin:0;
-  font-family:Arial;
-  background:var(--bg);
-  color:var(--text);
-}
-
-/* HEADER */
-header{
-  background:var(--card);
-  padding:12px 16px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  box-shadow:0 2px 8px rgba(0,0,0,.1);
-}
-
-header button{
-  padding:6px 10px;
-  border:none;
-  background:var(--primary);
-  color:white;
-  border-radius:6px;
-  cursor:pointer;
-}
-
-/* LAYOUT */
-.main{
-  display:flex;
-  padding:10px;
-  gap:10px;
-}
-
-.products,.invoice{
-  background:var(--card);
-  border-radius:10px;
-  padding:10px;
-}
-
-/* PRODUCTS */
-.products{
-  flex:2;
-}
-
-.product-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(110px,1fr));
-  gap:10px;
-}
-
-.product{
-  background:var(--bg);
-  padding:10px;
-  text-align:center;
-  border-radius:8px;
-  cursor:pointer;
-}
-
-/* INVOICE */
-.invoice{
-  flex:1;
-}
-
-.invoice ul{
-  list-style:none;
-  padding:0;
-}
-
-.invoice li{
-  display:flex;
-  justify-content:space-between;
-  margin-bottom:6px;
-}
-
-.total{
-  font-size:18px;
-  margin-top:10px;
-}
-
-.invoice button{
-  width:100%;
-  margin-top:8px;
-  padding:8px;
-  border:none;
-  border-radius:6px;
-  cursor:pointer;
-}
-
-.pay{background:green;color:white}
-.clear{background:red;color:white}
-
-/* MOBILE */
-@media(max-width:768px){
-  .main{flex-direction:column}
-}
-</style>
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json">
 </head>
 
 <body>
 
-<header>
-  <b>🧾 نظام الكاشير</b>
-  <button onclick="toggleMode()">🌙</button>
+<!-- ===== HEADER ===== -->
+<header class="top-bar">
+  <h1>نظام نقاط بيع</h1>
+
+  <nav>
+    <a href="index.html" class="active">الكاشير</a>
+    <a href="pages/products.html">الأصناف</a>
+    <a href="pages/reports.html">التقارير</a>
+    <a href="pages/settings.html">الإعدادات</a>
+  </nav>
+
+  <button onclick="toggleTheme()" title="تغيير الوضع">🌓</button>
 </header>
 
-<div class="main">
+<!-- ===== MAIN ===== -->
+<main class="pos-layout">
 
-  <!-- PRODUCTS -->
-  <div class="products">
-    <h3>🛒 المنتجات</h3>
-    <div class="product-grid" id="products">
-      <div class="product" onclick="addItem('سكر',10)">سكر<br>10ج</div>
-      <div class="product" onclick="addItem('زيت',25)">زيت<br>25ج</div>
-      <div class="product" onclick="addItem('رز',20)">رز<br>20ج</div>
-      <div class="product" onclick="addItem('مكرونة',8)">مكرونة<br>8ج</div>
+  <!-- المنتجات -->
+  <section class="products-panel">
+    <h2>المنتجات</h2>
+
+    <input
+      type="text"
+      id="searchInput"
+      placeholder="بحث بالاسم أو الباركود..."
+      onkeyup="searchProduct(this.value)"
+    >
+
+    <div id="productsGrid"></div>
+  </section>
+
+  <!-- الفاتورة -->
+  <section class="invoice-panel">
+    <h2>الفاتورة</h2>
+
+    <div id="invoiceItems"></div>
+
+    <div class="total-box">
+      <span>الإجمالي</span>
+      <strong id="total">0 ج</strong>
     </div>
-  </div>
 
-  <!-- INVOICE -->
-  <div class="invoice">
-    <h3>🧾 الفاتورة</h3>
-    <ul id="list"></ul>
-    <div class="total">الإجمالي: <span id="total">0</span> ج</div>
-    <button class="pay">💰 حفظ الفاتورة</button>
-    <button class="clear" onclick="clearInvoice()">🗑 تفريغ</button>
-  </div>
+    <div class="actions">
+      <button class="btn-save" onclick="saveInvoice()">حفظ</button>
+      <button class="btn-clear" onclick="clearInvoice()">تفريغ</button>
+    </div>
+  </section>
 
-</div>
+</main>
 
+<!-- ===== FOOTER ===== -->
+<footer>
+  POS Pro © 2025
+</footer>
+
+<!-- ===== SCRIPTS ===== -->
+<script src="assets/js/auth-guard.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/products.js"></script>
+<script src="assets/js/cashier.js"></script>
+<script src="assets/js/barcode.js"></script>
+<script src="assets/js/settings.js"></script>
+
+<!-- ===== SERVICE WORKER ===== -->
 <script>
-let total=0;
-
-function addItem(name,price){
-  const li=document.createElement('li');
-  li.innerHTML=`${name} <span>${price} ج</span>`;
-  document.getElementById('list').appendChild(li);
-  total+=price;
-  document.getElementById('total').innerText=total;
-}
-
-function clearInvoice(){
-  document.getElementById('list').innerHTML='';
-  total=0;
-  document.getElementById('total').innerText=0;
-}
-
-function toggleMode(){
-  document.body.classList.toggle('dark');
-}
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("sw.js");
+  }
 </script>
 
 </body>
