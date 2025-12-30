@@ -1,32 +1,34 @@
-/* auth-guard.js | POS PRO PAGE GUARD */
+/* auth-guard.js | Route Protection */
 
-const SESSION_KEY = "pos_session";
+const SESSION_KEY = "pos_user_session";
 
-/* =========================
-   Get Session
-========================= */
-function getSession() {
-  return JSON.parse(localStorage.getItem(SESSION_KEY));
+/**
+ * يمنع الدخول للصفحات بدون تسجيل دخول
+ */
+function requireAuth() {
+    const session = localStorage.getItem(SESSION_KEY);
+
+    if (!session) {
+        window.location.href = "login.html";
+        return;
+    }
 }
 
-/* =========================
-   Page Guard
-========================= */
-(function () {
-  const session = getSession();
-  const currentPage = window.location.pathname;
+/**
+ * يمنع فتح صفحة تسجيل الدخول لو المستخدم مسجل بالفعل
+ */
+function redirectIfLoggedIn() {
+    const session = localStorage.getItem(SESSION_KEY);
 
-  // لو مش مسجل دخول
-  if (!session) {
-    // اسمح فقط بصفحة تسجيل الدخول
-    if (!currentPage.includes("login.html")) {
-      window.location.href = "login.html";
+    if (session) {
+        window.location.href = "index.html";
     }
-    return;
-  }
+}
 
-  // لو مسجل دخول وفتح login
-  if (currentPage.includes("login.html")) {
-    window.location.href = "index.html";
-  }
-})();
+/**
+ * جلب بيانات المستخدم الحالي
+ */
+function getCurrentUser() {
+    const session = localStorage.getItem(SESSION_KEY);
+    return session ? JSON.parse(session) : null;
+}
