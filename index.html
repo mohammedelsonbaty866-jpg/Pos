@@ -1,139 +1,83 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title>POS Super Pro | الكاشير</title>
-
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <!-- PWA -->
-  <link rel="manifest" href="manifest.json" />
-  <meta name="theme-color" content="#0d6efd" />
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0d6efd">
 
   <!-- CSS -->
-  <link rel="stylesheet" href="assets/css/style.css" />
-  <link rel="stylesheet" href="assets/css/theme.css" />
-
-  <!-- Icons -->
-  <link rel="icon" href="assets/icons/icon-192.png" />
+  <link rel="stylesheet" href="assets/css/theme.css">
+  <link rel="stylesheet" href="assets/css/layout.css">
+  <link rel="stylesheet" href="assets/css/components.css">
 </head>
 
 <body>
 
-<!-- ===== حماية الصفحة (تسجيل الدخول) ===== -->
-<script src="assets/js/auth-guard.js"></script>
+<!-- الهيدر بيتحقن تلقائي من layout.js -->
 
-<!-- ===== HEADER ===== -->
-<header class="top-bar">
-  <div class="logo">POS Super Pro</div>
+<main class="page">
 
-  <nav class="main-nav">
-    <a href="index.html" class="active">الكاشير</a>
-    <a href="pages/products.html">الأصناف</a>
-    <a href="pages/reports.html">التقارير</a>
-    <a href="pages/settings.html">الإعدادات</a>
-    <button onclick="logout()" class="logout-btn">خروج</button>
-  </nav>
-</header>
-
-<!-- ===== MAIN ===== -->
-<main class="pos-layout">
+  <!-- ===== البحث ===== -->
+  <div class="card">
+    <h2>🔍 بحث / باركود</h2>
+    <input
+      id="searchInput"
+      placeholder="اكتب اسم الصنف أو الباركود"
+      onkeyup="searchProduct(this.value)"
+    >
+  </div>
 
   <!-- ===== المنتجات ===== -->
-  <section class="products-panel">
-    <h2>المنتجات</h2>
-
-    <!-- بحث -->
-    <input
-      type="text"
-      id="searchInput"
-      placeholder="بحث بالاسم أو الباركود"
-      onkeyup="searchProduct(this.value)"
-    />
-
-    <!-- أزرار -->
-    <div class="product-actions">
-      <button onclick="openBarcodeScanner()">📷 باركود</button>
-      <button onclick="openAddProduct()">➕ إضافة صنف</button>
+  <div class="card">
+    <h2>🧾 المنتجات</h2>
+    <div id="productsGrid" class="grid">
+      <!-- يتم التحميل من products.js -->
     </div>
-
-    <!-- شبكة المنتجات -->
-    <div id="productsGrid" class="products-grid"></div>
-  </section>
+  </div>
 
   <!-- ===== الفاتورة ===== -->
-  <section class="invoice-panel">
-    <h2>الفاتورة</h2>
+  <div class="card">
+    <h2>🧮 الفاتورة</h2>
 
-    <div id="invoiceItems" class="invoice-items"></div>
+    <div id="invoiceItems">
+      <small>لم يتم إضافة أصناف بعد</small>
+    </div>
 
-    <div class="total-box">
-      <span>الإجمالي</span>
+    <hr>
+
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <strong>الإجمالي:</strong>
       <strong id="total">0 ج</strong>
     </div>
 
-    <div class="invoice-actions">
-      <button class="btn-save" onclick="saveInvoice()">حفظ</button>
-      <button class="btn-clear" onclick="clearInvoice()">تفريغ</button>
+    <div style="margin-top:10px;display:flex;gap:10px">
+      <button class="btn-primary" onclick="saveInvoice()">💾 حفظ</button>
+      <button onclick="clearInvoice()">🗑️ تفريغ</button>
     </div>
-  </section>
+  </div>
 
 </main>
 
-<!-- ===== Barcode Camera Modal ===== -->
-<div id="barcodeModal" class="modal hidden">
-  <div class="modal-content">
-    <h3>مسح الباركود</h3>
-    <video id="barcodeVideo"></video>
-    <button onclick="closeBarcodeScanner()">إغلاق</button>
-  </div>
-</div>
-
-<!-- ===== Audio ===== -->
+<!-- ===== الأصوات ===== -->
 <audio id="beepSound" src="assets/sounds/beep.mp3"></audio>
 
 <!-- ===== JS ===== -->
+<script src="assets/js/theme.js"></script>
+<script src="assets/js/layout.js"></script>
 <script src="assets/js/data.js"></script>
 <script src="assets/js/products.js"></script>
 <script src="assets/js/cashier.js"></script>
 <script src="assets/js/barcode.js"></script>
-<script src="assets/js/settings.js"></script>
 
-<!-- ===== Service Worker ===== -->
+<!-- Service Worker -->
 <script>
   if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("sw.js");
+    navigator.serviceWorker.register("/sw.js");
   }
-  <!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-<meta charset="UTF-8">
-<title>POS | الكاشير</title>
-
-<link rel="stylesheet" href="assets/css/theme.css">
-<link rel="stylesheet" href="assets/css/layout.css">
-<link rel="stylesheet" href="assets/css/components.css">
-</head>
-
-<body>
-
-<main class="page">
-  <div class="card">
-    <h2>بحث / باركود</h2>
-    <input placeholder="اسم الصنف أو الباركود">
-  </div>
-
-  <div class="card">
-    <h2>الفاتورة</h2>
-    <div id="invoiceItems">لا توجد أصناف</div>
-    <strong>الإجمالي: 0 ج</strong>
-  </div>
-</main>
-
-<script src="assets/js/theme.js"></script>
-<script src="assets/js/layout.js"></script>
-</body>
-</html>
 </script>
 
 </body>
