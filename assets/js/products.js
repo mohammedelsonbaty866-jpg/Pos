@@ -117,3 +117,38 @@ document.addEventListener("DOMContentLoaded", () => {
 
   renderProductsTable();
 });
+document.addEventListener("DOMContentLoaded", () => {
+  renderProducts();
+});
+
+function renderProducts(filter = "") {
+  const grid = document.getElementById("productsGrid");
+  if (!grid) return;
+
+  const products = getProducts();
+  grid.innerHTML = "";
+
+  const filtered = products.filter(p =>
+    p.name.includes(filter) || p.barcode.includes(filter)
+  );
+
+  if (filtered.length === 0) {
+    grid.innerHTML = "<p class='empty'>لا توجد أصناف</p>";
+    return;
+  }
+
+  filtered.forEach(product => {
+    const div = document.createElement("div");
+    div.className = "product-card";
+    div.innerHTML = `
+      <strong>${product.name}</strong>
+      <span>${product.price} ج</span>
+    `;
+    div.onclick = () => addToInvoice(product);
+    grid.appendChild(div);
+  });
+}
+
+function searchProducts(value) {
+  renderProducts(value);
+}
