@@ -1,78 +1,85 @@
-/* ===============================
-   AUTH SYSTEM - POS PRO
-================================ */
+// ===============================
+// AUTH.JS - POS SUPER PRO
+// ===============================
 
-const USERS_KEY = "pos_users";
-const SESSION_KEY = "pos_session";
+// عناصر الواجهة
+const loginForm = document.getElementById("loginForm");
+const registerForm = document.getElementById("registerForm");
+const authMessage = document.getElementById("authMessage");
 
-/* ===== INIT DEFAULT ADMIN ===== */
-(function initAdmin() {
-  let users = JSON.parse(localStorage.getItem(USERS_KEY)) || [];
-
-  if (!users.find(u => u.username === "admin")) {
-    users.push({
-      username: "admin",
-      password: "1234",
-      role: "admin"
-    });
-    localStorage.setItem(USERS_KEY, JSON.stringify(users));
-  }
-})();
-
-/* ===== LOGIN ===== */
-function login() {
-  const username = document.getElementById("username").value.trim();
-  const password = document.getElementById("password").value.trim();
-
-  if (!username || !password) {
-    alert("ادخل اسم المستخدم وكلمة المرور");
-    return;
-  }
-
-  const users = JSON.parse(localStorage.getItem(USERS_KEY)) || [];
-  const user = users.find(
-    u => u.username === username && u.password === password
-  );
-
-  if (!user) {
-    alert("بيانات الدخول غير صحيحة");
-    return;
-  }
-
-  localStorage.setItem(
-    SESSION_KEY,
-    JSON.stringify({
-      username: user.username,
-      role: user.role,
-      time: Date.now()
-    })
-  );
-
-  window.location.href = "../index.html";
+// تحميل المستخدمين
+function getUsers() {
+  return JSON.parse(localStorage.getItem("pos_users")) || [];
 }
 
-/* ===== LOGOUT ===== */
-function logout() {
-  localStorage.removeItem(SESSION_KEY);
-  window.location.href = "../login.html";
+// حفظ المستخدمين
+function saveUsers(users) {
+  localStorage.setItem("pos_users", JSON.stringify(users));
 }
 
-/* ===== REGISTER CASHIER (ADMIN) ===== */
-function registerCashier(username, password) {
-  let users = JSON.parse(localStorage.getItem(USERS_KEY)) || [];
+// ===============================
+// تسجيل حساب جديد
+// ===============================
+if (registerForm) {
+  registerForm.addEventListener("submit", function (e) {
+    e.preventDefault();
 
-  if (users.find(u => u.username === username)) {
-    alert("اسم المستخدم موجود بالفعل");
-    return false;
-  }
+    const username = document
+      .getElementById("registerUsername")
+      .value.trim();
+    const password = document
+      .getElementById("registerPassword")
+      .value.trim();
 
-  users.push({
-    username,
-    password,
-    role: "cashier"
+    if (!username || !password) {
+      authMessage.textContent = "⚠️ أكمل كل البيانات";
+      return;
+    }
+
+    const users = getUsers();
+
+    const exists = users.find((u) => u.username === username);
+    if (exists) {
+      authMessage.textContent = "❌ اسم المستخدم موجود بالفعل";
+      return;
+    }
+
+    users.push({ username, password, role: "admin" });
+    saveUsers(users);
+
+    authMessage.textContent = "✅ تم إنشاء الحساب بنجاح — سجل الدخول";
   });
+}
 
-  localStorage.setItem(USERS_KEY, JSON.stringify(users));
-  alert("تم إضافة الكاشير بنجاح");
-  return true;
+// ===============================
+// تسجيل الدخول
+// ===============================
+if (loginForm) {
+  loginForm.addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    const username = document
+      .getElementById("loginUsername")
+      .value.trim();
+    const password = document
+      .getElementById("loginPassword")
+      .value.trim();
+
+    const users = getUsers();
+
+    const user = users.find(
+      (u) => u.username === username && u.password === password
+    );
+
+    if (!user) {
+      authMessage.textContent = "❌ بيانات الدخول غير صحيحة";
+      return;
+    }
+
+    // حفظ الجلسة
+    localStorage.setItem("pos_session", JSON.stringify(user));
+
+    // الدخول للكاشير
+    window.location.href = "index.html";
+  });
 }
