@@ -1,10 +1,32 @@
-const productList = document.getElementById("productList");
-const products = JSON.parse(localStorage.getItem("pos_products"));
+const table=document.getElementById("productsTable");
 
-products.forEach(p => {
-  const div = document.createElement("div");
-  div.className = "product";
-  div.innerHTML = `<strong>${p.name}</strong><br>${p.price} جنيه`;
-  div.onclick = () => addToCart(p);
-  productList.appendChild(div);
-});
+function renderTable(){
+  table.innerHTML="";
+  products.forEach((p,i)=>{
+    table.innerHTML+=`
+    <tr>
+      <td>${i+1}</td>
+      <td>${p.name}</td>
+      <td>${p.price}</td>
+      <td>${p.barcode}</td>
+      <td><button onclick="del(${i})">❌</button></td>
+    </tr>`;
+  });
+  localStorage.setItem("products",JSON.stringify(products));
+}
+renderTable();
+
+function addProduct(){
+  products.push({
+    id:Date.now(),
+    name:pName.value,
+    price:+pPrice.value,
+    barcode:pBarcode.value
+  });
+  renderTable();
+}
+
+function del(i){
+  products.splice(i,1);
+  renderTable();
+}
