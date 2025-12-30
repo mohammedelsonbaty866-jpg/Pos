@@ -1,53 +1,77 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<title>POS PRO | الكاشير</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>نقطة بيع | POS Pro</title>
 
-<link rel="manifest" href="manifest.json">
-<link rel="stylesheet" href="assets/css/style.css">
-<link rel="stylesheet" href="assets/css/theme.css">
+    <!-- PWA -->
+    <link rel="manifest" href="manifest.json" />
+    <meta name="theme-color" content="#0d6efd" />
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="assets/css/style.css" />
+    <link rel="stylesheet" href="assets/css/theme.css" />
+
 </head>
-
 <body>
-<script src="assets/js/auth-guard.js"></script>
 
-<header class="top-bar">
-  <h1>POS PRO</h1>
-  <nav>
-    <a href="index.html" class="active">الكاشير</a>
-    <a href="pages/products.html">الأصناف</a>
-    <a href="pages/reports.html">التقارير</a>
-    <a href="pages/settings.html">الإعدادات</a>
-    <button onclick="logout()">خروج</button>
-  </nav>
-</header>
+    <!-- Top Bar -->
+    <header class="top-bar">
+        <h1>🧾 الكاشير</h1>
+        <div class="top-actions">
+            <button onclick="toggleTheme()">🌗</button>
+            <button onclick="logout()">تسجيل خروج</button>
+        </div>
+    </header>
 
-<main class="pos-layout">
+    <!-- Cashier Layout -->
+    <main class="cashier-container">
 
-  <section class="products-panel">
-    <input placeholder="بحث بالاسم أو الباركود" oninput="searchProduct(this.value)">
-    <div id="productsGrid"></div>
-  </section>
+        <!-- Search -->
+        <section class="search-box">
+            <input
+                type="text"
+                id="searchInput"
+                placeholder="🔍 ابحث بالاسم أو الباركود"
+                oninput="searchProduct(this.value)"
+            />
+        </section>
 
-  <section class="invoice-panel">
-    <h2>الفاتورة</h2>
-    <div id="invoiceItems"></div>
+        <!-- Products List -->
+        <section class="products-list" id="productsList">
+            <!-- منتجات -->
+        </section>
 
-    <div class="total-box">
-      الإجمالي: <strong id="total">0</strong> ج
-    </div>
+        <!-- Cart -->
+        <section class="cart">
+            <h2>🛒 الفاتورة</h2>
+            <div id="cartItems"></div>
 
-    <button onclick="saveInvoice()">حفظ الفاتورة</button>
-    <button onclick="clearInvoice()">تفريغ</button>
-  </section>
+            <div class="total">
+                الإجمالي: <span id="totalPrice">0</span> ج
+            </div>
 
-</main>
+            <button class="pay-btn" onclick="checkout()">💰 إتمام البيع</button>
+        </section>
 
-<script src="assets/js/data.js"></script>
-<script src="assets/js/products.js"></script>
-<script src="assets/js/barcode.js"></script>
-<script src="assets/js/cashier.js"></script>
+    </main>
+
+    <!-- Sounds -->
+    <audio id="beepSound" src="assets/sounds/beep.mp3"></audio>
+
+    <!-- JS -->
+    <script src="assets/js/auth-guard.js"></script>
+    <script src="assets/js/data.js"></script>
+    <script src="assets/js/products.js"></script>
+    <script src="assets/js/barcode.js"></script>
+    <script src="assets/js/cashier.js"></script>
+    <script src="assets/js/settings.js"></script>
+
+    <script>
+        requireAuth();
+        loadProducts();
+    </script>
+
 </body>
 </html>
