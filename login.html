@@ -1,40 +1,28 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>تسجيل الدخول | POS Pro</title>
+<meta charset="UTF-8">
+<title>تسجيل الدخول | POS</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- CSS -->
-    <link rel="stylesheet" href="assets/css/auth.css" />
-    <link rel="stylesheet" href="assets/css/theme.css" />
+<link rel="stylesheet" href="assets/css/auth.css">
 </head>
-<body class="auth-body">
 
-    <div class="login-box">
-        <h1>🔐 تسجيل الدخول</h1>
+<body>
 
-        <input
-            type="text"
-            id="username"
-            placeholder="اسم المستخدم"
-            autocomplete="off"
-        />
+<div class="auth-container">
+  <h2>تسجيل الدخول</h2>
 
-        <input
-            type="password"
-            id="password"
-            placeholder="كلمة المرور"
-        />
+  <form id="loginForm">
+    <input id="username" type="text" placeholder="اسم المستخدم" required>
+    <input id="password" type="password" placeholder="كلمة المرور" required>
 
-        <button onclick="login()">دخول</button>
+    <button type="submit">دخول</button>
+  </form>
 
-        <p class="hint">
-            أول مرة؟ سيتم إنشاء الحساب تلقائياً
-        </p>
-    </div>
+  <p id="errorMsg"></p>
+</div>
 
-    <!-- JS -->
-    <script src="assets/js/auth.js"></script>
+<script src="assets/js/auth.js"></script>
 </body>
 </html>
