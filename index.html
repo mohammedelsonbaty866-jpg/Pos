@@ -2,20 +2,44 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<title>POS Super Pro | تسجيل الدخول</title>
+<title>POS | الكاشير</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="assets/css/auth.css">
+<link rel="stylesheet" href="assets/css/style.css">
+<link rel="manifest" href="manifest.json">
 </head>
+
 <body>
 
-<div class="login-box">
-  <h2>تسجيل الدخول</h2>
-  <input id="username" placeholder="اسم المستخدم">
-  <input id="password" type="password" placeholder="كلمة المرور">
-  <button onclick="login()">دخول</button>
-  <p id="msg"></p>
-</div>
+<header>
+  <h3>POS سوبر برو</h3>
+  <a href="pages/settings.html">⚙ الإعدادات</a>
+</header>
 
-<script src="assets/js/auth.js"></script>
+<main class="pos-layout">
+
+<section class="products-panel">
+  <input placeholder="بحث بالاسم أو الباركود"
+         onkeyup="searchProduct(this.value)">
+  <div id="productsGrid"></div>
+</section>
+
+<section class="invoice-panel">
+  <h3>الفاتورة</h3>
+  <div id="invoiceItems"></div>
+  <div class="total-box">
+    الإجمالي: <span id="total">0 ج</span>
+  </div>
+  <div class="actions">
+    <button onclick="saveInvoice()">💾 حفظ</button>
+    <button onclick="clearInvoice()">🗑 تفريغ</button>
+  </div>
+</section>
+
+</main>
+
+<script src="assets/js/auth-guard.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/barcode.js"></script>
+<script src="assets/js/cashier.js"></script>
 </body>
 </html>
