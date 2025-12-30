@@ -55,6 +55,40 @@
 <footer class="footer">
   POS Super Pro © 2025
 </footer>
+<script>
+function loadReports() {
+  const sales = JSON.parse(localStorage.getItem("sales")) || [];
+  const today = new Date().toDateString();
 
+  let todayTotal = 0;
+  let todayCount = 0;
+  let monthTotal = 0;
+
+  sales.forEach(sale => {
+    const saleDate = new Date(sale.date);
+
+    // مبيعات اليوم
+    if (saleDate.toDateString() === today) {
+      todayTotal += sale.total;
+      todayCount++;
+    }
+
+    // مبيعات الشهر
+    const now = new Date();
+    if (
+      saleDate.getMonth() === now.getMonth() &&
+      saleDate.getFullYear() === now.getFullYear()
+    ) {
+      monthTotal += sale.total;
+    }
+  });
+
+  document.getElementById("todaySales").innerText = todayTotal + " ج";
+  document.getElementById("salesCount").innerText = todayCount;
+  document.getElementById("monthSales").innerText = monthTotal + " ج";
+}
+
+loadReports();
+</script>
 </body>
 </html>
