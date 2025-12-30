@@ -93,3 +93,35 @@ function goPage(path) {
 
 // تحميل أولي
 renderProducts();
+function saveInvoice() {
+  // جلب الإجمالي
+  const totalText = document.getElementById("totalAmount")?.innerText || "0";
+  const total = parseFloat(totalText);
+
+  if (total <= 0) {
+    alert("لا توجد فاتورة للحفظ");
+    return;
+  }
+
+  // إنشاء فاتورة
+  const invoice = {
+    id: Date.now(),
+    total: total,
+    date: new Date().toLocaleString("ar-EG")
+  };
+
+  // جلب التقارير القديمة
+  let sales = JSON.parse(localStorage.getItem("sales")) || [];
+
+  // إضافة الفاتورة
+  sales.push(invoice);
+
+  // حفظ في التخزين
+  localStorage.setItem("sales", JSON.stringify(sales));
+
+  alert("✅ تم حفظ الفاتورة في التقارير");
+
+  // تصفير الفاتورة
+  document.getElementById("invoiceItems").innerHTML = "";
+  document.getElementById("totalAmount").innerText = "0";
+}
