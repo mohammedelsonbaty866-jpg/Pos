@@ -1,52 +1,39 @@
-let cart = [];
+const grid=document.getElementById("productsGrid");
+const invoiceBox=document.getElementById("invoiceItems");
+const totalBox=document.getElementById("total");
 
-function addToCart(product) {
-  const item = cart.find(i => i.id === product.id);
-  if (item) {
-    item.qty++;
-  } else {
-    cart.push({ ...product, qty: 1 });
-  }
-  renderCart();
-}
-
-function removeItem(id) {
-  cart = cart.filter(i => i.id !== id);
-  renderCart();
-}
-
-function renderCart() {
-  const tbody = document.getElementById("cartItems");
-  const totalSpan = document.getElementById("totalPrice");
-  tbody.innerHTML = "";
-  let total = 0;
-
-  cart.forEach(item => {
-    total += item.price * item.qty;
-    tbody.innerHTML += `
-      <tr>
-        <td>${item.name}</td>
-        <td>${item.price}</td>
-        <td>${item.qty}</td>
-        <td><button onclick="removeItem(${item.id})">❌</button></td>
-      </tr>
-    `;
+function renderProducts(list=products){
+  grid.innerHTML="";
+  list.forEach(p=>{
+    const d=document.createElement("div");
+    d.className="product";
+    d.innerText=p.name+" - "+p.price+"ج";
+    d.onclick=()=>addToInvoice(p);
+    grid.appendChild(d);
   });
+}
+renderProducts();
 
-  totalSpan.innerText = total;
+function addToInvoice(p){
+  invoice.push(p);
+  renderInvoice();
 }
 
-function checkout() {
-  if (cart.length === 0) return alert("الفاتورة فاضية");
-
-  const sales = JSON.parse(localStorage.getItem("pos_sales"));
-  sales.push({
-    date: new Date().toLocaleString(),
-    items: cart
+function renderInvoice(){
+  invoiceBox.innerHTML="";
+  let t=0;
+  invoice.forEach(i=>{
+    t+=i.price;
+    invoiceBox.innerHTML+=`<div>${i.name} - ${i.price}ج</div>`;
   });
+  totalBox.innerText=t+" ج";
+}
 
-  localStorage.setItem("pos_sales", JSON.stringify(sales));
-  cart = [];
-  renderCart();
-  alert("تم التحصيل بنجاح ✅");
+function clearInvoice(){
+  invoice=[];
+  renderInvoice();
+}
+
+function saveInvoice(){
+  alert("تم حفظ الفاتورة");
 }
