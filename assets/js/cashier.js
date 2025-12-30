@@ -1,61 +1,22 @@
 /********************************
- * CASHIER LOGIC - POS PRO
+ * CASHIER MODULE - POS SUPER PRO
  ********************************/
 
-let cart = [];
-
 /* ==============================
-   تحميل المنتجات في الكاشير
+   بيانات الفاتورة الحالية
 ================================ */
-document.addEventListener("DOMContentLoaded", () => {
-  renderProductsGrid();
-  updateTotal();
-});
-
-/* ==============================
-   جلب الأصناف
-================================ */
-function getProducts() {
-  return JSON.parse(localStorage.getItem("products")) || [];
-}
-
-/* ==============================
-   عرض المنتجات في الشبكة
-================================ */
-function renderProductsGrid(filtered = null) {
-  const grid = document.getElementById("productsGrid");
-  if (!grid) return;
-
-  const products = filtered || getProducts();
-  grid.innerHTML = "";
-
-  products.forEach(product => {
-    const btn = document.createElement("button");
-    btn.className = "product-btn";
-    btn.innerHTML = `
-      <strong>${product.name}</strong>
-      <span>${product.price.toFixed(2)} ج</span>
-    `;
-
-    btn.onclick = () => addToCart(product.id);
-    grid.appendChild(btn);
-  });
-}
+let invoiceItems = [];
 
 /* ==============================
    إضافة صنف للفاتورة
 ================================ */
-function addToCart(productId) {
-  const products = getProducts();
-  const product = products.find(p => p.id === productId);
-  if (!product) return;
+function addToInvoice(product) {
+  const existing = invoiceItems.find(i => i.id === product.id);
 
-  const item = cart.find(i => i.id === productId);
-
-  if (item) {
-    item.qty++;
+  if (existing) {
+    existing.qty += 1;
   } else {
-    cart.push({
+    invoiceItems.push({
       id: product.id,
       name: product.name,
       price: product.price,
@@ -63,7 +24,30 @@ function addToCart(productId) {
     });
   }
 
+  renderInvoice();
   playBeep();
+}
+
+/* ==============================
+   زيادة / تقليل الكمية
+================================ */
+function changeQty(id, delta) {
+  const item = invoiceItems.find(i => i.id === id);
+  if (!item) return;
+
+  item.qty += delta;
+  if (item.qty <= 0) {
+    invoiceItems = invoiceItems.filter(i => i.id !== id);
+  }
+
+  renderInvoice();
+}
+
+/* ==============================
+   حذف صنف من الفاتورة
+================================ */
+function removeItem(id) {
+  invoiceItems = invoiceItems.filter(i => i.id !== id);
   renderInvoice();
 }
 
@@ -71,101 +55,85 @@ function addToCart(productId) {
    عرض الفاتورة
 ================================ */
 function renderInvoice() {
-  const box = document.getElementById("invoiceItems");
-  if (!box) return;
+  const table = document.getElementById("invoiceTable");
+  const totalEl = document.getElementById("invoiceTotal");
 
-  box.innerHTML = "";
+  if (!table || !totalEl) return;
 
-  cart.forEach((item, index) => {
-    const row = document.createElement("div");
-    row.className = "invoice-row";
+  table.innerHTML = "";
+  let total = 0;
 
-    row.innerHTML = `
-      <span>${item.name}</span>
-      <span>${item.qty} × ${item.price}</span>
-      <span>${(item.qty * item.price).toFixed(2)}</span>
-      <button onclick="removeItem(${index})">✖</button>
+  invoiceItems.forEach((item, index) => {
+    const sub = item.qty * item.price;
+    total += sub;
+
+    table.innerHTML += `
+      <tr>
+        <td>${index + 1}</td>
+        <td>${item.name}</td>
+        <td>
+          <button onclick="changeQty(${item.id}, -1)">➖</button>
+          ${item.qty}
+          <button onclick="changeQty(${item.id}, 1)">➕</button>
+        </td>
+        <td>${item.price} ج</td>
+        <td>${sub} ج</td>
+        <td>
+          <button onclick="removeItem(${item.id})">🗑</button>
+        </td>
+      </tr>
     `;
-
-    box.appendChild(row);
   });
 
-  updateTotal();
+  totalEl.textContent = total.toFixed(2) + " ج";
 }
 
 /* ==============================
-   حذف صنف من الفاتورة
+   إنهاء البيع
 ================================ */
-function removeItem(index) {
-  cart.splice(index, 1);
-  renderInvoice();
-}
-
-/* ==============================
-   تحديث الإجمالي
-================================ */
-function updateTotal() {
-  const totalBox = document.getElementById("total");
-  if (!totalBox) return;
-
-  const total = cart.reduce((sum, i) => sum + i.qty * i.price, 0);
-  totalBox.innerText = total.toFixed(2) + " ج";
-}
-
-/* ==============================
-   حفظ الفاتورة
-================================ */
-function saveInvoice() {
-  if (cart.length === 0) {
-    alert("الفاتورة فارغة");
+function checkout() {
+  if (invoiceItems.length === 0) {
+    alert("❌ الفاتورة فارغة");
     return;
   }
 
-  const invoices = JSON.parse(localStorage.getItem("invoices")) || [];
+  const sales = JSON.parse(localStorage.getItem("sales")) || [];
 
-  invoices.push({
+  sales.push({
     id: Date.now(),
     date: new Date().toLocaleString(),
-    items: cart,
-    total: cart.reduce((s, i) => s + i.qty * i.price, 0)
+    items: invoiceItems,
+    total: getInvoiceTotal()
   });
 
-  localStorage.setItem("invoices", JSON.stringify(invoices));
+  localStorage.setItem("sales", JSON.stringify(sales));
 
-  clearInvoice();
-  alert("تم حفظ الفاتورة");
-}
-
-/* ==============================
-   تفريغ الفاتورة
-================================ */
-function clearInvoice() {
-  cart = [];
+  invoiceItems = [];
   renderInvoice();
+
+  alert("✅ تم حفظ البيع بنجاح");
 }
 
 /* ==============================
-   البحث بالكاشير (اسم / باركود)
+   إجمالي الفاتورة
 ================================ */
-function searchProduct(query) {
-  query = query.trim().toLowerCase();
-  const products = getProducts();
-
-  const filtered = products.filter(p =>
-    p.name.toLowerCase().includes(query) ||
-    (p.barcode && p.barcode.includes(query))
-  );
-
-  renderProductsGrid(filtered);
+function getInvoiceTotal() {
+  return invoiceItems.reduce((sum, i) => sum + i.qty * i.price, 0);
 }
 
 /* ==============================
-   صوت الباركود
+   صوت البيب
 ================================ */
 function playBeep() {
-  const sound = document.getElementById("beepSound");
-  if (sound) {
-    sound.currentTime = 0;
-    sound.play();
+  const audio = document.getElementById("beepSound");
+  if (audio) audio.play();
+}
+
+/* ==============================
+   البحث من الكاشير
+================================ */
+function cashierSearch(value) {
+  if (typeof searchProduct === "function") {
+    searchProduct(value);
   }
 }
