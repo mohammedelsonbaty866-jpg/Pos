@@ -1,122 +1,96 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title>إدارة الأصناف | POS Super Pro</title>
-
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#0d6efd" />
-
-  <!-- CSS -->
-  <link rel="stylesheet" href="../assets/css/style.css" />
-  <link rel="stylesheet" href="../assets/css/theme.css" />
-
-  <link rel="icon" href="../assets/icons/icon-192.png" />
-</head>
-
-<body class="light">
-
-  <!-- ================= HEADER ================= -->
-  <header class="app-header">
-    <div class="logo">📦 إدارة الأصناف</div>
-    <div class="header-actions">
-      <a href="../index.html" class="back-btn">⬅ رجوع للكاشير</a>
-    </div>
-  </header>
-
-  <!-- ================= MAIN ================= -->
-  <main class="products-page">
-
-    <!-- Add Product -->
-    <section class="card">
-      <h2>➕ إضافة صنف جديد</h2>
-
-      <form id="productForm" class="form-grid">
-        <input type="text" id="productName" placeholder="اسم الصنف" required />
-        <input type="number" id="productPrice" placeholder="السعر" required />
-        <input type="text" id="productBarcode" placeholder="الباركود (اختياري)" />
-
-        <button type="submit" class="primary-btn">
-          💾 حفظ الصنف
-        </button>
-      </form>
-    </section>
-
-    <!-- Products List -->
-    <section class="card">
-      <h2>📋 قائمة الأصناف</h2>
-
-      <table class="products-table">
-        <thead>
-          <tr>
-            <th>الاسم</th>
-            <th>السعر</th>
-            <th>الباركود</th>
-            <th>حذف</th>
-          </tr>
-        </thead>
-        <tbody id="productsTable">
-          <!-- المنتجات تظهر هنا -->
-        </tbody>
-      </table>
-    </section>
-
-  </main>
-
-  <!-- ================= NAV ================= -->
-  <nav class="bottom-nav">
-    <a href="../index.html">🏠 الكاشير</a>
-    <a href="products.html" class="active">📦 الأصناف</a>
-    <a href="reports.html">📊 التقارير</a>
-    <a href="settings.html">⚙️ الإعدادات</a>
-  </nav>
-
-  <!-- ================= JS ================= -->
-  <script src="../assets/js/data.js"></script>
-  <script src="../assets/js/products.js"></script>
-
-  <!-- Theme Load -->
-  <script>
-    const savedTheme = localStorage.getItem("theme");
-    if (savedTheme === "dark") {
-      document.body.classList.remove("light");
-      document.body.classList.add("dark");
-    }
-   <!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-<meta charset="UTF-8">
-<title>الأصناف</title>
-
-<link rel="stylesheet" href="../assets/css/theme.css">
-<link rel="stylesheet" href="../assets/css/layout.css">
-<link rel="stylesheet" href="../assets/css/components.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="../assets/css/theme.css">
+  <link rel="stylesheet" href="../assets/css/layout.css">
 </head>
 
 <body>
 
-<header class="top-bar">
-  <div class="logo">POS Pro</div>
-  <nav class="main-nav">
+<header class="app-header">
+  <div class="logo">📦 الأصناف</div>
+  <nav class="nav">
     <a href="../index.html">الكاشير</a>
-    <a class="active" href="products.html">الأصناف</a>
+    <a href="products.html" class="active">الأصناف</a>
     <a href="reports.html">التقارير</a>
     <a href="settings.html">الإعدادات</a>
   </nav>
 </header>
 
-<main class="page">
-  <div class="card">
-    <h2>إضافة صنف</h2>
-    <input placeholder="اسم الصنف">
-    <input placeholder="السعر">
-    <button class="btn-primary">حفظ</button>
-  </div>
+<main class="container">
+
+  <section class="card">
+    <h2>➕ إضافة صنف</h2>
+
+    <input id="pName" placeholder="اسم الصنف">
+    <input id="pPrice" type="number" placeholder="السعر">
+    <input id="pBarcode" placeholder="الباركود">
+
+    <button class="btn-primary" onclick="addProduct()">إضافة</button>
+  </section>
+
+  <section class="card">
+    <h2>📋 قائمة الأصناف</h2>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>الاسم</th>
+          <th>السعر</th>
+          <th>باركود</th>
+          <th>حذف</th>
+        </tr>
+      </thead>
+      <tbody id="productsTable"></tbody>
+    </table>
+  </section>
+
 </main>
 
-</body>
-</html> 
-  </script>
+<script src="../assets/js/data.js"></script>
+<script>
+function loadProducts() {
+  const products = JSON.parse(localStorage.getItem("products") || "[]");
+  const table = document.getElementById("productsTable");
+  table.innerHTML = "";
+
+  products.forEach((p, i) => {
+    table.innerHTML += `
+      <tr>
+        <td>${p.name}</td>
+        <td>${p.price}</td>
+        <td>${p.barcode || "-"}</td>
+        <td><button onclick="deleteProduct(${i})">❌</button></td>
+      </tr>`;
+  });
+}
+
+function addProduct() {
+  const products = JSON.parse(localStorage.getItem("products") || "[]");
+
+  products.push({
+    name: pName.value,
+    price: Number(pPrice.value),
+    barcode: pBarcode.value
+  });
+
+  localStorage.setItem("products", JSON.stringify(products));
+  loadProducts();
+
+  pName.value = pPrice.value = pBarcode.value = "";
+}
+
+function deleteProduct(i) {
+  const products = JSON.parse(localStorage.getItem("products"));
+  products.splice(i, 1);
+  localStorage.setItem("products", JSON.stringify(products));
+  loadProducts();
+}
+
+loadProducts();
+</script>
 
 </body>
 </html>
