@@ -1,4 +1,6 @@
-function searchProduct(v){
-  const res=products.filter(p=>p.name.includes(v)||p.barcode===v);
-  renderProducts(res);
+const beep = new Audio("assets/sounds/beep.mp3");
+
+function playBeep(){
+  beep.currentTime=0;
+  beep.play();
 }
