@@ -81,3 +81,43 @@ function renderReport(invoices, title) {
 document.addEventListener("DOMContentLoaded", () => {
   allReports();
 });
+document.addEventListener("DOMContentLoaded", () => {
+  loadReports();
+});
+
+function loadReports() {
+  const table = document.getElementById("reportsTable");
+  const totalBox = document.getElementById("reportsTotal");
+
+  if (!table) return;
+
+  table.innerHTML = "";
+
+  const sales = JSON.parse(localStorage.getItem("sales")) || [];
+
+  let grandTotal = 0;
+
+  if (sales.length === 0) {
+    table.innerHTML = `
+      <tr>
+        <td colspan="3" style="text-align:center">لا توجد مبيعات</td>
+      </tr>
+    `;
+    if (totalBox) totalBox.innerText = "0";
+    return;
+  }
+
+  sales.forEach((sale, index) => {
+    grandTotal += sale.total;
+
+    table.innerHTML += `
+      <tr>
+        <td>${index + 1}</td>
+        <td>${sale.date}</td>
+        <td>${sale.total} ج</td>
+      </tr>
+    `;
+  });
+
+  if (totalBox) totalBox.innerText = grandTotal + " ج";
+}
