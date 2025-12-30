@@ -1,97 +1,58 @@
-/* ===============================
-   SETTINGS.JS | POS SUPER PRO
-================================ */
+/********************************
+ * SETTINGS LOGIC - POS SUPER PRO
+ ********************************/
 
-// عند فتح صفحة الإعدادات
-document.addEventListener("DOMContentLoaded", () => {
-  loadUser();
-  applySavedTheme();
-});
-
-/* ===============================
-   USER
+/* ==============================
+   تحميل الإعدادات
 ================================ */
-function loadUser() {
-  const user = localStorage.getItem("currentUser");
-  document.getElementById("currentUser").innerText =
-    user ? user : "غير معروف";
+function loadSettings() {
+  const settings = JSON.parse(localStorage.getItem("settings")) || {};
+
+  // اسم المحل
+  if (settings.shopName) {
+    const shopNameEl = document.getElementById("shopName");
+    if (shopNameEl) shopNameEl.textContent = settings.shopName;
+  }
+
+  // الوضع الليلي
+  if (settings.theme === "dark") {
+    document.body.classList.add("dark");
+  }
 }
 
-/* ===============================
-   THEME (LIGHT / DARK)
+/* ==============================
+   حفظ الإعدادات
+================================ */
+function saveSettings() {
+  const shopNameInput = document.getElementById("shopNameInput");
+  const darkModeToggle = document.getElementById("darkModeToggle");
+
+  const settings = {
+    shopName: shopNameInput ? shopNameInput.value : "POS Pro",
+    theme: darkModeToggle && darkModeToggle.checked ? "dark" : "light"
+  };
+
+  localStorage.setItem("settings", JSON.stringify(settings));
+  alert("✅ تم حفظ الإعدادات");
+
+  loadSettings();
+}
+
+/* ==============================
+   تبديل الوضع الداكن فورًا
 ================================ */
 function toggleTheme() {
-  const current = localStorage.getItem("theme") || "light";
-  const next = current === "light" ? "dark" : "light";
-  localStorage.setItem("theme", next);
-  applySavedTheme();
+  document.body.classList.toggle("dark");
+
+  const settings = JSON.parse(localStorage.getItem("settings")) || {};
+  settings.theme = document.body.classList.contains("dark") ? "dark" : "light";
+
+  localStorage.setItem("settings", JSON.stringify(settings));
 }
 
-function applySavedTheme() {
-  const theme = localStorage.getItem("theme") || "light";
-  document.body.classList.remove("light", "dark");
-  document.body.classList.add(theme);
-}
-
-/* ===============================
-   BARCODE SOUND
+/* ==============================
+   تهيئة الصفحة
 ================================ */
-function toggleBeep() {
-  const enabled = localStorage.getItem("beep") !== "off";
-  localStorage.setItem("beep", enabled ? "off" : "on");
-  alert(
-    enabled
-      ? "🔇 تم إيقاف صوت الباركود"
-      : "🔊 تم تشغيل صوت الباركود"
-  );
-}
-
-/* ===============================
-   LOGOUT
-================================ */
-function logout() {
-  if (!confirm("هل أنت متأكد من تسجيل الخروج؟")) return;
-
-  localStorage.removeItem("loggedIn");
-  localStorage.removeItem("currentUser");
-
-  window.location.href = "../login.html";
-}
-
-/* ===============================
-   SYSTEM
-================================ */
-function clearData() {
-  if (!confirm("سيتم مسح كل البيانات، هل أنت متأكد؟")) return;
-
-  localStorage.clear();
-  alert("✅ تم مسح البيانات");
-  location.reload();
-}
-
-function reloadApp() {
-  location.reload();
-}
-
-/* ===============================
-   NAVIGATION
-================================ */
-function goCashier() {
-  window.location.href = "../index.html";
-}
-// تحميل الوضع المحفوظ
 document.addEventListener("DOMContentLoaded", () => {
-  const theme = localStorage.getItem("theme") || "light";
-  applyTheme(theme);
+  loadSettings();
 });
-
-function toggleTheme() {
-  const current = document.documentElement.getAttribute("data-theme");
-  const newTheme = current === "dark" ? "light" : "dark";
-  applyTheme(newTheme);
-  localStorage.setItem("theme", newTheme);
-}
-
-function applyTheme(theme) {
-  document.documentElement.setAttribute("data-theme", theme);
-}
