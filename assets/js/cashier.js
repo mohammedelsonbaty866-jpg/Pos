@@ -166,3 +166,217 @@ document.addEventListener("DOMContentLoaded", () => {
   renderProducts();
   renderInvoice();
 });
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>الإعدادات</title>
+
+  <link rel="stylesheet" href="../assets/css/style.css">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Tahoma, Arial;
+      background: var(--bg);
+      color: var(--text);
+      transition: .3s;
+    }
+
+    :root {
+      --bg: #f4f6f9;
+      --card: #ffffff;
+      --text: #000;
+      --primary: #0d6efd;
+    }
+
+    body.dark {
+      --bg: #121212;
+      --card: #1e1e1e;
+      --text: #fff;
+      --primary: #0d6efd;
+    }
+
+    header {
+      background: var(--primary);
+      color: #fff;
+      padding: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    header h2 {
+      margin: 0;
+      font-size: 18px;
+    }
+
+    .container {
+      padding: 15px;
+    }
+
+    .card {
+      background: var(--card);
+      padding: 15px;
+      border-radius: 12px;
+      margin-bottom: 15px;
+      box-shadow: 0 2px 6px rgba(0,0,0,.15);
+    }
+
+    .row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    label {
+      font-size: 16px;
+    }
+
+    input[type="text"], select {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 15px;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    .save-btn {
+      background: #198754;
+      color: #fff;
+    }
+
+    .back-btn {
+      background: #0d6efd;
+      color: #fff;
+      margin-top: 10px;
+    }
+
+    .toggle {
+      width: 50px;
+      height: 26px;
+      background: #ccc;
+      border-radius: 20px;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .toggle::after {
+      content: "";
+      width: 22px;
+      height: 22px;
+      background: #fff;
+      border-radius: 50%;
+      position: absolute;
+      top: 2px;
+      right: 2px;
+      transition: .3s;
+    }
+
+    .toggle.active {
+      background: #198754;
+    }
+
+    .toggle.active::after {
+      right: 26px;
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <button onclick="goBack()">⬅</button>
+  <h2>الإعدادات</h2>
+  <div>⚙️</div>
+</header>
+
+<div class="container">
+
+  <!-- الوضع -->
+  <div class="card">
+    <h3>المظهر</h3>
+    <div class="row">
+      <label>الوضع الداكن</label>
+      <div id="darkToggle" class="toggle"></div>
+    </div>
+  </div>
+
+  <!-- إعدادات المتجر -->
+  <div class="card">
+    <h3>بيانات المتجر</h3>
+    <label>اسم المتجر</label>
+    <input type="text" id="storeName" placeholder="اسم المتجر">
+
+    <label style="margin-top:10px;">العملة</label>
+    <select id="currency">
+      <option value="جنيه">جنيه</option>
+      <option value="ريال">ريال</option>
+      <option value="دولار">$</option>
+    </select>
+  </div>
+
+  <!-- حفظ -->
+  <div class="card">
+    <button class="save-btn" onclick="saveSettings()">💾 حفظ الإعدادات</button>
+    <button class="back-btn" onclick="goBack()">⬅ رجوع للكاشير</button>
+  </div>
+
+</div>
+
+<script>
+  const body = document.body;
+  const darkToggle = document.getElementById("darkToggle");
+  const storeNameInput = document.getElementById("storeName");
+  const currencySelect = document.getElementById("currency");
+
+  const settings = JSON.parse(localStorage.getItem("settings")) || {
+    darkMode: false,
+    storeName: "POS Pro",
+    currency: "جنيه"
+  };
+
+  function applySettings() {
+    if (settings.darkMode) {
+      body.classList.add("dark");
+      darkToggle.classList.add("active");
+    }
+
+    storeNameInput.value = settings.storeName;
+    currencySelect.value = settings.currency;
+  }
+
+  darkToggle.onclick = () => {
+    settings.darkMode = !settings.darkMode;
+    body.classList.toggle("dark");
+    darkToggle.classList.toggle("active");
+  };
+
+  function saveSettings() {
+    settings.storeName = storeNameInput.value || "POS Pro";
+    settings.currency = currencySelect.value;
+
+    localStorage.setItem("settings", JSON.stringify(settings));
+    alert("✅ تم حفظ الإعدادات");
+  }
+
+  function goBack() {
+    window.location.href = "../index.html";
+  }
+
+  applySettings();
+</script>
+
+</body>
+</html>
