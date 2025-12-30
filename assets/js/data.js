@@ -30,3 +30,10 @@ function saveInvoices(invoices) {
 function generateID() {
   return "_" + Math.random().toString(36).substr(2, 9);
 }
+const products = [
+  { id: 1, name: "مياه", price: 5 },
+  { id: 2, name: "عصير", price: 10 },
+  { id: 3, name: "شيبسي", price: 7 },
+  { id: 4, name: "شوكولاتة", price: 12 },
+  { id: 5, name: "لبن", price: 8 }
+];
