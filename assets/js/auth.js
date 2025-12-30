@@ -1,85 +1,91 @@
-// ===============================
-// AUTH.JS - POS SUPER PRO
-// ===============================
+/* ================= AUTH SYSTEM ================= */
 
-// عناصر الواجهة
-const loginForm = document.getElementById("loginForm");
-const registerForm = document.getElementById("registerForm");
-const authMessage = document.getElementById("authMessage");
+/*
+  شكل التخزين:
+  localStorage.users = [
+    { username, password, role }
+  ]
 
-// تحميل المستخدمين
+  localStorage.currentUser = {
+    username, role
+  }
+*/
+
+const AUTH_USERS_KEY = "users";
+const AUTH_SESSION_KEY = "currentUser";
+
+/* تحميل المستخدمين */
 function getUsers() {
-  return JSON.parse(localStorage.getItem("pos_users")) || [];
+  return JSON.parse(localStorage.getItem(AUTH_USERS_KEY) || "[]");
 }
 
-// حفظ المستخدمين
+/* حفظ المستخدمين */
 function saveUsers(users) {
-  localStorage.setItem("pos_users", JSON.stringify(users));
+  localStorage.setItem(AUTH_USERS_KEY, JSON.stringify(users));
 }
 
-// ===============================
-// تسجيل حساب جديد
-// ===============================
-if (registerForm) {
-  registerForm.addEventListener("submit", function (e) {
-    e.preventDefault();
+/* ================= REGISTER ================= */
+function register() {
+  const username = document.getElementById("regUsername").value.trim();
+  const password = document.getElementById("regPassword").value.trim();
 
-    const username = document
-      .getElementById("registerUsername")
-      .value.trim();
-    const password = document
-      .getElementById("registerPassword")
-      .value.trim();
+  if (!username || !password) {
+    alert("من فضلك أدخل اسم المستخدم وكلمة المرور");
+    return;
+  }
 
-    if (!username || !password) {
-      authMessage.textContent = "⚠️ أكمل كل البيانات";
-      return;
-    }
+  let users = getUsers();
 
-    const users = getUsers();
+  if (users.find(u => u.username === username)) {
+    alert("اسم المستخدم موجود بالفعل");
+    return;
+  }
 
-    const exists = users.find((u) => u.username === username);
-    if (exists) {
-      authMessage.textContent = "❌ اسم المستخدم موجود بالفعل";
-      return;
-    }
-
-    users.push({ username, password, role: "admin" });
-    saveUsers(users);
-
-    authMessage.textContent = "✅ تم إنشاء الحساب بنجاح — سجل الدخول";
+  users.push({
+    username,
+    password,
+    role: "admin" // أول حساب مدير
   });
+
+  saveUsers(users);
+
+  alert("تم إنشاء الحساب بنجاح");
+  login(username, password);
 }
 
-// ===============================
-// تسجيل الدخول
-// ===============================
-if (loginForm) {
-  loginForm.addEventListener("submit", function (e) {
-    e.preventDefault();
+/* ================= LOGIN ================= */
+function login(user = null, pass = null) {
+  const username = user || document.getElementById("loginUsername").value.trim();
+  const password = pass || document.getElementById("loginPassword").value.trim();
 
-    const username = document
-      .getElementById("loginUsername")
-      .value.trim();
-    const password = document
-      .getElementById("loginPassword")
-      .value.trim();
+  let users = getUsers();
+  let found = users.find(
+    u => u.username === username && u.password === password
+  );
 
-    const users = getUsers();
+  if (!found) {
+    alert("بيانات الدخول غير صحيحة");
+    return;
+  }
 
-    const user = users.find(
-      (u) => u.username === username && u.password === password
-    );
+  localStorage.setItem(
+    AUTH_SESSION_KEY,
+    JSON.stringify({
+      username: found.username,
+      role: found.role
+    })
+  );
 
-    if (!user) {
-      authMessage.textContent = "❌ بيانات الدخول غير صحيحة";
-      return;
-    }
+  window.location.href = "index.html";
+}
 
-    // حفظ الجلسة
-    localStorage.setItem("pos_session", JSON.stringify(user));
+/* ================= LOGOUT ================= */
+function logout() {
+  localStorage.removeItem(AUTH_SESSION_KEY);
+  window.location.href = "login.html";
+}
 
-    // الدخول للكاشير
-    window.location.href = "index.html";
-  });
+/* ================= CURRENT USER ================= */
+function getCurrentUser() {
+  return JSON.parse(localStorage.getItem(AUTH_SESSION_KEY));
 }
