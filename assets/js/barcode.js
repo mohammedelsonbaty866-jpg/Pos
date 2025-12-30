@@ -1,34 +1,41 @@
-let stream = null;
+let codeReader;
+let streamActive = false;
 
 function startBarcode() {
-  const modal = document.getElementById("barcodeModal");
-  const video = document.getElementById("camera");
-  modal.style.display = "flex";
+  document.getElementById("barcodeModal").style.display = "flex";
 
-  navigator.mediaDevices.getUserMedia({
-    video: { facingMode: "environment" }
-  }).then(s => {
-    stream = s;
-    video.srcObject = stream;
-  });
+  codeReader = new ZXing.BrowserMultiFormatReader();
+
+  codeReader.decodeFromVideoDevice(
+    null,
+    "camera",
+    (result, err) => {
+      if (result && !streamActive) {
+        streamActive = true;
+
+        document.getElementById("beep").play();
+
+        const barcode = result.text;
+        const product = products.find(p => p.barcode == barcode);
+
+        if (product) {
+          addToCart(product);
+        } else {
+          alert("❌ المنتج غير موجود");
+        }
+
+        stopBarcode();
+      }
+    }
+  );
 }
 
 function stopBarcode() {
   document.getElementById("barcodeModal").style.display = "none";
-  if (stream) {
-    stream.getTracks().forEach(t => t.stop());
-  }
-}
 
-// محاكاة قراءة باركود (قابل للربط الحقيقي لاحقًا)
-setInterval(() => {
-  if (document.getElementById("barcodeModal").style.display === "flex") {
-    // مثال باركود = ID المنتج
-    const fakeBarcode = 1;
-    const product = products.find(p => p.id === fakeBarcode);
-    if (product) {
-      addToCart(product);
-      stopBarcode();
-    }
+  if (codeReader) {
+    codeReader.reset();
   }
-}, 3000);
+
+  streamActive = false;
+}
