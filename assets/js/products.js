@@ -1,51 +1,127 @@
-// ===============================
-// PRODUCTS.JS - POS SUPER PRO
-// ===============================
+/********************************
+ * PRODUCTS MANAGEMENT - POS PRO
+ ********************************/
 
-let products = loadProducts();
+// تحميل الأصناف عند فتح الصفحة
+document.addEventListener("DOMContentLoaded", () => {
+  renderProductsTable();
+});
 
-// عرض المنتجات في شاشة الكاشير
-function renderProducts(list = products) {
-  const grid = document.getElementById("productsGrid");
-  if (!grid) return;
+/* ==============================
+   جلب الأصناف من LocalStorage
+================================ */
+function getProducts() {
+  return JSON.parse(localStorage.getItem("products")) || [];
+}
 
-  grid.innerHTML = "";
+/* ==============================
+   حفظ الأصناف
+================================ */
+function saveProducts(products) {
+  localStorage.setItem("products", JSON.stringify(products));
+}
 
-  list.forEach(product => {
-    const btn = document.createElement("button");
-    btn.className = "product-btn";
-    btn.innerText = `${product.name}\n${product.price} ج`;
+/* ==============================
+   إضافة صنف
+================================ */
+function addProduct() {
+  const name = document.getElementById("productName").value.trim();
+  const price = parseFloat(document.getElementById("productPrice").value);
+  const barcode = document.getElementById("productBarcode").value.trim();
+  const stock = parseInt(document.getElementById("productStock").value) || 0;
 
-    btn.onclick = () => addToInvoice(product.id);
+  if (!name || isNaN(price)) {
+    alert("من فضلك أدخل اسم وسعر الصنف");
+    return;
+  }
 
-    grid.appendChild(btn);
+  const products = getProducts();
+
+  // منع تكرار الباركود
+  if (barcode && products.find(p => p.barcode === barcode)) {
+    alert("الباركود مستخدم بالفعل");
+    return;
+  }
+
+  const newProduct = {
+    id: Date.now(),
+    name,
+    price,
+    barcode,
+    stock
+  };
+
+  products.push(newProduct);
+  saveProducts(products);
+
+  clearProductForm();
+  renderProductsTable();
+}
+
+/* ==============================
+   مسح النموذج
+================================ */
+function clearProductForm() {
+  document.getElementById("productName").value = "";
+  document.getElementById("productPrice").value = "";
+  document.getElementById("productBarcode").value = "";
+  document.getElementById("productStock").value = "1";
+}
+
+/* ==============================
+   عرض جدول الأصناف
+================================ */
+function renderProductsTable(filteredList = null) {
+  const table = document.getElementById("productsTable");
+  if (!table) return;
+
+  const products = filteredList || getProducts();
+  table.innerHTML = "";
+
+  products.forEach((product, index) => {
+    const row = document.createElement("tr");
+
+    row.innerHTML = `
+      <td>${index + 1}</td>
+      <td>${product.name}</td>
+      <td>${product.price.toFixed(2)}</td>
+      <td>${product.barcode || "-"}</td>
+      <td>${product.stock}</td>
+      <td>
+        <button class="btn-danger" onclick="deleteProduct(${product.id})">
+          حذف
+        </button>
+      </td>
+    `;
+
+    table.appendChild(row);
   });
 }
 
-// البحث بالاسم
-function searchProduct(keyword) {
-  const filtered = products.filter(p =>
-    p.name.toLowerCase().includes(keyword.toLowerCase()) ||
-    (p.barcode && p.barcode.includes(keyword))
-  );
-  renderProducts(filtered);
-}
+/* ==============================
+   حذف صنف
+================================ */
+function deleteProduct(id) {
+  if (!confirm("هل أنت متأكد من حذف الصنف؟")) return;
 
-// إضافة منتج جديد (من صفحة الأصناف)
-function addProduct(name, price, barcode = "") {
-  const product = {
-    id: generateID(),
-    name,
-    price: Number(price),
-    barcode
-  };
-
-  products.push(product);
+  let products = getProducts();
+  products = products.filter(p => p.id !== id);
   saveProducts(products);
-  renderProducts();
+
+  renderProductsTable();
 }
 
-// تحميل المنتجات عند فتح الصفحة
-document.addEventListener("DOMContentLoaded", () => {
-  renderProducts();
-});
+/* ==============================
+   البحث
+================================ */
+function searchProducts(query) {
+  query = query.trim().toLowerCase();
+  const products = getProducts();
+
+  const filtered = products.filter(p =>
+    p.name.toLowerCase().includes(query) ||
+    (p.barcode && p.barcode.includes(query))
+  );
+
+  renderProductsTable(filtered);
+}
