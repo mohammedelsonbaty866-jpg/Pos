@@ -1,72 +1,42 @@
 /* ===============================
-   AUTH SYSTEM (LOGIN / REGISTER)
+   AUTH SYSTEM
 ================================ */
 
 const AUTH_KEY = "pos_user";
 
-/* ===== HELPERS ===== */
-function getUsers() {
-    return JSON.parse(localStorage.getItem("pos_users") || "[]");
-}
+// مستخدم افتراضي (نسخة برو مبدئية)
+const USERS = [
+  { username: "admin", password: "1234", role: "admin" },
+  { username: "cashier", password: "1234", role: "cashier" }
+];
 
-function saveUsers(users) {
-    localStorage.setItem("pos_users", JSON.stringify(users));
-}
+document.addEventListener("DOMContentLoaded", () => {
 
-/* ===== REGISTER ===== */
-function registerUser() {
-    const username = document.getElementById("regUsername").value.trim();
-    const password = document.getElementById("regPassword").value.trim();
+  const form = document.getElementById("loginForm");
+  const errorMsg = document.getElementById("errorMsg");
 
-    if (!username || !password) {
-        alert("من فضلك أدخل اسم المستخدم وكلمة المرور");
-        return;
-    }
+  if (!form) return;
 
-    let users = getUsers();
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
 
-    if (users.find(u => u.username === username)) {
-        alert("اسم المستخدم موجود بالفعل");
-        return;
-    }
+    const username = document.getElementById("username").value.trim();
+    const password = document.getElementById("password").value.trim();
 
-    users.push({
-        username,
-        password,
-        role: "admin" // أول حساب مدير
-    });
-
-    saveUsers(users);
-    alert("تم إنشاء الحساب بنجاح");
-    window.location.href = "login.html";
-}
-
-/* ===== LOGIN ===== */
-function loginUser() {
-    const username = document.getElementById("loginUsername").value.trim();
-    const password = document.getElementById("loginPassword").value.trim();
-
-    let users = getUsers();
-    let user = users.find(
-        u => u.username === username && u.password === password
+    const user = USERS.find(
+      u => u.username === username && u.password === password
     );
 
     if (!user) {
-        alert("بيانات الدخول غير صحيحة");
-        return;
+      errorMsg.innerText = "❌ اسم المستخدم أو كلمة المرور غير صحيحة";
+      return;
     }
 
+    // حفظ المستخدم
     localStorage.setItem(AUTH_KEY, JSON.stringify(user));
+
+    // تحويل لصفحة الكاشير
     window.location.href = "index.html";
-}
+  });
 
-/* ===== LOGOUT ===== */
-function logout() {
-    localStorage.removeItem(AUTH_KEY);
-    window.location.href = "login.html";
-}
-
-/* ===== CURRENT USER ===== */
-function getCurrentUser() {
-    return JSON.parse(localStorage.getItem(AUTH_KEY));
-}
+});
