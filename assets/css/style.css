@@ -1,122 +1,171 @@
-:root {
-  --bg: #f4f6f8;
-  --card: #ffffff;
-  --primary: #2563eb;
-  --text: #111827;
-  --muted: #6b7280;
-}
-
-body.dark {
-  --bg: #0f172a;
-  --card: #1e293b;
-  --primary: #38bdf8;
-  --text: #f8fafc;
-  --muted: #94a3b8;
-}
-
+/* =========================
+   GLOBAL
+========================= */
 * {
   box-sizing: border-box;
-  font-family: "Cairo", sans-serif;
+  margin: 0;
+  padding: 0;
 }
 
 body {
-  margin: 0;
+  font-family: "Cairo", system-ui, sans-serif;
   background: var(--bg);
   color: var(--text);
+  direction: rtl;
 }
 
-/* ===== HEADER ===== */
+/* =========================
+   THEME VARIABLES
+========================= */
+:root {
+  --bg: #f1f5f9;
+  --text: #0f172a;
+  --card-bg: #ffffff;
+  --primary: #2563eb;
+  --danger: #dc2626;
+  --border: #e5e7eb;
+}
+
+[data-theme="dark"] {
+  --bg: #020617;
+  --text: #f8fafc;
+  --card-bg: #0f172a;
+  --border: #1e293b;
+}
+
+/* =========================
+   HEADER
+========================= */
 .top-bar {
-  background: var(--card);
-  padding: 12px 16px;
+  background: var(--card-bg);
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--border);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: 0 2px 8px rgba(0,0,0,.05);
 }
 
 .top-bar h1 {
   font-size: 18px;
-  margin: 0;
 }
 
 .top-bar nav a {
-  margin-inline: 6px;
+  margin: 0 6px;
   text-decoration: none;
-  color: var(--muted);
-  font-size: 14px;
+  color: var(--text);
+  font-weight: 600;
 }
 
 .top-bar nav a.active {
   color: var(--primary);
-  font-weight: bold;
 }
 
-/* ===== LAYOUT ===== */
+/* =========================
+   LAYOUT
+========================= */
 .pos-layout {
   display: grid;
-  grid-template-columns: 1fr 360px;
-  gap: 12px;
-  padding: 12px;
+  grid-template-columns: 2fr 1fr;
+  gap: 16px;
+  padding: 16px;
 }
 
-/* ===== PRODUCTS ===== */
-.products-panel,
-.invoice-panel {
-  background: var(--card);
-  border-radius: 12px;
-  padding: 12px;
+/* =========================
+   PRODUCTS PANEL
+========================= */
+.products-panel {
+  background: var(--card-bg);
+  border-radius: 14px;
+  padding: 16px;
+}
+
+.products-panel h2 {
+  margin-bottom: 10px;
 }
 
 .products-panel input {
   width: 100%;
   padding: 10px;
-  border-radius: 8px;
-  border: 1px solid #e5e7eb;
-  margin-bottom: 10px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  margin-bottom: 12px;
 }
 
 #productsGrid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-  gap: 10px;
+  gap: 12px;
 }
 
-.product {
+.product-card {
   background: var(--bg);
-  padding: 10px;
-  border-radius: 10px;
+  border-radius: 12px;
+  padding: 12px;
   text-align: center;
   cursor: pointer;
-  transition: .2s;
+  transition: 0.2s;
 }
 
-.product:hover {
+.product-card:hover {
   background: var(--primary);
   color: #fff;
 }
 
-/* ===== INVOICE ===== */
-#invoiceItems div {
+.product-card strong {
+  display: block;
+  font-size: 14px;
+}
+
+/* =========================
+   INVOICE PANEL
+========================= */
+.invoice-panel {
+  background: var(--card-bg);
+  border-radius: 14px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+}
+
+.invoice-panel h2 {
+  margin-bottom: 10px;
+}
+
+#invoiceItems {
+  flex: 1;
+  overflow-y: auto;
+  margin-bottom: 10px;
+}
+
+.invoice-item {
   display: flex;
   justify-content: space-between;
-  padding: 6px 0;
-  border-bottom: 1px dashed #e5e7eb;
+  padding: 10px;
+  border-bottom: 1px dashed var(--border);
+  font-size: 14px;
 }
 
 .total-box {
   display: flex;
   justify-content: space-between;
   font-size: 18px;
-  margin: 12px 0;
+  margin: 10px 0;
+  font-weight: bold;
 }
 
-.actions button {
-  width: 100%;
-  padding: 12px;
+/* =========================
+   BUTTONS
+========================= */
+.actions {
+  display: flex;
+  gap: 10px;
+}
+
+button {
+  flex: 1;
+  padding: 14px;
+  border-radius: 12px;
   border: none;
-  border-radius: 10px;
-  margin-top: 6px;
   font-size: 16px;
   cursor: pointer;
 }
@@ -127,13 +176,30 @@ body {
 }
 
 .btn-clear {
-  background: #ef4444;
+  background: var(--danger);
   color: #fff;
 }
 
-/* ===== MOBILE ===== */
+/* =========================
+   FOOTER
+========================= */
+footer {
+  text-align: center;
+  padding: 10px;
+  font-size: 13px;
+  color: #64748b;
+}
+
+/* =========================
+   MOBILE
+========================= */
 @media (max-width: 768px) {
   .pos-layout {
     grid-template-columns: 1fr;
+  }
+
+  .top-bar {
+    flex-direction: column;
+    gap: 8px;
   }
 }
