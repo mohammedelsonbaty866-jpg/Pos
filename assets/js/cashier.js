@@ -377,6 +377,35 @@ document.addEventListener("DOMContentLoaded", () => {
 
   applySettings();
 </script>
+let invoice = [];
 
+function addToInvoice(product) {
+  invoice.push(product);
+  renderInvoice();
+}
+
+function renderInvoice() {
+  const box = document.getElementById("invoiceItems");
+  const totalEl = document.getElementById("total");
+
+  box.innerHTML = "";
+  let total = 0;
+
+  invoice.forEach(item => {
+    total += item.price;
+    box.innerHTML += `<div>${item.name} - ${item.price} ج</div>`;
+  });
+
+  totalEl.textContent = total + " ج";
+}
+
+function clearInvoice() {
+  invoice = [];
+  renderInvoice();
+}
+
+function saveInvoice() {
+  alert("تم حفظ الفاتورة");
+}
 </body>
 </html>
