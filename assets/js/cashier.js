@@ -1,27 +1,52 @@
-let cart=[];
+let cart = [];
 
-function addToInvoice(p){
-  cart.push(p);
-  renderInvoice();
+function addToCart(product) {
+  const item = cart.find(i => i.id === product.id);
+  if (item) {
+    item.qty++;
+  } else {
+    cart.push({ ...product, qty: 1 });
+  }
+  renderCart();
 }
 
-function renderInvoice(){
-  invoiceItems.innerHTML="";
-  let t=0;
-  cart.forEach(i=>{
-    t+=i.price;
-    invoiceItems.innerHTML+=`<div>${i.name} - ${i.price}</div>`;
+function removeItem(id) {
+  cart = cart.filter(i => i.id !== id);
+  renderCart();
+}
+
+function renderCart() {
+  const tbody = document.getElementById("cartItems");
+  const totalSpan = document.getElementById("totalPrice");
+  tbody.innerHTML = "";
+  let total = 0;
+
+  cart.forEach(item => {
+    total += item.price * item.qty;
+    tbody.innerHTML += `
+      <tr>
+        <td>${item.name}</td>
+        <td>${item.price}</td>
+        <td>${item.qty}</td>
+        <td><button onclick="removeItem(${item.id})">❌</button></td>
+      </tr>
+    `;
   });
-  total.innerText=t+" ج";
+
+  totalSpan.innerText = total;
 }
 
-function saveInvoice(){
-  invoices.push({
-    date:new Date().toLocaleString(),
-    total: total.innerText,
+function checkout() {
+  if (cart.length === 0) return alert("الفاتورة فاضية");
+
+  const sales = JSON.parse(localStorage.getItem("pos_sales"));
+  sales.push({
+    date: new Date().toLocaleString(),
     items: cart
   });
-  saveAll();
-  cart=[];
-  renderInvoice();
+
+  localStorage.setItem("pos_sales", JSON.stringify(sales));
+  cart = [];
+  renderCart();
+  alert("تم التحصيل بنجاح ✅");
 }
