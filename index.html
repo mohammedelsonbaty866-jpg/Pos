@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>POS Pro | الكاشير</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/theme.css">
+</head>
+
+<body>
+
+<script src="assets/js/auth-guard.js"></script>
+
+<header class="top-bar">
+  <h2>POS Pro</h2>
+  <button onclick="logout()">خروج</button>
+</header>
+
+<main class="cashier-container">
+
+  <section class="products">
+    <h3>المنتجات</h3>
+    <div id="productList"></div>
+  </section>
+
+  <section class="cart">
+    <h3>الفاتورة</h3>
+
+    <table>
+      <thead>
+        <tr>
+          <th>الصنف</th>
+          <th>السعر</th>
+          <th>الكمية</th>
+          <th>حذف</th>
+        </tr>
+      </thead>
+      <tbody id="cartItems"></tbody>
+    </table>
+
+    <div class="total">
+      الإجمالي: <span id="totalPrice">0</span> جنيه
+    </div>
+
+    <button class="pay-btn" onclick="checkout()">تحصيل</button>
+  </section>
+
+</main>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/js/products.js"></script>
+<script src="assets/js/cashier.js"></script>
+<script src="assets/js/auth.js"></script>
+
+</body>
+</html>
