@@ -1,28 +1,25 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<title>تسجيل الدخول | POS</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <title>تسجيل الدخول | POS Pro</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<link rel="stylesheet" href="assets/css/auth.css">
+  <link rel="stylesheet" href="assets/css/auth.css">
 </head>
+<body class="auth-body">
 
-<body>
+  <div class="login-card">
+    <h2>تسجيل الدخول</h2>
 
-<div class="auth-container">
-  <h2>تسجيل الدخول</h2>
+    <input type="text" id="username" placeholder="اسم المستخدم">
+    <input type="password" id="password" placeholder="كلمة المرور">
 
-  <form id="loginForm">
-    <input id="username" type="text" placeholder="اسم المستخدم" required>
-    <input id="password" type="password" placeholder="كلمة المرور" required>
+    <button onclick="login()">دخول</button>
 
-    <button type="submit">دخول</button>
-  </form>
+    <p id="error" class="error"></p>
+  </div>
 
-  <p id="errorMsg"></p>
-</div>
-
-<script src="assets/js/auth.js"></script>
+  <script src="assets/js/auth.js"></script>
 </body>
 </html>
