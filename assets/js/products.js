@@ -14,65 +14,27 @@ function saveProducts(products) {
   localStorage.setItem(PRODUCTS_KEY, JSON.stringify(products));
 }
 
-/* ===== عناصر الصفحة ===== */
-const productNameInput = document.getElementById("productName");
-const productPriceInput = document.getElementById("productPrice");
-const productBarcodeInput = document.getElementById("productBarcode");
-const productsTable = document.getElementById("productsTable");
-
 /* ===== إضافة صنف ===== */
-function addProduct() {
-  const name = productNameInput.value.trim();
-  const price = parseFloat(productPriceInput.value);
-  const barcode = productBarcodeInput.value.trim();
+function addProduct(name, price, barcode = "") {
+  const products = loadProducts();
 
-  if (!name || isNaN(price)) {
-    alert("❌ أدخل اسم وسعر الصنف");
+  const exists = products.find(
+    p => p.name === name || (barcode && p.barcode === barcode)
+  );
+  if (exists) {
+    alert("❌ الصنف موجود بالفعل");
     return;
   }
-
-  const products = loadProducts();
 
   products.push({
     id: Date.now(),
     name,
-    price,
+    price: Number(price),
     barcode
   });
 
   saveProducts(products);
   renderProducts();
-
-  productNameInput.value = "";
-  productPriceInput.value = "";
-  productBarcodeInput.value = "";
-}
-
-/* ===== عرض الأصناف ===== */
-function renderProducts(filter = "") {
-  const products = loadProducts();
-  productsTable.innerHTML = "";
-
-  products
-    .filter(p =>
-      p.name.includes(filter) ||
-      (p.barcode && p.barcode.includes(filter))
-    )
-    .forEach((product, index) => {
-      const tr = document.createElement("tr");
-
-      tr.innerHTML = `
-        <td>${index + 1}</td>
-        <td>${product.name}</td>
-        <td>${product.price}</td>
-        <td>${product.barcode || "-"}</td>
-        <td>
-          <button onclick="deleteProduct(${product.id})">❌</button>
-        </td>
-      `;
-
-      productsTable.appendChild(tr);
-    });
 }
 
 /* ===== حذف صنف ===== */
@@ -84,11 +46,67 @@ function deleteProduct(id) {
 }
 
 /* ===== البحث ===== */
-function searchProduct(value) {
-  renderProducts(value);
+function searchProducts(query) {
+  const products = loadProducts();
+  query = query.toLowerCase();
+
+  return products.filter(p =>
+    p.name.toLowerCase().includes(query) ||
+    (p.barcode && p.barcode.includes(query))
+  );
 }
 
-/* ===== تشغيل تلقائي ===== */
+/* ===== عرض الأصناف ===== */
+function renderProducts(list = null) {
+  const table = document.getElementById("productsTable");
+  if (!table) return;
+
+  const products = list || loadProducts();
+  table.innerHTML = "";
+
+  products.forEach(p => {
+    const row = document.createElement("tr");
+
+    row.innerHTML = `
+      <td>${p.name}</td>
+      <td>${p.price.toFixed(2)}</td>
+      <td>${p.barcode || "-"}</td>
+      <td>
+        <button onclick="deleteProduct(${p.id})">🗑 حذف</button>
+      </td>
+    `;
+
+    table.appendChild(row);
+  });
+}
+
+/* ===== أحداث الصفحة ===== */
 document.addEventListener("DOMContentLoaded", () => {
   renderProducts();
+
+  const form = document.getElementById("addProductForm");
+  const searchInput = document.getElementById("searchProduct");
+
+  /* إضافة صنف */
+  form?.addEventListener("submit", e => {
+    e.preventDefault();
+
+    const name = document.getElementById("productName").value.trim();
+    const price = document.getElementById("productPrice").value;
+    const barcode = document.getElementById("productBarcode").value.trim();
+
+    if (!name || !price) {
+      alert("⚠️ أدخل اسم وسعر الصنف");
+      return;
+    }
+
+    addProduct(name, price, barcode);
+    form.reset();
+  });
+
+  /* البحث */
+  searchInput?.addEventListener("input", e => {
+    const result = searchProducts(e.target.value);
+    renderProducts(result);
+  });
 });
