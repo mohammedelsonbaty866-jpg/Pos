@@ -250,3 +250,29 @@ body {
   padding: 8px;
   border-bottom: 1px solid #ddd;
 }
+/* كروت المنتجات */
+.product-btn {
+  background: linear-gradient(145deg, #ffffff, #f1f1f1);
+  color: #111 !important;
+  border-radius: 18px;
+  padding: 18px;
+  font-size: 17px;
+  font-weight: bold;
+  text-align: center;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.25);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* اسم الصنف */
+.product-btn strong {
+  color: #000 !important;
+  font-size: 18px;
+}
+
+/* السعر */
+.product-btn span {
+  color: #0a7cff !important;
+  font-size: 16px;
+}
