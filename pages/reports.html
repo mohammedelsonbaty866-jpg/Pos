@@ -2,30 +2,24 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>التقارير</title>
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="../assets/css/style.css">
 
   <style>
     body {
-      margin: 0;
       font-family: Tahoma, Arial;
       background: #f4f6f9;
+      margin: 0;
     }
 
     header {
-      background: #6f42c1;
+      background: #0d6efd;
       color: #fff;
       padding: 12px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-    }
-
-    header h2 {
-      margin: 0;
-      font-size: 18px;
     }
 
     .container {
@@ -37,50 +31,13 @@
       padding: 15px;
       border-radius: 12px;
       margin-bottom: 15px;
-      box-shadow: 0 2px 6px rgba(0,0,0,.1);
+      box-shadow: 0 2px 6px rgba(0,0,0,.15);
     }
 
-    .stat {
-      font-size: 20px;
-      font-weight: bold;
-      color: #198754;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 10px;
-    }
-
-    th, td {
-      padding: 10px;
-      border-bottom: 1px solid #eee;
-      text-align: center;
-      font-size: 14px;
-    }
-
-    th {
-      background: #f1f1f1;
-    }
-
-    button {
-      width: 100%;
-      padding: 12px;
-      font-size: 16px;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-    }
-
-    .clear-btn {
-      background: #dc3545;
-      color: #fff;
-    }
-
-    .back-btn {
-      background: #0d6efd;
-      color: #fff;
-      margin-top: 10px;
+    .invoice {
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 10px;
+      margin-bottom: 10px;
     }
   </style>
 </head>
@@ -89,86 +46,53 @@
 
 <header>
   <button onclick="goBack()">⬅</button>
-  <h2>التقارير</h2>
+  <h3>التقارير</h3>
   <div>📊</div>
 </header>
 
 <div class="container">
 
-  <!-- إحصائيات -->
   <div class="card">
-    <h3>ملخص</h3>
-    <p>إجمالي المبيعات: <span class="stat" id="totalSales">0</span> جنيه</p>
-    <p>عدد الفواتير: <span class="stat" id="totalInvoices">0</span></p>
+    <h4>ملخص</h4>
+    <p>عدد الفواتير: <strong id="count">0</strong></p>
+    <p>إجمالي المبيعات: <strong id="sum">0</strong></p>
   </div>
 
-  <!-- جدول الفواتير -->
   <div class="card">
-    <h3>الفواتير</h3>
-    <table>
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>الإجمالي</th>
-          <th>التاريخ</th>
-        </tr>
-      </thead>
-      <tbody id="reportsTable"></tbody>
-    </table>
-  </div>
-
-  <!-- مسح التقارير -->
-  <div class="card">
-    <button class="clear-btn" onclick="clearReports()">🗑 مسح كل التقارير</button>
+    <h4>تفاصيل الفواتير</h4>
+    <div id="reportsList"></div>
   </div>
 
 </div>
 
 <script>
   const sales = JSON.parse(localStorage.getItem("sales")) || [];
-  const table = document.getElementById("reportsTable");
-  const totalSalesEl = document.getElementById("totalSales");
-  const totalInvoicesEl = document.getElementById("totalInvoices");
+  const settings = JSON.parse(localStorage.getItem("settings")) || { currency: "جنيه" };
 
-  function renderReports() {
-    table.innerHTML = "";
+  const countEl = document.getElementById("count");
+  const sumEl = document.getElementById("sum");
+  const list = document.getElementById("reportsList");
 
-    let total = 0;
+  countEl.textContent = sales.length;
 
-    if (sales.length === 0) {
-      table.innerHTML = "<tr><td colspan='3'>لا توجد فواتير</td></tr>";
-      totalSalesEl.textContent = 0;
-      totalInvoicesEl.textContent = 0;
-      return;
-    }
+  let totalSum = 0;
 
-    sales.forEach((sale, index) => {
-      total += sale.total;
+  sales.forEach(sale => {
+    totalSum += sale.total;
 
-      const tr = document.createElement("tr");
-      tr.innerHTML = `
-        <td>${index + 1}</td>
-        <td>${sale.total} جنيه</td>
-        <td>${sale.date}</td>
-      `;
-      table.appendChild(tr);
-    });
+    list.innerHTML += `
+      <div class="invoice">
+        <div>📅 ${sale.date}</div>
+        <div>💰 ${sale.total} ${settings.currency}</div>
+      </div>
+    `;
+  });
 
-    totalSalesEl.textContent = total;
-    totalInvoicesEl.textContent = sales.length;
-  }
-
-  function clearReports() {
-    if (!confirm("هل تريد مسح كل التقارير؟")) return;
-    localStorage.removeItem("sales");
-    renderReports();
-  }
+  sumEl.textContent = totalSum + " " + settings.currency;
 
   function goBack() {
     window.location.href = "../index.html";
   }
-
-  renderReports();
 </script>
 
 </body>
