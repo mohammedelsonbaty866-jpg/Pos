@@ -35,3 +35,29 @@
   margin-bottom: 12px;
   border: 1px solid var(--border);
 }
+.top-bar {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:10px 16px;
+  background:var(--card);
+  border-bottom:1px solid var(--border);
+}
+
+.main-nav a {
+  margin:0 8px;
+  text-decoration:none;
+  color:var(--text);
+}
+
+.page {
+  padding:16px;
+}
+
+.card {
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:16px;
+  margin-bottom:12px;
+}
