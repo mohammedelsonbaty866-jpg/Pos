@@ -8,8 +8,8 @@
   <!-- CSS -->
   <link rel="stylesheet" href="../assets/css/style.css">
   <link rel="stylesheet" href="../assets/css/theme.css">
-
 </head>
+
 <body>
 
 <!-- ===== HEADER ===== -->
@@ -23,41 +23,37 @@
 <!-- ===== MAIN ===== -->
 <main class="settings-page">
 
-  <!-- بيانات المتجر -->
-  <section class="settings-card">
-    <h2>🏪 بيانات المتجر</h2>
-
-    <label>اسم المتجر</label>
-    <input type="text" id="storeName" placeholder="اسم المتجر">
-
-    <label>رقم الهاتف</label>
-    <input type="tel" id="storePhone" placeholder="رقم الهاتف">
-
-    <button onclick="saveStoreInfo()" class="btn-primary">
-      💾 حفظ البيانات
-    </button>
-  </section>
-
-  <!-- المظهر -->
-  <section class="settings-card">
+  <!-- ===== المظهر ===== -->
+  <section class="card">
     <h2>🎨 المظهر</h2>
 
-    <div class="toggle-row">
+    <label class="switch-row">
       <span>الوضع الداكن</span>
-      <label class="switch">
-        <input type="checkbox" id="themeToggle">
-        <span class="slider"></span>
-      </label>
-    </div>
+      <input type="checkbox" id="darkModeToggle">
+    </label>
   </section>
 
-  <!-- النظام -->
-  <section class="settings-card danger">
-    <h2>⚠️ النظام</h2>
+  <!-- ===== الصوت ===== -->
+  <section class="card">
+    <h2>🔊 الصوت</h2>
 
-    <button onclick="resetApp()" class="btn-danger">
-      🗑️ إعادة ضبط البرنامج
+    <label class="switch-row">
+      <span>صوت الباركود</span>
+      <input type="checkbox" id="barcodeSoundToggle">
+    </label>
+  </section>
+
+  <!-- ===== البيانات ===== -->
+  <section class="card danger">
+    <h2>🗑️ إدارة البيانات</h2>
+
+    <button class="btn-danger" onclick="resetData()">
+      مسح كل البيانات
     </button>
+
+    <p class="hint">
+      ⚠️ سيتم حذف الفواتير والأصناف نهائيًا
+    </p>
   </section>
 
 </main>
