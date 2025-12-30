@@ -1,193 +1,80 @@
-/*************************************************
- * POS Super Pro - Products Module
- * Path: /assets/js/products.js
- *************************************************/
+const STORAGE_KEY = "pos_products";
 
-/* ========= Storage Keys ========= */
-const PRODUCTS_KEY = "pos_products";
-
-/* ========= Helpers ========= */
-function getProducts() {
-  const data = localStorage.getItem(PRODUCTS_KEY);
-  return data ? JSON.parse(data) : [];
+// تحميل الأصناف
+function loadProducts() {
+  return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
 }
 
+// حفظ الأصناف
 function saveProducts(products) {
-  localStorage.setItem(PRODUCTS_KEY, JSON.stringify(products));
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(products));
 }
 
-/* ========= Render Products Table ========= */
-function renderProductsTable() {
-  const tableBody = document.getElementById("productsTable");
-  if (!tableBody) return;
+// إضافة صنف
+function addProduct() {
+  const name = document.getElementById("pName").value.trim();
+  const price = document.getElementById("pPrice").value;
+  const barcode = document.getElementById("pBarcode").value.trim();
 
-  const products = getProducts();
-  tableBody.innerHTML = "";
-
-  if (products.length === 0) {
-    tableBody.innerHTML = `
-      <tr>
-        <td colspan="4" style="text-align:center; opacity:.6">
-          لا توجد أصناف
-        </td>
-      </tr>
-    `;
+  if (!name || !price) {
+    alert("أدخل اسم الصنف والسعر");
     return;
   }
 
-  products.forEach((product, index) => {
-    const tr = document.createElement("tr");
-
-    tr.innerHTML = `
-      <td>${product.name}</td>
-      <td>${product.price} ج</td>
-      <td>${product.barcode || "-"}</td>
-      <td>
-        <button class="danger-btn" onclick="deleteProduct(${index})">
-          🗑
-        </button>
-      </td>
-    `;
-
-    tableBody.appendChild(tr);
-  });
-}
-
-/* ========= Add Product ========= */
-function addProduct(event) {
-  event.preventDefault();
-
-  const nameInput = document.getElementById("productName");
-  const priceInput = document.getElementById("productPrice");
-  const barcodeInput = document.getElementById("productBarcode");
-
-  if (!nameInput || !priceInput) return;
-
-  const name = nameInput.value.trim();
-  const price = parseFloat(priceInput.value);
-  const barcode = barcodeInput.value.trim();
-
-  if (!name || isNaN(price)) {
-    alert("من فضلك أدخل اسم وسعر صحيح");
-    return;
-  }
-
-  const products = getProducts();
-
-  // منع تكرار الباركود
-  if (barcode) {
-    const exists = products.some(p => p.barcode === barcode);
-    if (exists) {
-      alert("الباركود موجود بالفعل");
-      return;
-    }
-  }
+  const products = loadProducts();
 
   products.push({
+    id: Date.now(),
     name,
-    price,
+    price: Number(price),
     barcode
   });
 
   saveProducts(products);
 
-  nameInput.value = "";
-  priceInput.value = "";
-  barcodeInput.value = "";
+  document.getElementById("pName").value = "";
+  document.getElementById("pPrice").value = "";
+  document.getElementById("pBarcode").value = "";
 
-  renderProductsTable();
-}
-
-/* ========= Delete Product ========= */
-function deleteProduct(index) {
-  if (!confirm("هل تريد حذف الصنف؟")) return;
-
-  const products = getProducts();
-  products.splice(index, 1);
-  saveProducts(products);
-  renderProductsTable();
-}
-
-/* ========= Init ========= */
-document.addEventListener("DOMContentLoaded", () => {
-  const form = document.getElementById("productForm");
-  if (form) {
-    form.addEventListener("submit", addProduct);
-  }
-
-  renderProductsTable();
-});
-document.addEventListener("DOMContentLoaded", () => {
   renderProducts();
-});
+}
 
-function renderProducts(filter = "") {
-  const grid = document.getElementById("productsGrid");
-  if (!grid) return;
+// عرض الأصناف
+function renderProducts() {
+  const list = document.getElementById("productsList");
+  const products = loadProducts();
 
-  const products = getProducts();
-  grid.innerHTML = "";
+  list.innerHTML = "";
 
-  const filtered = products.filter(p =>
-    p.name.includes(filter) || p.barcode.includes(filter)
-  );
-
-  if (filtered.length === 0) {
-    grid.innerHTML = "<p class='empty'>لا توجد أصناف</p>";
+  if (products.length === 0) {
+    list.innerHTML = "<p>لا يوجد أصناف</p>";
     return;
   }
 
-  filtered.forEach(product => {
+  products.forEach(p => {
     const div = document.createElement("div");
-    div.className = "product-card";
+    div.className = "product-row";
     div.innerHTML = `
-      <strong>${product.name}</strong>
-      <span>${product.price} ج</span>
+      <span>${p.name}</span>
+      <span>${p.price} ج</span>
+      <button onclick="deleteProduct(${p.id})">🗑️</button>
     `;
-    div.onclick = () => addToInvoice(product);
-    grid.appendChild(div);
+    list.appendChild(div);
   });
 }
 
-function searchProducts(value) {
-  renderProducts(value);
+// حذف صنف
+function deleteProduct(id) {
+  let products = loadProducts();
+  products = products.filter(p => p.id !== id);
+  saveProducts(products);
+  renderProducts();
 }
-document.addEventListener("DOMContentLoaded", () => {
-  const grid = document.getElementById("productsGrid");
 
-  if (!grid) {
-    alert("productsGrid مش موجود");
-    return;
-  }
-
-  grid.innerHTML = `
-    <div style="padding:10px;border:1px solid #ccc">منتج 1</div>
-    <div style="padding:10px;border:1px solid #ccc">منتج 2</div>
-  `;
-});
-document.addEventListener("DOMContentLoaded", () => {
-  loadProducts();
-});
-
-function loadProducts() {
-  const grid = document.getElementById("productsGrid");
-  if (!grid) {
-    console.error("productsGrid not found");
-    return;
-  }
-
-  const products = JSON.parse(localStorage.getItem("pos_products")) || [];
-
-  grid.innerHTML = "";
-
-  products.forEach(product => {
-    const card = document.createElement("div");
-    card.className = "product-card";
-    card.innerHTML = `
-      <strong>${product.name}</strong>
-      <span>${product.price} ج</span>
-    `;
-    card.onclick = () => addToInvoice(product);
-    grid.appendChild(card);
-  });
+// رجوع للكاشير
+function goCashier() {
+  window.location.href = "../index.html";
 }
+
+// تحميل تلقائي
+renderProducts();
