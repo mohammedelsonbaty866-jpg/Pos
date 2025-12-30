@@ -1,19 +1,45 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<title>تسجيل الدخول</title>
-<link rel="stylesheet" href="assets/css/auth.css">
+  <meta charset="UTF-8" />
+  <title>تسجيل الدخول | POS PRO</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="assets/css/auth.css" />
+  <link rel="stylesheet" href="assets/css/theme.css" />
+
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json" />
 </head>
 <body>
 
-<div class="auth-box">
-  <h3>تسجيل الدخول</h3>
-  <input id="username" placeholder="اسم المستخدم">
-  <input id="password" type="password" placeholder="كلمة المرور">
-  <button onclick="login()">دخول</button>
-</div>
+  <div class="login-container">
+    <h1>POS PRO</h1>
+    <p class="subtitle">تسجيل الدخول</p>
 
-<script src="assets/js/auth.js"></script>
+    <form id="loginForm">
+      <input
+        type="text"
+        id="username"
+        placeholder="اسم المستخدم"
+        required
+      />
+
+      <input
+        type="password"
+        id="password"
+        placeholder="كلمة المرور"
+        required
+      />
+
+      <button type="submit">دخول</button>
+    </form>
+
+    <p id="loginMessage"></p>
+  </div>
+
+  <!-- JS -->
+  <script src="assets/js/auth.js"></script>
 </body>
 </html>
