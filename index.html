@@ -8,7 +8,6 @@
   <link rel="manifest" href="manifest.json">
   <link rel="stylesheet" href="assets/css/style.css">
   <link rel="stylesheet" href="assets/css/theme.css">
-
 </head>
 <body>
 
@@ -16,19 +15,18 @@
   <h2>🧾 الكاشير</h2>
   <div>
     <button onclick="toggleTheme()">🌙</button>
+    <button onclick="startBarcode()">📷</button>
     <a href="pages/settings.html" class="btn">⚙️</a>
   </div>
 </header>
 
 <main class="pos-layout">
 
-  <!-- المنتجات -->
   <section class="products-panel">
     <h3>المنتجات</h3>
     <div id="productsList" class="products-grid"></div>
   </section>
 
-  <!-- الفاتورة -->
   <section class="invoice-panel">
     <h3>الفاتورة</h3>
     <ul id="cartList"></ul>
@@ -42,10 +40,17 @@
 
 </main>
 
+<!-- نافذة الكاميرا -->
+<div id="barcodeModal" class="modal">
+  <video id="camera" autoplay></video>
+  <button onclick="stopBarcode()">❌ إغلاق</button>
+</div>
+
 <audio id="beep" src="assets/sounds/beep.mp3"></audio>
 
 <script src="assets/js/data.js"></script>
 <script src="assets/js/cashier.js"></script>
+<script src="assets/js/barcode.js"></script>
 <script src="assets/js/settings.js"></script>
 
 </body>
