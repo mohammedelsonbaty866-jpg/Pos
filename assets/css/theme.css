@@ -1,152 +1,103 @@
-/* theme.css | POS PRO THEME SYSTEM */
+/* ================================
+   THEME VARIABLES
+================================ */
 
-/* ===== Root Variables (Light Theme) ===== */
 :root {
-  --primary: #2563eb;
-  --primary-dark: #1d4ed8;
-
-  --bg-color: #f8fafc;
-  --card-bg: #ffffff;
-
-  --text-color: #0f172a;
-  --muted-text: #64748b;
-
-  --border-color: #e2e8f0;
-  --input-bg: #f1f5f9;
-
-  --success: #22c55e;
-  --danger: #ef4444;
-  --warning: #f59e0b;
-
-  --shadow-sm: 0 4px 10px rgba(0, 0, 0, 0.08);
-  --shadow-md: 0 10px 25px rgba(0, 0, 0, 0.15);
+    --bg-main: #f1f5f9;
+    --bg-card: #ffffff;
+    --text-main: #020617;
+    --text-muted: #64748b;
+    --primary: #2563eb;
+    --danger: #dc2626;
+    --border: #e5e7eb;
 }
 
-/* ===== Dark Theme ===== */
+/* ===== DARK MODE ===== */
 body.dark {
-  --bg-color: #0f172a;
-  --card-bg: #020617;
-
-  --text-color: #e5e7eb;
-  --muted-text: #94a3b8;
-
-  --border-color: #1e293b;
-  --input-bg: #020617;
-
-  --shadow-sm: 0 4px 10px rgba(0, 0, 0, 0.4);
-  --shadow-md: 0 10px 25px rgba(0, 0, 0, 0.6);
+    --bg-main: #020617;
+    --bg-card: #0f172a;
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+    --primary: #3b82f6;
+    --danger: #ef4444;
+    --border: #1e293b;
 }
 
-/* ===== Global Styles ===== */
+/* ================================
+   GLOBAL THEME APPLY
+================================ */
+
 body {
-  background: var(--bg-color);
-  color: var(--text-color);
-  transition: background 0.25s ease, color 0.25s ease;
+    background: var(--bg-main);
+    color: var(--text-main);
+    transition: background .3s, color .3s;
 }
 
-/* Cards */
+/* ===== CARDS ===== */
 .card {
-  background: var(--card-bg);
-  border-radius: 14px;
-  box-shadow: var(--shadow-sm);
-  padding: 16px;
+    background: var(--bg-card);
+    border-radius: 14px;
+    padding: 15px;
+    box-shadow: 0 6px 15px rgba(0,0,0,.08);
+    border: 1px solid var(--border);
 }
 
-/* Buttons */
+/* ===== TEXT ===== */
+h1, h2, h3 {
+    color: var(--text-main);
+}
+
+small, .muted {
+    color: var(--text-muted);
+}
+
+/* ===== BUTTONS ===== */
 .btn {
-  padding: 10px 14px;
-  border-radius: 10px;
-  border: none;
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: bold;
-  transition: background 0.2s, transform 0.1s;
-}
-
-.btn:active {
-  transform: scale(0.97);
+    padding: 10px 14px;
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+    font-size: 15px;
 }
 
 .btn-primary {
-  background: var(--primary);
-  color: #fff;
-}
-
-.btn-primary:hover {
-  background: var(--primary-dark);
-}
-
-.btn-success {
-  background: var(--success);
-  color: #fff;
+    background: var(--primary);
+    color: #fff;
 }
 
 .btn-danger {
-  background: var(--danger);
-  color: #fff;
+    background: var(--danger);
+    color: #fff;
 }
 
-.btn-warning {
-  background: var(--warning);
-  color: #fff;
+/* ===== INPUTS ===== */
+input, select {
+    background: var(--bg-card);
+    color: var(--text-main);
+    border: 1px solid var(--border);
 }
 
-/* Inputs */
-input,
-select {
-  background: var(--input-bg);
-  border: 1px solid var(--border-color);
-  color: var(--text-color);
-  border-radius: 10px;
-  padding: 10px 12px;
-  outline: none;
-  transition: border 0.2s, box-shadow 0.2s;
+input::placeholder {
+    color: var(--text-muted);
 }
 
-input:focus,
-select:focus {
-  border-color: var(--primary);
-  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.25);
-}
-
-/* Tables */
+/* ===== TABLE ===== */
 table {
-  width: 100%;
-  border-collapse: collapse;
+    width: 100%;
+    border-collapse: collapse;
 }
 
-th,
-td {
-  padding: 10px;
-  border-bottom: 1px solid var(--border-color);
-  text-align: center;
-  font-size: 14px;
+th, td {
+    border: 1px solid var(--border);
+    padding: 8px;
+    text-align: center;
 }
 
 th {
-  background: var(--input-bg);
-  font-weight: bold;
+    background: rgba(0,0,0,.04);
 }
 
-/* Scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--border-color);
-  border-radius: 6px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--muted-text);
-}
-
-/* Utility */
-.hidden {
-  display: none !important;
-}
-
-.text-center {
-  text-align: center;
+/* ===== TRANSITION ===== */
+* {
+    transition: background .25s, color .25s, border .25s;
 }
