@@ -1,21 +1,24 @@
-/* ============ AUTH GUARD ============ */
+/*************************************************
+ * auth-guard.js
+ * يحمي الصفحات من الدخول بدون تسجيل
+ *************************************************/
 
-const SESSION_KEY = "currentUser";
+(function () {
+  const isLoggedIn = localStorage.getItem("pos_logged_in");
+  const currentPage = window.location.pathname.split("/").pop();
 
-/* تحقق من تسجيل الدخول */
-function requireAuth() {
-  const user = JSON.parse(localStorage.getItem(SESSION_KEY));
+  // الصفحات اللي مسموح تدخلها بدون تسجيل
+  const publicPages = ["login.html"];
 
-  if (!user) {
-    window.location.replace("login.html");
+  if (!isLoggedIn && !publicPages.includes(currentPage)) {
+    // مش مسجل → رجوع لتسجيل الدخول
+    window.location.href = "login.html";
+    return;
   }
-}
 
-/* منع الرجوع لصفحة اللوجين بعد الدخول */
-function blockLoginPage() {
-  const user = JSON.parse(localStorage.getItem(SESSION_KEY));
-
-  if (user) {
-    window.location.replace("index.html");
+  if (isLoggedIn && currentPage === "login.html") {
+    // مسجل ودخل على login → حوله للكاشير
+    window.location.href = "index.html";
+    return;
   }
-}
+})();
