@@ -152,3 +152,16 @@ function renderProducts(filter = "") {
 function searchProducts(value) {
   renderProducts(value);
 }
+document.addEventListener("DOMContentLoaded", () => {
+  const grid = document.getElementById("productsGrid");
+
+  if (!grid) {
+    alert("productsGrid مش موجود");
+    return;
+  }
+
+  grid.innerHTML = `
+    <div style="padding:10px;border:1px solid #ccc">منتج 1</div>
+    <div style="padding:10px;border:1px solid #ccc">منتج 2</div>
+  `;
+});
