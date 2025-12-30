@@ -1,12 +1,40 @@
-self.addEventListener("install", e=>{
-  e.waitUntil(
-    caches.open("pos-pro").then(c=>c.addAll([
-      "/", "/index.html", "/login.html"
-    ]))
+const CACHE_NAME = "pos-pro-v1";
+const FILES_TO_CACHE = [
+  "/",
+  "/index.html",
+  "/login.html",
+  "/manifest.json",
+
+  "/assets/css/style.css",
+  "/assets/css/auth.css",
+  "/assets/css/theme.css",
+
+  "/assets/js/auth.js",
+  "/assets/js/auth-guard.js",
+  "/assets/js/data.js",
+  "/assets/js/products.js",
+  "/assets/js/cashier.js",
+  "/assets/js/reports.js",
+  "/assets/js/settings.js",
+  "/assets/js/barcode.js",
+
+  "/assets/sounds/beep.mp3",
+
+  "/pages/products.html",
+  "/pages/reports.html",
+  "/pages/settings.html"
+];
+
+self.addEventListener("install", event => {
+  event.waitUntil(
+    caches.open(CACHE_NAME).then(cache => cache.addAll(FILES_TO_CACHE))
   );
 });
-self.addEventListener("fetch", e=>{
-  e.respondWith(
-    caches.match(e.request).then(r=>r||fetch(e.request))
+
+self.addEventListener("fetch", event => {
+  event.respondWith(
+    caches.match(event.request).then(response => {
+      return response || fetch(event.request);
+    })
   );
 });
