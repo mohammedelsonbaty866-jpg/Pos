@@ -1,46 +1,80 @@
-/* ===== LIGHT MODE (DEFAULT) ===== */
-body.light {
-  --primary: #0d6efd;
-  --bg: #f4f6f8;
-  --card: #ffffff;
-  --text: #222;
-  --border: #ddd;
+/* ================= THEME SYSTEM ================= */
+
+/* الوضع الافتراضي (فاتح) */
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  transition: background-color .3s ease, color .3s ease;
 }
 
-/* ===== DARK MODE ===== */
+/* الوضع الداكن */
 body.dark {
-  --primary: #4dabf7;
-  --bg: #121212;
-  --card: #1e1e1e;
-  --text: #f1f1f1;
-  --border: #333;
+  background-color: #020617;
+  color: #f8fafc;
 }
 
-/* TRANSITION */
-body,
-.header,
-.product,
-.cart-section,
-.search-section {
-  transition: background 0.3s, color 0.3s;
+/* الكروت */
+body.dark .products-panel,
+body.dark .invoice-panel {
+  background: #0f172a;
+  box-shadow: 0 5px 15px rgba(0,0,0,.4);
 }
 
-/* TOGGLE BUTTON */
+/* الهيدر */
+body.dark .top-bar {
+  background: #020617;
+}
+
+/* القائمة */
+body.dark .main-nav {
+  background: #0f172a;
+  border-bottom: 1px solid #1e293b;
+}
+
+body.dark .main-nav a,
+body.dark .main-nav button {
+  color: #f8fafc;
+}
+
+body.dark .main-nav .active {
+  background: var(--main);
+  color: #fff;
+}
+
+/* المدخلات */
+body.dark input,
+body.dark select {
+  background: #020617;
+  color: #f8fafc;
+  border: 1px solid #334155;
+}
+
+/* المنتجات */
+body.dark .product-card {
+  background: #020617;
+  border: 1px solid #1e293b;
+}
+
+/* عناصر الفاتورة */
+body.dark .invoice-item {
+  border-bottom: 1px dashed #334155;
+}
+
+/* الفوتر */
+body.dark footer {
+  color: #94a3b8;
+}
+
+/* زر تغيير الوضع */
 .theme-toggle {
-  background: transparent;
+  background: none;
   border: none;
-  font-size: 22px;
+  color: #fff;
+  font-size: 20px;
   cursor: pointer;
-  color: #fff;
 }
 
-/* DARK FIXES */
-body.dark .product-price {
-  color: #4dabf7;
-}
-
-body.dark input {
-  background: #1e1e1e;
-  color: #fff;
-  border-color: #333;
+/* انتقالات ناعمة */
+* {
+  transition: background-color .2s ease, color .2s ease, border-color .2s ease;
 }
