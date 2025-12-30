@@ -2,91 +2,51 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <title>POS Super Pro | الكاشير</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>POS Super Pro</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <!-- PWA -->
   <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#0d6efd">
-
-  <!-- CSS -->
   <link rel="stylesheet" href="assets/css/style.css">
   <link rel="stylesheet" href="assets/css/theme.css">
-</head>
 
+</head>
 <body>
 
-<!-- ===== TOP BAR ===== -->
 <header class="top-bar">
-  <div class="left">
-    <h1>POS Super Pro</h1>
-  </div>
-
-  <div class="right">
-    <button class="icon-btn" onclick="toggleTheme()">🌙</button>
-    <button class="icon-btn" onclick="goSettings()">⚙️</button>
-    <button class="icon-btn danger" onclick="logout()">⏻</button>
+  <h2>🧾 الكاشير</h2>
+  <div>
+    <button onclick="toggleTheme()">🌙</button>
+    <a href="pages/settings.html" class="btn">⚙️</a>
   </div>
 </header>
 
-<!-- ===== MAIN ===== -->
 <main class="pos-layout">
 
-  <!-- ===== PRODUCTS ===== -->
+  <!-- المنتجات -->
   <section class="products-panel">
-    <div class="panel-header">
-      <h2>المنتجات</h2>
-      <button class="barcode-btn" onclick="startBarcodeScan()">📷 باركود</button>
-    </div>
-
-    <input
-      type="text"
-      id="searchInput"
-      placeholder="بحث بالاسم أو الباركود..."
-      onkeyup="searchProduct(this.value)"
-    >
-
-    <div id="productsGrid"></div>
+    <h3>المنتجات</h3>
+    <div id="productsList" class="products-grid"></div>
   </section>
 
-  <!-- ===== INVOICE ===== -->
+  <!-- الفاتورة -->
   <section class="invoice-panel">
-    <h2>الفاتورة</h2>
-
-    <div id="invoiceItems" class="invoice-items"></div>
+    <h3>الفاتورة</h3>
+    <ul id="cartList"></ul>
 
     <div class="total-box">
-      <span>الإجمالي</span>
-      <strong id="total">0 ج</strong>
+      الإجمالي: <span id="total">0</span> جنيه
     </div>
 
-    <div class="actions">
-      <button class="btn-save" onclick="saveInvoice()">💾 حفظ</button>
-      <button class="btn-clear" onclick="clearInvoice()">🗑️ تفريغ</button>
-    </div>
+    <button class="pay-btn" onclick="checkout()">💵 إتمام البيع</button>
   </section>
 
 </main>
 
-<!-- ===== FOOTER ===== -->
-<footer class="app-footer">
-  POS Super Pro © 2025
-</footer>
+<audio id="beep" src="assets/sounds/beep.mp3"></audio>
 
-<!-- ===== JS (ترتيب مهم جدًا) ===== -->
-<script src="assets/js/auth-guard.js"></script>
 <script src="assets/js/data.js"></script>
-<script src="assets/js/products.js"></script>
 <script src="assets/js/cashier.js"></script>
-<script src="assets/js/barcode.js"></script>
 <script src="assets/js/settings.js"></script>
-
-<!-- ===== PWA Service Worker ===== -->
-<script>
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('sw.js');
-  }
-</script>
 
 </body>
 </html>
