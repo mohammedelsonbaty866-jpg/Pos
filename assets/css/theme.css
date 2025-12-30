@@ -1,13 +1,4 @@
-body.dark {
-  background: #121212;
-  color: white;
-}
-
-body.dark .products,
-body.dark .cart {
-  background: #1e1e1e;
-}
-
-body.dark .product {
-  border-color: #333;
+body.dark{
+  background:#111;
+  color:#fff;
 }
