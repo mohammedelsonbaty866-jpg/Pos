@@ -1,84 +1,73 @@
-// ===============================
-// BARCODE SCANNER - CAMERA MODE
-// POS SUPER PRO
-// ===============================
-
-let scannerActive = false;
 let videoStream = null;
 
-// فتح الكاميرا
-async function openBarcodeScanner() {
-  if (scannerActive) return;
-  scannerActive = true;
-
-  const video = document.getElementById("barcodeVideo");
-  const overlay = document.getElementById("barcodeOverlay");
-
-  overlay.style.display = "flex";
-
-  try {
-    videoStream = await navigator.mediaDevices.getUserMedia({
-      video: { facingMode: "environment" },
-      audio: false
-    });
-
-    video.srcObject = videoStream;
-    video.setAttribute("playsinline", true);
-    video.play();
-
-    scanFrame(video);
-  } catch (err) {
-    alert("لا يمكن فتح الكاميرا");
-    closeScanner();
-  }
-}
-
-// إغلاق الكاميرا
-function closeScanner() {
-  scannerActive = false;
-
-  const overlay = document.getElementById("barcodeOverlay");
-  const video = document.getElementById("barcodeVideo");
-
-  overlay.style.display = "none";
-
-  if (videoStream) {
-    videoStream.getTracks().forEach(track => track.stop());
-    videoStream = null;
-  }
-}
-
-// قراءة الفريم
-function scanFrame(video) {
-  if (!scannerActive) return;
-
-  const canvas = document.createElement("canvas");
-  const ctx = canvas.getContext("2d");
-
-  canvas.width = video.videoWidth;
-  canvas.height = video.videoHeight;
-  ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-
-  const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-
-  const code = jsQR(imageData.data, canvas.width, canvas.height);
-
-  if (code) {
-    handleBarcode(code.data);
-    closeScanner();
+function startBarcodeScanner() {
+  if (!navigator.mediaDevices) {
+    alert("الكاميرا غير مدعومة");
     return;
   }
 
-  requestAnimationFrame(() => scanFrame(video));
+  const video = document.createElement("video");
+  video.setAttribute("playsinline", true);
+  video.style.width = "100%";
+
+  const overlay = document.createElement("div");
+  overlay.style.position = "fixed";
+  overlay.style.inset = "0";
+  overlay.style.background = "#000";
+  overlay.style.zIndex = "9999";
+  overlay.appendChild(video);
+
+  document.body.appendChild(overlay);
+
+  navigator.mediaDevices.getUserMedia({
+    video: { facingMode: "environment" }
+  }).then(stream => {
+    videoStream = stream;
+    video.srcObject = stream;
+    video.play();
+
+    const detector = new BarcodeDetector({
+      formats: ["ean_13", "code_128", "qr_code"]
+    });
+
+    const scan = async () => {
+      if (!videoStream) return;
+
+      const codes = await detector.detect(video);
+      if (codes.length > 0) {
+        const code = codes[0].rawValue;
+        stopScanner(overlay);
+        playBeep();
+        findProductByBarcode(code);
+        return;
+      }
+      requestAnimationFrame(scan);
+    };
+    scan();
+  }).catch(() => {
+    alert("لم يتم السماح بالكاميرا");
+    stopScanner(overlay);
+  });
 }
 
-// التعامل مع الباركود
-function handleBarcode(barcode) {
-  const product = products.find(p => p.barcode === barcode);
-
-  if (product) {
-    addToInvoice(product.id);
-  } else {
-    alert("الصنف غير موجود");
+function stopScanner(overlay) {
+  if (videoStream) {
+    videoStream.getTracks().forEach(t => t.stop());
+    videoStream = null;
   }
+  overlay.remove();
+}
+
+function playBeep() {
+  const audio = new Audio("assets/sounds/beep.mp3");
+  audio.play();
+}
+
+function findProductByBarcode(code) {
+  const product = products.find(p => p.barcode === code);
+  if (!product) {
+    alert("الصنف غير موجود");
+    return;
+  }
+  addToCart(product);
 }
