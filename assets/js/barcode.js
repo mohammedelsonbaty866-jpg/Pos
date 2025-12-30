@@ -1,8 +1,4 @@
-const beep = new Audio("../assets/sounds/beep.mp3");
-function barcodeScan(code){
-  const p = products.find(x=>x.barcode==code);
-  if(p){
-    beep.play();
-    addToInvoice(p);
-  }
+function searchProduct(v){
+  const res=products.filter(p=>p.name.includes(v)||p.barcode===v);
+  renderProducts(res);
 }
