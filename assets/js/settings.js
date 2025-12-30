@@ -2,62 +2,58 @@
  * SETTINGS SYSTEM - POS SUPER PRO
  *************************************************/
 
-/* ===== مفاتيح التخزين ===== */
 const SETTINGS_KEY = "pos_settings";
 
 /* ===== تحميل الإعدادات ===== */
 function loadSettings() {
   return JSON.parse(localStorage.getItem(SETTINGS_KEY)) || {
-    shopName: "POS Super Pro",
-    theme: "light", // light | dark
-    currency: "جنيه",
-    barcodeSound: true
+    shopName: "POS Pro",
+    theme: "light"
   };
 }
 
 /* ===== حفظ الإعدادات ===== */
-function saveSettings(data) {
-  localStorage.setItem(SETTINGS_KEY, JSON.stringify(data));
+function saveSettings(settings) {
+  localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
 }
-
-/* ===== عناصر الصفحة ===== */
-const shopNameInput = document.getElementById("shopNameInput");
-const themeToggle = document.getElementById("themeToggle");
-const currencyInput = document.getElementById("currencyInput");
-const barcodeSoundToggle = document.getElementById("barcodeSoundToggle");
-const saveBtn = document.getElementById("saveSettingsBtn");
 
 /* ===== تطبيق الثيم ===== */
 function applyTheme(theme) {
-  document.body.classList.remove("light", "dark");
-  document.body.classList.add(theme);
+  if (theme === "dark") {
+    document.body.classList.add("dark");
+  } else {
+    document.body.classList.remove("dark");
+  }
 }
 
-/* ===== تحميل الإعدادات عند الفتح ===== */
+/* ===== عند فتح الصفحة ===== */
 document.addEventListener("DOMContentLoaded", () => {
   const settings = loadSettings();
 
+  // عناصر الصفحة
+  const shopNameInput = document.getElementById("shopName");
+  const themeToggle = document.getElementById("themeToggle");
+
   if (shopNameInput) shopNameInput.value = settings.shopName;
-  if (currencyInput) currencyInput.value = settings.currency;
-  if (barcodeSoundToggle) barcodeSoundToggle.checked = settings.barcodeSound;
-  if (themeToggle) themeToggle.value = settings.theme;
+  if (themeToggle) themeToggle.checked = settings.theme === "dark";
 
   applyTheme(settings.theme);
+
+  /* ===== تغيير اسم المحل ===== */
+  shopNameInput?.addEventListener("input", e => {
+    settings.shopName = e.target.value;
+    saveSettings(settings);
+  });
+
+  /* ===== تغيير الوضع ===== */
+  themeToggle?.addEventListener("change", e => {
+    settings.theme = e.target.checked ? "dark" : "light";
+    saveSettings(settings);
+    applyTheme(settings.theme);
+  });
 });
 
-/* ===== حفظ الإعدادات ===== */
-if (saveBtn) {
-  saveBtn.addEventListener("click", () => {
-    const newSettings = {
-      shopName: shopNameInput.value || "POS Super Pro",
-      currency: currencyInput.value || "جنيه",
-      barcodeSound: barcodeSoundToggle.checked,
-      theme: themeToggle.value
-    };
-
-    saveSettings(newSettings);
-    applyTheme(newSettings.theme);
-
-    alert("✅ تم حفظ الإعدادات بنجاح");
-  });
+/* ===== زر الرجوع للكاشير ===== */
+function backToCashier() {
+  window.location.href = "index.html";
 }
