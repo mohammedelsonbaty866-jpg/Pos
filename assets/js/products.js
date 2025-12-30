@@ -1,67 +1,119 @@
-let products = JSON.parse(localStorage.getItem("products")) || [];
+/*************************************************
+ * POS Super Pro - Products Module
+ * Path: /assets/js/products.js
+ *************************************************/
 
-function addProduct() {
-  const name = document.getElementById("name").value.trim();
-  const price = parseFloat(document.getElementById("price").value);
-  const barcode = document.getElementById("barcode").value.trim();
+/* ========= Storage Keys ========= */
+const PRODUCTS_KEY = "pos_products";
 
-  if (!name || !price) {
-    alert("❌ أدخل اسم وسعر الصنف");
+/* ========= Helpers ========= */
+function getProducts() {
+  const data = localStorage.getItem(PRODUCTS_KEY);
+  return data ? JSON.parse(data) : [];
+}
+
+function saveProducts(products) {
+  localStorage.setItem(PRODUCTS_KEY, JSON.stringify(products));
+}
+
+/* ========= Render Products Table ========= */
+function renderProductsTable() {
+  const tableBody = document.getElementById("productsTable");
+  if (!tableBody) return;
+
+  const products = getProducts();
+  tableBody.innerHTML = "";
+
+  if (products.length === 0) {
+    tableBody.innerHTML = `
+      <tr>
+        <td colspan="4" style="text-align:center; opacity:.6">
+          لا توجد أصناف
+        </td>
+      </tr>
+    `;
     return;
   }
 
+  products.forEach((product, index) => {
+    const tr = document.createElement("tr");
+
+    tr.innerHTML = `
+      <td>${product.name}</td>
+      <td>${product.price} ج</td>
+      <td>${product.barcode || "-"}</td>
+      <td>
+        <button class="danger-btn" onclick="deleteProduct(${index})">
+          🗑
+        </button>
+      </td>
+    `;
+
+    tableBody.appendChild(tr);
+  });
+}
+
+/* ========= Add Product ========= */
+function addProduct(event) {
+  event.preventDefault();
+
+  const nameInput = document.getElementById("productName");
+  const priceInput = document.getElementById("productPrice");
+  const barcodeInput = document.getElementById("productBarcode");
+
+  if (!nameInput || !priceInput) return;
+
+  const name = nameInput.value.trim();
+  const price = parseFloat(priceInput.value);
+  const barcode = barcodeInput.value.trim();
+
+  if (!name || isNaN(price)) {
+    alert("من فضلك أدخل اسم وسعر صحيح");
+    return;
+  }
+
+  const products = getProducts();
+
+  // منع تكرار الباركود
+  if (barcode) {
+    const exists = products.some(p => p.barcode === barcode);
+    if (exists) {
+      alert("الباركود موجود بالفعل");
+      return;
+    }
+  }
+
   products.push({
-    id: Date.now(),
     name,
     price,
     barcode
   });
 
-  localStorage.setItem("products", JSON.stringify(products));
+  saveProducts(products);
 
-  document.getElementById("name").value = "";
-  document.getElementById("price").value = "";
-  document.getElementById("barcode").value = "";
+  nameInput.value = "";
+  priceInput.value = "";
+  barcodeInput.value = "";
 
-  renderProducts();
+  renderProductsTable();
 }
 
-function renderProducts() {
-  const table = document.getElementById("productsTable");
-  const search = document.getElementById("search").value.toLowerCase();
+/* ========= Delete Product ========= */
+function deleteProduct(index) {
+  if (!confirm("هل تريد حذف الصنف؟")) return;
 
-  table.innerHTML = "";
-
-  products
-    .filter(p =>
-      p.name.toLowerCase().includes(search) ||
-      (p.barcode && p.barcode.includes(search))
-    )
-    .forEach((p, index) => {
-      table.innerHTML += `
-        <tr>
-          <td>${index + 1}</td>
-          <td>${p.name}</td>
-          <td>${p.price}</td>
-          <td>${p.barcode || "-"}</td>
-          <td>
-            <button class="delete" onclick="deleteProduct(${p.id})">🗑</button>
-          </td>
-        </tr>
-      `;
-    });
+  const products = getProducts();
+  products.splice(index, 1);
+  saveProducts(products);
+  renderProductsTable();
 }
 
-function deleteProduct(id) {
-  if (!confirm("هل أنت متأكد من الحذف؟")) return;
+/* ========= Init ========= */
+document.addEventListener("DOMContentLoaded", () => {
+  const form = document.getElementById("productForm");
+  if (form) {
+    form.addEventListener("submit", addProduct);
+  }
 
-  products = products.filter(p => p.id !== id);
-  localStorage.setItem("products", JSON.stringify(products));
-  renderProducts();
-}
-
-function goBack() {
-  window.location.href = "../index.html";
-}
-
-renderProducts();
+  renderProductsTable();
+});
