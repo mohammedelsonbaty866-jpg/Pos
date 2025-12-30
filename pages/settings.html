@@ -2,112 +2,22 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>الإعدادات | POS</title>
-
-<style>
-body{
-  font-family:Arial;
-  background:#f5f6fa;
-  margin:0;
-}
-
-header{
-  background:#2563eb;
-  color:white;
-  padding:14px;
-  text-align:center;
-}
-
-.container{
-  padding:15px;
-}
-
-.card{
-  background:white;
-  padding:15px;
-  border-radius:10px;
-  box-shadow:0 4px 10px rgba(0,0,0,.1);
-  margin-bottom:15px;
-}
-
-label{
-  display:block;
-  margin-bottom:5px;
-  font-weight:bold;
-}
-
-input{
-  width:100%;
-  padding:8px;
-  margin-bottom:10px;
-  border-radius:6px;
-  border:1px solid #ccc;
-}
-
-button{
-  width:100%;
-  padding:10px;
-  border:none;
-  border-radius:8px;
-  background:#2563eb;
-  color:white;
-  font-size:16px;
-  cursor:pointer;
-}
-
-.back{
-  background:#22c55e;
-  margin-top:10px;
-}
-</style>
+<title>الإعدادات</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="../assets/css/style.css">
 </head>
-
 <body>
 
-<header>⚙️ الإعدادات</header>
+<header>
+  <h2>الإعدادات</h2>
+  <a href="../dashboard.html">⬅ رجوع</a>
+</header>
 
-<div class="container">
+<main style="padding:10px">
+  <button onclick="toggleTheme()">🌙 / ☀ الوضع الليلي</button>
+</main>
 
-  <div class="card">
-    <label>اسم المتجر</label>
-    <input id="storeName" placeholder="مثال: سوبر ماركت محمد">
-
-    <label>العملة</label>
-    <input id="currency" placeholder="جنيه">
-
-    <label>نسبة الضريبة %</label>
-    <input id="tax" type="number" placeholder="14">
-
-    <button onclick="saveSettings()">💾 حفظ الإعدادات</button>
-    <button class="back" onclick="goBack()">⬅ الرجوع للكاشير</button>
-  </div>
-
-</div>
-
-<script>
-function saveSettings(){
-  const data={
-    store:storeName.value,
-    currency:currency.value,
-    tax:tax.value
-  };
-  localStorage.setItem("pos_settings",JSON.stringify(data));
-  alert("تم حفظ الإعدادات ✅");
-}
-
-function goBack(){
-  window.location.href="index.html";
-}
-
-// تحميل البيانات
-const saved=JSON.parse(localStorage.getItem("pos_settings"));
-if(saved){
-  storeName.value=saved.store;
-  currency.value=saved.currency;
-  tax.value=saved.tax;
-}
-</script>
-
+<script src="../assets/js/auth-guard.js"></script>
+<script src="../assets/js/settings.js"></script>
 </body>
 </html>
