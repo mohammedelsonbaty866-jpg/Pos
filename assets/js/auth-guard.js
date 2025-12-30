@@ -1,27 +1,12 @@
-/* ===============================
-   AUTH GUARD
-   Protect Pages From Unauthorized Access
+/* ==============================
+   Page Protection | POS Pro
 ================================ */
 
-(function () {
+const SESSION_KEY = "pos_user_session";
 
-    const AUTH_KEY = "pos_user";
-    const user = localStorage.getItem(AUTH_KEY);
-
-    // الصفحات المسموح بها بدون تسجيل
-    const publicPages = [
-        "/login.html",
-        "login.html"
-    ];
-
-    const currentPage = window.location.pathname;
-
-    // لو مش مسجل دخول
-    if (!user) {
-        // ولو مش في صفحة login
-        if (!publicPages.some(p => currentPage.endsWith(p))) {
-            window.location.replace("login.html");
-        }
-    }
-
+(function protectPage() {
+  const user = JSON.parse(localStorage.getItem(SESSION_KEY));
+  if (!user) {
+    window.location.href = "/login.html";
+  }
 })();
