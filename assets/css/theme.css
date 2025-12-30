@@ -1,0 +1,46 @@
+/* ===== LIGHT MODE (DEFAULT) ===== */
+body.light {
+  --primary: #0d6efd;
+  --bg: #f4f6f8;
+  --card: #ffffff;
+  --text: #222;
+  --border: #ddd;
+}
+
+/* ===== DARK MODE ===== */
+body.dark {
+  --primary: #4dabf7;
+  --bg: #121212;
+  --card: #1e1e1e;
+  --text: #f1f1f1;
+  --border: #333;
+}
+
+/* TRANSITION */
+body,
+.header,
+.product,
+.cart-section,
+.search-section {
+  transition: background 0.3s, color 0.3s;
+}
+
+/* TOGGLE BUTTON */
+.theme-toggle {
+  background: transparent;
+  border: none;
+  font-size: 22px;
+  cursor: pointer;
+  color: #fff;
+}
+
+/* DARK FIXES */
+body.dark .product-price {
+  color: #4dabf7;
+}
+
+body.dark input {
+  background: #1e1e1e;
+  color: #fff;
+  border-color: #333;
+}
