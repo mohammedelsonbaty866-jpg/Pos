@@ -346,3 +346,25 @@ body {
   padding: 10px 20px;
   font-size: 18px;
 }
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.95);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  z-index: 9999;
+}
+
+.modal video {
+  width: 90%;
+  max-width: 420px;
+  border-radius: 16px;
+}
+
+.modal button {
+  margin-top: 15px;
+  padding: 10px 22px;
+  font-size: 18px;
+}
