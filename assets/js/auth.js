@@ -1,91 +1,48 @@
-/* ================= AUTH SYSTEM ================= */
+/*************************************************
+ * auth.js
+ * مسؤول عن تسجيل الدخول وتخزين الجلسة
+ *************************************************/
 
-/*
-  شكل التخزين:
-  localStorage.users = [
-    { username, password, role }
-  ]
-
-  localStorage.currentUser = {
-    username, role
+// مستخدمين تجريبيين (تقدر تعدلهم بعدين)
+const USERS = [
+  {
+    username: "admin",
+    password: "1234",
+    role: "admin"
+  },
+  {
+    username: "cashier",
+    password: "1234",
+    role: "cashier"
   }
-*/
+];
 
-const AUTH_USERS_KEY = "users";
-const AUTH_SESSION_KEY = "currentUser";
+document.addEventListener("DOMContentLoaded", () => {
+  const form = document.getElementById("loginForm");
+  const errorBox = document.getElementById("loginError");
 
-/* تحميل المستخدمين */
-function getUsers() {
-  return JSON.parse(localStorage.getItem(AUTH_USERS_KEY) || "[]");
-}
+  if (!form) return;
 
-/* حفظ المستخدمين */
-function saveUsers(users) {
-  localStorage.setItem(AUTH_USERS_KEY, JSON.stringify(users));
-}
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
 
-/* ================= REGISTER ================= */
-function register() {
-  const username = document.getElementById("regUsername").value.trim();
-  const password = document.getElementById("regPassword").value.trim();
+    const username = document.getElementById("username").value.trim();
+    const password = document.getElementById("password").value.trim();
 
-  if (!username || !password) {
-    alert("من فضلك أدخل اسم المستخدم وكلمة المرور");
-    return;
-  }
+    const user = USERS.find(
+      u => u.username === username && u.password === password
+    );
 
-  let users = getUsers();
+    if (!user) {
+      errorBox.textContent = "❌ اسم المستخدم أو كلمة المرور غير صحيحة";
+      return;
+    }
 
-  if (users.find(u => u.username === username)) {
-    alert("اسم المستخدم موجود بالفعل");
-    return;
-  }
+    // حفظ الجلسة
+    localStorage.setItem("pos_logged_in", "true");
+    localStorage.setItem("pos_user", JSON.stringify(user));
 
-  users.push({
-    username,
-    password,
-    role: "admin" // أول حساب مدير
+    // تحويل للكاشير
+    window.location.href = "index.html";
   });
-
-  saveUsers(users);
-
-  alert("تم إنشاء الحساب بنجاح");
-  login(username, password);
-}
-
-/* ================= LOGIN ================= */
-function login(user = null, pass = null) {
-  const username = user || document.getElementById("loginUsername").value.trim();
-  const password = pass || document.getElementById("loginPassword").value.trim();
-
-  let users = getUsers();
-  let found = users.find(
-    u => u.username === username && u.password === password
-  );
-
-  if (!found) {
-    alert("بيانات الدخول غير صحيحة");
-    return;
-  }
-
-  localStorage.setItem(
-    AUTH_SESSION_KEY,
-    JSON.stringify({
-      username: found.username,
-      role: found.role
-    })
-  );
-
-  window.location.href = "index.html";
-}
-
-/* ================= LOGOUT ================= */
-function logout() {
-  localStorage.removeItem(AUTH_SESSION_KEY);
-  window.location.href = "login.html";
-}
-
-/* ================= CURRENT USER ================= */
-function getCurrentUser() {
-  return JSON.parse(localStorage.getItem(AUTH_SESSION_KEY));
-}
+});
