@@ -1,72 +1,24 @@
-body {
-  margin: 0;
-  font-family: Tahoma, Arial;
-  background: #f4f6f9;
+body{margin:0;font-family:Tahama}
+header{
+  background:#0d6efd;
+  color:#fff;
+  padding:10px;
 }
-
-.top-bar {
-  background: #0d6efd;
-  color: white;
-  padding: 12px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+nav a, nav button{
+  margin:5px;
+  color:#fff;
+  background:none;
+  border:none;
 }
-
-.cashier-container {
-  display: flex;
-  padding: 10px;
-  gap: 10px;
+.pos{
+  display:flex;
+  height:calc(100vh - 60px);
 }
-
-.products, .cart {
-  background: white;
-  border-radius: 10px;
-  padding: 10px;
-}
-
-.products {
-  width: 60%;
-}
-
-.cart {
-  width: 40%;
-}
-
-.product {
-  border: 1px solid #ddd;
-  padding: 10px;
-  margin-bottom: 8px;
-  border-radius: 8px;
-  cursor: pointer;
-}
-
-.product:hover {
-  background: #f1f1f1;
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-table th, table td {
-  border-bottom: 1px solid #ddd;
-  padding: 6px;
-  text-align: center;
-}
-
-.total {
-  font-size: 18px;
-  margin-top: 10px;
-}
-
-.pay-btn {
-  width: 100%;
-  padding: 12px;
-  background: #198754;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-size: 18px;
+.products{flex:2;overflow:auto;padding:10px}
+.invoice{flex:1;background:#f5f5f5;padding:10px}
+.product{
+  border:1px solid #ccc;
+  padding:10px;
+  margin:5px;
+  cursor:pointer;
 }
