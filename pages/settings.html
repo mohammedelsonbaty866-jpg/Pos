@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>الإعدادات | POS Pro</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <link rel="stylesheet" href="../assets/css/theme.css">
+
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<header class="top-bar">
+  <h1>⚙️ الإعدادات</h1>
+  <nav>
+    <a href="../index.html">⬅ رجوع للكاشير</a>
+  </nav>
+</header>
+
+<!-- ===== MAIN ===== -->
+<main class="settings-page">
+
+  <!-- بيانات المتجر -->
+  <section class="settings-card">
+    <h2>🏪 بيانات المتجر</h2>
+
+    <label>اسم المتجر</label>
+    <input type="text" id="storeName" placeholder="اسم المتجر">
+
+    <label>رقم الهاتف</label>
+    <input type="tel" id="storePhone" placeholder="رقم الهاتف">
+
+    <button onclick="saveStoreInfo()" class="btn-primary">
+      💾 حفظ البيانات
+    </button>
+  </section>
+
+  <!-- المظهر -->
+  <section class="settings-card">
+    <h2>🎨 المظهر</h2>
+
+    <div class="toggle-row">
+      <span>الوضع الداكن</span>
+      <label class="switch">
+        <input type="checkbox" id="themeToggle">
+        <span class="slider"></span>
+      </label>
+    </div>
+  </section>
+
+  <!-- النظام -->
+  <section class="settings-card danger">
+    <h2>⚠️ النظام</h2>
+
+    <button onclick="resetApp()" class="btn-danger">
+      🗑️ إعادة ضبط البرنامج
+    </button>
+  </section>
+
+</main>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  POS Super Pro © 2025
+</footer>
+
+<!-- ===== JS ===== -->
+<script src="../assets/js/auth-guard.js"></script>
+<script src="../assets/js/settings.js"></script>
+
+</body>
+</html>
