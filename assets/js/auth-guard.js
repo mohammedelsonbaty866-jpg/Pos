@@ -1,34 +1,27 @@
-/* auth-guard.js | Route Protection */
+/* ===============================
+   AUTH GUARD
+   Protect Pages From Unauthorized Access
+================================ */
 
-const SESSION_KEY = "pos_user_session";
+(function () {
 
-/**
- * يمنع الدخول للصفحات بدون تسجيل دخول
- */
-function requireAuth() {
-    const session = localStorage.getItem(SESSION_KEY);
+    const AUTH_KEY = "pos_user";
+    const user = localStorage.getItem(AUTH_KEY);
 
-    if (!session) {
-        window.location.href = "login.html";
-        return;
+    // الصفحات المسموح بها بدون تسجيل
+    const publicPages = [
+        "/login.html",
+        "login.html"
+    ];
+
+    const currentPage = window.location.pathname;
+
+    // لو مش مسجل دخول
+    if (!user) {
+        // ولو مش في صفحة login
+        if (!publicPages.some(p => currentPage.endsWith(p))) {
+            window.location.replace("login.html");
+        }
     }
-}
 
-/**
- * يمنع فتح صفحة تسجيل الدخول لو المستخدم مسجل بالفعل
- */
-function redirectIfLoggedIn() {
-    const session = localStorage.getItem(SESSION_KEY);
-
-    if (session) {
-        window.location.href = "index.html";
-    }
-}
-
-/**
- * جلب بيانات المستخدم الحالي
- */
-function getCurrentUser() {
-    const session = localStorage.getItem(SESSION_KEY);
-    return session ? JSON.parse(session) : null;
-}
+})();
