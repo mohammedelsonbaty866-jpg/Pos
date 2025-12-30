@@ -32,3 +32,22 @@ th, td {
   padding: 10px;
   border-bottom: 1px solid var(--border);
 }
+button {
+  padding:10px 14px;
+  border-radius:6px;
+  border:none;
+  cursor:pointer;
+}
+
+.btn-primary {
+  background:var(--primary);
+  color:#fff;
+}
+
+input {
+  width:100%;
+  padding:10px;
+  margin-bottom:10px;
+  border-radius:6px;
+  border:1px solid var(--border);
+}
