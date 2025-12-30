@@ -1,9 +1,10 @@
-function renderProducts(){
-  productsGrid.innerHTML="";
-  products.forEach(p=>{
-    const d=document.createElement("div");
-    d.innerText = p.name+" - "+p.price+"ج";
-    d.onclick=()=>addToInvoice(p);
-    productsGrid.appendChild(d);
-  });
-}
+const productList = document.getElementById("productList");
+const products = JSON.parse(localStorage.getItem("pos_products"));
+
+products.forEach(p => {
+  const div = document.createElement("div");
+  div.className = "product";
+  div.innerHTML = `<strong>${p.name}</strong><br>${p.price} جنيه`;
+  div.onclick = () => addToCart(p);
+  productList.appendChild(div);
+});
