@@ -2,40 +2,25 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<title>التقارير | POS PRO</title>
+<title>التقارير</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="../assets/css/style.css">
 </head>
 <body>
 
-<script src="../assets/js/auth-guard.js"></script>
-
-<header class="top-bar">
-  <h1>التقارير</h1>
-  <nav>
-    <a href="../index.html">الكاشير</a>
-    <a href="products.html">الأصناف</a>
-    <a class="active">التقارير</a>
-    <a href="settings.html">الإعدادات</a>
-  </nav>
+<header>
+  <h2>التقارير</h2>
+  <a href="../dashboard.html">⬅ رجوع</a>
 </header>
 
 <main style="padding:10px">
-  <h3>الفواتير</h3>
-  <table width="100%" border="1">
-    <thead>
-      <tr>
-        <th>#</th>
-        <th>التاريخ</th>
-        <th>عدد الأصناف</th>
-        <th>الإجمالي</th>
-      </tr>
-    </thead>
-    <tbody id="rep"></tbody>
-  </table>
+  <button onclick="daily()">تقرير اليوم</button>
+  <button onclick="monthly()">تقرير شهري</button>
+
+  <div id="reportBox"></div>
 </main>
 
-<script src="../assets/js/data.js"></script>
+<script src="../assets/js/auth-guard.js"></script>
 <script src="../assets/js/reports.js"></script>
 </body>
 </html>
