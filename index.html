@@ -1,75 +1,103 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
   <title>POS Super Pro</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <!-- PWA -->
-  <link rel="manifest" href="manifest.json" />
-  <meta name="theme-color" content="#0d6efd" />
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0d6efd">
 
   <!-- CSS -->
-  <link rel="stylesheet" href="assets/css/style.css" />
-  <link rel="stylesheet" href="assets/css/theme.css" />
-
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/theme.css">
 </head>
-<body class="light">
 
-  <!-- HEADER -->
-  <header class="header">
-    <h1>نقطة البيع</h1>
-    <div class="header-actions">
-      <button onclick="toggleTheme()">🌙</button>
-      <button onclick="goSettings()">⚙️</button>
-    </div>
-  </header>
+<body>
 
-  <!-- SEARCH -->
-  <section class="search-section">
-    <input 
-      type="text" 
-      id="searchInput" 
-      placeholder="ابحث بالاسم أو الباركود"
-      autofocus
-    />
-  </section>
+<!-- ================= HEADER ================= -->
+<header class="top-bar">
+  <h1>POS Super Pro</h1>
 
-  <!-- PRODUCTS -->
-  <section class="products-section" id="productsList">
-    <!-- المنتجات -->
-  </section>
+  <div class="top-actions">
+    <button onclick="toggleTheme()">🌓</button>
+    <a href="pages/settings.html">⚙️</a>
+    <button onclick="logout()">⏻</button>
+  </div>
+</header>
 
-  <!-- CART -->
-  <section class="cart-section">
-    <h2>الفاتورة</h2>
-    <ul id="cartList"></ul>
+<!-- ================= NAV ================= -->
+<nav class="main-nav">
+  <button class="active">🧾 الكاشير</button>
+  <a href="pages/products.html">📦 الأصناف</a>
+  <a href="pages/reports.html">📊 التقارير</a>
+</nav>
 
-    <div class="total">
-      الإجمالي: <span id="totalPrice">0</span> جنيه
-    </div>
+<!-- ================= MAIN ================= -->
+<main class="pos-layout">
 
-    <button class="pay-btn" onclick="completeSale()">
-      إتمام البيع
+  <!-- ===== PRODUCTS ===== -->
+  <section class="products-panel">
+    <h2>المنتجات</h2>
+
+    <input
+      type="text"
+      placeholder="بحث بالاسم أو الباركود"
+      onkeyup="searchProduct(this.value)"
+    >
+
+    <button class="scan-btn" onclick="openBarcodeScanner()">
+      📷 مسح باركود
     </button>
+
+    <div id="productsGrid"></div>
   </section>
 
-  <!-- SOUND -->
-  <audio id="beepSound" src="assets/sounds/beep.mp3"></audio>
+  <!-- ===== INVOICE ===== -->
+  <section class="invoice-panel">
+    <h2>الفاتورة</h2>
 
-  <!-- JS -->
-  <script src="assets/js/data.js"></script>
-  <script src="assets/js/products.js"></script>
-  <script src="assets/js/barcode.js"></script>
-  <script src="assets/js/cashier.js"></script>
-  <script src="assets/js/settings.js"></script>
+    <div id="invoiceItems"></div>
 
-  <!-- SERVICE WORKER -->
-  <script>
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('sw.js');
-    }
-  </script>
+    <div class="total-box">
+      <span>الإجمالي</span>
+      <strong id="total">0 ج</strong>
+    </div>
+
+    <div class="actions">
+      <button class="btn-save" onclick="saveInvoice()">حفظ</button>
+      <button class="btn-clear" onclick="clearInvoice()">تفريغ</button>
+    </div>
+  </section>
+
+</main>
+
+<!-- ================= FOOTER ================= -->
+<footer>
+  POS Super Pro ©
+</footer>
+
+<!-- ================= BARCODE CAMERA ================= -->
+<div id="barcodeOverlay" class="barcode-overlay">
+  <div class="scanner-box">
+    <video id="barcodeVideo"></video>
+    <button onclick="closeScanner()">إغلاق</button>
+  </div>
+</div>
+
+<!-- ================= SOUND ================= -->
+<audio id="beepSound" src="assets/sounds/beep.mp3"></audio>
+
+<!-- ================= JS ================= -->
+<script src="https://cdn.jsdelivr.net/npm/jsqr/dist/jsQR.js"></script>
+
+<script src="assets/js/auth-guard.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/products.js"></script>
+<script src="assets/js/cashier.js"></script>
+<script src="assets/js/barcode.js"></script>
+<script src="assets/js/settings.js"></script>
 
 </body>
 </html>
