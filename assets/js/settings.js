@@ -1,41 +1,81 @@
-/*************************
- * SETTINGS & THEME
- *************************/
+/* ===============================
+   SETTINGS.JS | POS SUPER PRO
+================================ */
 
-// فتح صفحة الإعدادات
-function goSettings() {
-  window.location.href = "pages/settings.html";
-}
-
-// تسجيل خروج
-function logout() {
-  localStorage.removeItem("pos_user");
-  window.location.href = "login.html";
-}
-
-// ===== الوضع الليلي =====
+// عند فتح صفحة الإعدادات
 document.addEventListener("DOMContentLoaded", () => {
-  const themeBtn = document.getElementById("themeToggle");
-  const savedTheme = localStorage.getItem("pos_theme");
-
-  if (savedTheme === "dark") {
-    document.body.classList.add("dark");
-    if (themeBtn) themeBtn.textContent = "☀️";
-  }
-
-  if (themeBtn) {
-    themeBtn.addEventListener("click", toggleTheme);
-  }
+  loadUser();
+  applySavedTheme();
 });
 
+/* ===============================
+   USER
+================================ */
+function loadUser() {
+  const user = localStorage.getItem("currentUser");
+  document.getElementById("currentUser").innerText =
+    user ? user : "غير معروف";
+}
+
+/* ===============================
+   THEME (LIGHT / DARK)
+================================ */
 function toggleTheme() {
-  document.body.classList.toggle("dark");
+  const current = localStorage.getItem("theme") || "light";
+  const next = current === "light" ? "dark" : "light";
+  localStorage.setItem("theme", next);
+  applySavedTheme();
+}
 
-  const isDark = document.body.classList.contains("dark");
-  localStorage.setItem("pos_theme", isDark ? "dark" : "light");
+function applySavedTheme() {
+  const theme = localStorage.getItem("theme") || "light";
+  document.body.classList.remove("light", "dark");
+  document.body.classList.add(theme);
+}
 
-  const themeBtn = document.getElementById("themeToggle");
-  if (themeBtn) {
-    themeBtn.textContent = isDark ? "☀️" : "🌙";
-  }
+/* ===============================
+   BARCODE SOUND
+================================ */
+function toggleBeep() {
+  const enabled = localStorage.getItem("beep") !== "off";
+  localStorage.setItem("beep", enabled ? "off" : "on");
+  alert(
+    enabled
+      ? "🔇 تم إيقاف صوت الباركود"
+      : "🔊 تم تشغيل صوت الباركود"
+  );
+}
+
+/* ===============================
+   LOGOUT
+================================ */
+function logout() {
+  if (!confirm("هل أنت متأكد من تسجيل الخروج؟")) return;
+
+  localStorage.removeItem("loggedIn");
+  localStorage.removeItem("currentUser");
+
+  window.location.href = "../login.html";
+}
+
+/* ===============================
+   SYSTEM
+================================ */
+function clearData() {
+  if (!confirm("سيتم مسح كل البيانات، هل أنت متأكد؟")) return;
+
+  localStorage.clear();
+  alert("✅ تم مسح البيانات");
+  location.reload();
+}
+
+function reloadApp() {
+  location.reload();
+}
+
+/* ===============================
+   NAVIGATION
+================================ */
+function goCashier() {
+  window.location.href = "../index.html";
 }
