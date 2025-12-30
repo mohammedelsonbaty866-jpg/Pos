@@ -1,29 +1,32 @@
-/********************************
- * PRODUCTS MODULE - POS SUPER PRO
- ********************************/
+/*************************************************
+ * PRODUCTS MANAGEMENT - POS PRO
+ *************************************************/
 
-/* ==============================
-   تحميل الأصناف
-================================ */
 let products = JSON.parse(localStorage.getItem("products")) || [];
 
-/* ==============================
-   حفظ الأصناف
-================================ */
+/* ===== حفظ الأصناف ===== */
 function saveProducts() {
   localStorage.setItem("products", JSON.stringify(products));
 }
 
-/* ==============================
-   إضافة صنف جديد
-================================ */
+/* ===== إضافة صنف ===== */
 function addProduct() {
-  const name = document.getElementById("productName").value.trim();
-  const price = parseFloat(document.getElementById("productPrice").value);
-  const barcode = document.getElementById("productBarcode").value.trim();
+  const nameInput = document.getElementById("productName");
+  const priceInput = document.getElementById("productPrice");
+  const barcodeInput = document.getElementById("productBarcode");
+
+  const name = nameInput.value.trim();
+  const price = parseFloat(priceInput.value);
+  const barcode = barcodeInput.value.trim();
 
   if (!name || isNaN(price)) {
-    alert("❌ من فضلك أدخل اسم وسعر الصنف");
+    alert("من فضلك أدخل اسم الصنف والسعر");
+    return;
+  }
+
+  // منع تكرار الباركود
+  if (barcode && products.some(p => p.barcode === barcode)) {
+    alert("الباركود مستخدم بالفعل");
     return;
   }
 
@@ -31,109 +34,72 @@ function addProduct() {
     id: Date.now(),
     name,
     price,
-    barcode: barcode || null
+    barcode
   };
 
   products.push(product);
   saveProducts();
-  renderProductsTable();
-  renderProductsGrid();
+  renderProducts();
 
-  // تفريغ الحقول
-  document.getElementById("productName").value = "";
-  document.getElementById("productPrice").value = "";
-  document.getElementById("productBarcode").value = "";
-
-  alert("✅ تم إضافة الصنف");
+  nameInput.value = "";
+  priceInput.value = "";
+  barcodeInput.value = "";
 }
 
-/* ==============================
-   حذف صنف
-================================ */
+/* ===== عرض الأصناف ===== */
+function renderProducts(filtered = null) {
+  const table = document.getElementById("productsTable");
+  if (!table) return;
+
+  const list = filtered || products;
+  table.innerHTML = "";
+
+  list.forEach((product, index) => {
+    const row = document.createElement("tr");
+
+    row.innerHTML = `
+      <td>${index + 1}</td>
+      <td>${product.name}</td>
+      <td>${product.price.toFixed(2)}</td>
+      <td>${product.barcode || "-"}</td>
+      <td>
+        <button class="btn-danger" onclick="deleteProduct(${product.id})">
+          حذف
+        </button>
+      </td>
+    `;
+
+    table.appendChild(row);
+  });
+}
+
+/* ===== حذف صنف ===== */
 function deleteProduct(id) {
   if (!confirm("هل أنت متأكد من حذف الصنف؟")) return;
 
   products = products.filter(p => p.id !== id);
   saveProducts();
-  renderProductsTable();
-  renderProductsGrid();
+  renderProducts();
 }
 
-/* ==============================
-   عرض الأصناف في جدول
-================================ */
-function renderProductsTable() {
-  const table = document.getElementById("productsTable");
-  if (!table) return;
+/* ===== بحث ===== */
+function searchProducts(keyword) {
+  keyword = keyword.trim().toLowerCase();
 
-  table.innerHTML = "";
+  if (!keyword) {
+    renderProducts();
+    return;
+  }
 
-  products.forEach((p, index) => {
-    table.innerHTML += `
-      <tr>
-        <td>${index + 1}</td>
-        <td>${p.name}</td>
-        <td>${p.price} ج</td>
-        <td>
-          <button onclick="deleteProduct(${p.id})">🗑</button>
-        </td>
-      </tr>
-    `;
-  });
+  const filtered = products.filter(p =>
+    p.name.toLowerCase().includes(keyword) ||
+    (p.barcode && p.barcode.includes(keyword))
+  );
+
+  renderProducts(filtered);
 }
 
-/* ==============================
-   عرض الأصناف في شاشة الكاشير
-================================ */
-function renderProductsGrid() {
-  const grid = document.getElementById("productsGrid");
-  if (!grid) return;
-
-  grid.innerHTML = "";
-
-  products.forEach(p => {
-    const div = document.createElement("div");
-    div.className = "product-card";
-    div.innerHTML = `
-      <strong>${p.name}</strong>
-      <span>${p.price} ج</span>
-    `;
-    div.onclick = () => addToInvoice(p);
-    grid.appendChild(div);
-  });
-}
-
-/* ==============================
-   البحث بالاسم أو الباركود
-================================ */
-function searchProduct(value) {
-  const grid = document.getElementById("productsGrid");
-  if (!grid) return;
-
-  const keyword = value.toLowerCase();
-  grid.innerHTML = "";
-
-  products
-    .filter(p =>
-      p.name.toLowerCase().includes(keyword) ||
-      (p.barcode && p.barcode.includes(keyword))
-    )
-    .forEach(p => {
-      const div = document.createElement("div");
-      div.className = "product-card";
-      div.innerHTML = `
-        <strong>${p.name}</strong>
-        <span>${p.price} ج</span>
-      `;
-      div.onclick = () => addToInvoice(p);
-      grid.appendChild(div);
-    });
-}
-
-/* ==============================
-   تحميل تلقائي
-================================ */
+/* ===== تحميل تلقائي ===== */
 document.addEventListener("DOMContentLoaded", () => {
-  renderProductsTable();
-  renderProductsGrid();
+  renderProducts();
 });
