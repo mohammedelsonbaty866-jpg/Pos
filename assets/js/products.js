@@ -165,3 +165,29 @@ document.addEventListener("DOMContentLoaded", () => {
     <div style="padding:10px;border:1px solid #ccc">منتج 2</div>
   `;
 });
+document.addEventListener("DOMContentLoaded", () => {
+  loadProducts();
+});
+
+function loadProducts() {
+  const grid = document.getElementById("productsGrid");
+  if (!grid) {
+    console.error("productsGrid not found");
+    return;
+  }
+
+  const products = JSON.parse(localStorage.getItem("pos_products")) || [];
+
+  grid.innerHTML = "";
+
+  products.forEach(product => {
+    const card = document.createElement("div");
+    card.className = "product-card";
+    card.innerHTML = `
+      <strong>${product.name}</strong>
+      <span>${product.price} ج</span>
+    `;
+    card.onclick = () => addToInvoice(product);
+    grid.appendChild(card);
+  });
+}
