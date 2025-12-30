@@ -1,71 +1,63 @@
-/* =========================
-   SETTINGS.JS – POS SUPER PRO
-   ========================= */
+/*************************************************
+ * SETTINGS SYSTEM - POS SUPER PRO
+ *************************************************/
 
-/* ===== عناصر الصفحة ===== */
-const darkModeToggle = document.getElementById("darkModeToggle");
-const barcodeSoundToggle = document.getElementById("barcodeSoundToggle");
+/* ===== مفاتيح التخزين ===== */
+const SETTINGS_KEY = "pos_settings";
 
 /* ===== تحميل الإعدادات ===== */
+function loadSettings() {
+  return JSON.parse(localStorage.getItem(SETTINGS_KEY)) || {
+    shopName: "POS Super Pro",
+    theme: "light", // light | dark
+    currency: "جنيه",
+    barcodeSound: true
+  };
+}
+
+/* ===== حفظ الإعدادات ===== */
+function saveSettings(data) {
+  localStorage.setItem(SETTINGS_KEY, JSON.stringify(data));
+}
+
+/* ===== عناصر الصفحة ===== */
+const shopNameInput = document.getElementById("shopNameInput");
+const themeToggle = document.getElementById("themeToggle");
+const currencyInput = document.getElementById("currencyInput");
+const barcodeSoundToggle = document.getElementById("barcodeSoundToggle");
+const saveBtn = document.getElementById("saveSettingsBtn");
+
+/* ===== تطبيق الثيم ===== */
+function applyTheme(theme) {
+  document.body.classList.remove("light", "dark");
+  document.body.classList.add(theme);
+}
+
+/* ===== تحميل الإعدادات عند الفتح ===== */
 document.addEventListener("DOMContentLoaded", () => {
-  loadTheme();
-  loadSoundSetting();
+  const settings = loadSettings();
+
+  if (shopNameInput) shopNameInput.value = settings.shopName;
+  if (currencyInput) currencyInput.value = settings.currency;
+  if (barcodeSoundToggle) barcodeSoundToggle.checked = settings.barcodeSound;
+  if (themeToggle) themeToggle.value = settings.theme;
+
+  applyTheme(settings.theme);
 });
 
-/* ===== الوضع الداكن ===== */
-function loadTheme() {
-  const theme = localStorage.getItem("theme") || "light";
+/* ===== حفظ الإعدادات ===== */
+if (saveBtn) {
+  saveBtn.addEventListener("click", () => {
+    const newSettings = {
+      shopName: shopNameInput.value || "POS Super Pro",
+      currency: currencyInput.value || "جنيه",
+      barcodeSound: barcodeSoundToggle.checked,
+      theme: themeToggle.value
+    };
 
-  if (theme === "dark") {
-    document.body.classList.add("dark");
-    if (darkModeToggle) darkModeToggle.checked = true;
-  }
-}
+    saveSettings(newSettings);
+    applyTheme(newSettings.theme);
 
-if (darkModeToggle) {
-  darkModeToggle.addEventListener("change", () => {
-    if (darkModeToggle.checked) {
-      document.body.classList.add("dark");
-      localStorage.setItem("theme", "dark");
-    } else {
-      document.body.classList.remove("dark");
-      localStorage.setItem("theme", "light");
-    }
+    alert("✅ تم حفظ الإعدادات بنجاح");
   });
-}
-
-/* ===== صوت الباركود ===== */
-function loadSoundSetting() {
-  const sound = localStorage.getItem("barcodeSound");
-
-  if (sound === "off") {
-    if (barcodeSoundToggle) barcodeSoundToggle.checked = false;
-  } else {
-    if (barcodeSoundToggle) barcodeSoundToggle.checked = true;
-  }
-}
-
-if (barcodeSoundToggle) {
-  barcodeSoundToggle.addEventListener("change", () => {
-    if (barcodeSoundToggle.checked) {
-      localStorage.setItem("barcodeSound", "on");
-    } else {
-      localStorage.setItem("barcodeSound", "off");
-    }
-  });
-}
-
-/* ===== مسح كل البيانات ===== */
-function resetData() {
-  const confirmDelete = confirm(
-    "هل أنت متأكد؟ سيتم حذف جميع البيانات نهائيًا!"
-  );
-
-  if (!confirmDelete) return;
-
-  localStorage.removeItem("products");
-  localStorage.removeItem("invoices");
-  localStorage.removeItem("currentInvoice");
-
-  alert("✅ تم مسح جميع البيانات بنجاح");
 }
