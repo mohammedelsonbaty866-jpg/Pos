@@ -1,101 +1,50 @@
 /********************************
- * PRODUCTS MANAGEMENT - POS PRO
+ * PRODUCTS MODULE - POS SUPER PRO
  ********************************/
 
-// تحميل الأصناف عند فتح الصفحة
-document.addEventListener("DOMContentLoaded", () => {
-  renderProductsTable();
-});
-
 /* ==============================
-   جلب الأصناف من LocalStorage
+   تحميل الأصناف
 ================================ */
-function getProducts() {
-  return JSON.parse(localStorage.getItem("products")) || [];
-}
+let products = JSON.parse(localStorage.getItem("products")) || [];
 
 /* ==============================
    حفظ الأصناف
 ================================ */
-function saveProducts(products) {
+function saveProducts() {
   localStorage.setItem("products", JSON.stringify(products));
 }
 
 /* ==============================
-   إضافة صنف
+   إضافة صنف جديد
 ================================ */
 function addProduct() {
   const name = document.getElementById("productName").value.trim();
   const price = parseFloat(document.getElementById("productPrice").value);
   const barcode = document.getElementById("productBarcode").value.trim();
-  const stock = parseInt(document.getElementById("productStock").value) || 0;
 
   if (!name || isNaN(price)) {
-    alert("من فضلك أدخل اسم وسعر الصنف");
+    alert("❌ من فضلك أدخل اسم وسعر الصنف");
     return;
   }
 
-  const products = getProducts();
-
-  // منع تكرار الباركود
-  if (barcode && products.find(p => p.barcode === barcode)) {
-    alert("الباركود مستخدم بالفعل");
-    return;
-  }
-
-  const newProduct = {
+  const product = {
     id: Date.now(),
     name,
     price,
-    barcode,
-    stock
+    barcode: barcode || null
   };
 
-  products.push(newProduct);
-  saveProducts(products);
-
-  clearProductForm();
+  products.push(product);
+  saveProducts();
   renderProductsTable();
-}
+  renderProductsGrid();
 
-/* ==============================
-   مسح النموذج
-================================ */
-function clearProductForm() {
+  // تفريغ الحقول
   document.getElementById("productName").value = "";
   document.getElementById("productPrice").value = "";
   document.getElementById("productBarcode").value = "";
-  document.getElementById("productStock").value = "1";
-}
 
-/* ==============================
-   عرض جدول الأصناف
-================================ */
-function renderProductsTable(filteredList = null) {
-  const table = document.getElementById("productsTable");
-  if (!table) return;
-
-  const products = filteredList || getProducts();
-  table.innerHTML = "";
-
-  products.forEach((product, index) => {
-    const row = document.createElement("tr");
-
-    row.innerHTML = `
-      <td>${index + 1}</td>
-      <td>${product.name}</td>
-      <td>${product.price.toFixed(2)}</td>
-      <td>${product.barcode || "-"}</td>
-      <td>${product.stock}</td>
-      <td>
-        <button class="btn-danger" onclick="deleteProduct(${product.id})">
-          حذف
-        </button>
-      </td>
-    `;
-
-    table.appendChild(row);
-  });
+  alert("✅ تم إضافة الصنف");
 }
 
 /* ==============================
@@ -104,24 +53,87 @@ function renderProductsTable(filteredList = null) {
 function deleteProduct(id) {
   if (!confirm("هل أنت متأكد من حذف الصنف؟")) return;
 
-  let products = getProducts();
   products = products.filter(p => p.id !== id);
-  saveProducts(products);
-
+  saveProducts();
   renderProductsTable();
+  renderProductsGrid();
 }
 
 /* ==============================
-   البحث
+   عرض الأصناف في جدول
 ================================ */
-function searchProducts(query) {
-  query = query.trim().toLowerCase();
-  const products = getProducts();
+function renderProductsTable() {
+  const table = document.getElementById("productsTable");
+  if (!table) return;
 
-  const filtered = products.filter(p =>
-    p.name.toLowerCase().includes(query) ||
-    (p.barcode && p.barcode.includes(query))
-  );
+  table.innerHTML = "";
 
-  renderProductsTable(filtered);
+  products.forEach((p, index) => {
+    table.innerHTML += `
+      <tr>
+        <td>${index + 1}</td>
+        <td>${p.name}</td>
+        <td>${p.price} ج</td>
+        <td>
+          <button onclick="deleteProduct(${p.id})">🗑</button>
+        </td>
+      </tr>
+    `;
+  });
 }
+
+/* ==============================
+   عرض الأصناف في شاشة الكاشير
+================================ */
+function renderProductsGrid() {
+  const grid = document.getElementById("productsGrid");
+  if (!grid) return;
+
+  grid.innerHTML = "";
+
+  products.forEach(p => {
+    const div = document.createElement("div");
+    div.className = "product-card";
+    div.innerHTML = `
+      <strong>${p.name}</strong>
+      <span>${p.price} ج</span>
+    `;
+    div.onclick = () => addToInvoice(p);
+    grid.appendChild(div);
+  });
+}
+
+/* ==============================
+   البحث بالاسم أو الباركود
+================================ */
+function searchProduct(value) {
+  const grid = document.getElementById("productsGrid");
+  if (!grid) return;
+
+  const keyword = value.toLowerCase();
+  grid.innerHTML = "";
+
+  products
+    .filter(p =>
+      p.name.toLowerCase().includes(keyword) ||
+      (p.barcode && p.barcode.includes(keyword))
+    )
+    .forEach(p => {
+      const div = document.createElement("div");
+      div.className = "product-card";
+      div.innerHTML = `
+        <strong>${p.name}</strong>
+        <span>${p.price} ج</span>
+      `;
+      div.onclick = () => addToInvoice(p);
+      grid.appendChild(div);
+    });
+}
+
+/* ==============================
+   تحميل تلقائي
+================================ */
+document.addEventListener("DOMContentLoaded", () => {
+  renderProductsTable();
+  renderProductsGrid();
+});
