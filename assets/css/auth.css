@@ -1,88 +1,61 @@
-/* ===== AUTH PAGE ===== */
-body.auth-page {
-    background: linear-gradient(135deg, #020617, #0f172a);
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+/* ==============================
+   Auth Pages Style | POS Pro
+================================ */
+
+* {
+  box-sizing: border-box;
+  font-family: Tahoma, Arial;
 }
 
-/* ===== LOGIN BOX ===== */
-.auth-box {
-    background: #ffffff;
-    width: 100%;
-    max-width: 380px;
-    padding: 25px;
-    border-radius: 18px;
-    box-shadow: 0 15px 30px rgba(0,0,0,.25);
-    text-align: center;
+.auth-body {
+  background: linear-gradient(135deg, #0d6efd, #0a58ca);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.auth-box h1 {
-    margin-bottom: 8px;
-    color: #020617;
+.login-card {
+  background: #fff;
+  width: 100%;
+  max-width: 360px;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.2);
+  text-align: center;
 }
 
-.auth-box p {
-    font-size: 14px;
-    color: #64748b;
-    margin-bottom: 20px;
+.login-card h2 {
+  margin-bottom: 20px;
+  color: #0d6efd;
 }
 
-/* ===== INPUTS ===== */
-.auth-box input {
-    width: 100%;
-    padding: 12px;
-    border-radius: 12px;
-    border: 1px solid #cbd5f5;
-    margin-bottom: 12px;
-    font-size: 15px;
+.login-card input {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 12px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 15px;
 }
 
-.auth-box input:focus {
-    outline: none;
-    border-color: #2563eb;
+.login-card button {
+  width: 100%;
+  padding: 12px;
+  background: #0d6efd;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
 }
 
-/* ===== BUTTON ===== */
-.auth-box button {
-    width: 100%;
-    padding: 12px;
-    background: #2563eb;
-    color: #fff;
-    border: none;
-    border-radius: 12px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: .2s;
+.login-card button:hover {
+  background: #0b5ed7;
 }
 
-.auth-box button:hover {
-    background: #1e40af;
-}
-
-/* ===== LINKS ===== */
-.auth-links {
-    margin-top: 12px;
-    font-size: 14px;
-}
-
-.auth-links a {
-    color: #2563eb;
-    text-decoration: none;
-}
-
-.auth-links a:hover {
-    text-decoration: underline;
-}
-
-/* ===== ERROR ===== */
-.auth-error {
-    background: #fee2e2;
-    color: #991b1b;
-    padding: 8px;
-    border-radius: 10px;
-    font-size: 14px;
-    margin-bottom: 10px;
-    display: none;
+.error {
+  margin-top: 10px;
+  color: red;
+  font-size: 14px;
 }
