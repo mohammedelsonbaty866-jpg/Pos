@@ -115,3 +115,25 @@ button {
   background: var(--primary);
   color: #fff;
 }
+:root {
+  --primary: #0d6efd;
+  --bg: #f4f6f9;
+  --card: #ffffff;
+  --text: #222;
+  --border: #ddd;
+}
+
+body.dark {
+  --primary: #4dabf7;
+  --bg: #121212;
+  --card: #1e1e1e;
+  --text: #f1f1f1;
+  --border: #333;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Segoe UI", Tahoma, sans-serif;
+}
