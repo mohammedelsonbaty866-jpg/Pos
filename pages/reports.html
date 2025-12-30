@@ -106,3 +106,26 @@ loadReports();
   <span>إجمالي الشهر</span>
   <strong id="monthSales">0 ج</strong>
 </div>
+<script>
+function loadReports() {
+  const sales = JSON.parse(localStorage.getItem("sales")) || [];
+
+  let todayTotal = 0;
+  let count = 0;
+
+  const today = new Date().toDateString();
+
+  sales.forEach(sale => {
+    const d = new Date(sale.date);
+    if (d.toDateString() === today) {
+      todayTotal += sale.total;
+      count++;
+    }
+  });
+
+  document.getElementById("todaySales").innerText = todayTotal + " ج";
+  document.getElementById("salesCount").innerText = count;
+}
+
+window.onload = loadReports;
+</script>
