@@ -1,9 +1,26 @@
-/* RESET */
+/* ================= ROOT ================= */
+:root {
+  --main: #0d6efd;
+  --dark: #0f172a;
+  --bg: #f4f6f9;
+  --card: #ffffff;
+  --text: #020617;
+  --danger: #dc3545;
+  --radius: 14px;
+}
+
+body.dark {
+  --bg: #020617;
+  --card: #0f172a;
+  --text: #f8fafc;
+}
+
+/* ================= RESET ================= */
 * {
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
-  font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+  font-family: "Tajawal", Arial, sans-serif;
 }
 
 body {
@@ -12,19 +29,9 @@ body {
   min-height: 100vh;
 }
 
-/* VARIABLES (light default) */
-:root {
-  --primary: #0d6efd;
-  --bg: #f4f6f8;
-  --card: #ffffff;
-  --text: #222;
-  --border: #ddd;
-  --danger: #dc3545;
-}
-
-/* HEADER */
-.header {
-  background: var(--primary);
+/* ================= HEADER ================= */
+.top-bar {
+  background: var(--main);
   color: #fff;
   padding: 12px 16px;
   display: flex;
@@ -32,125 +39,205 @@ body {
   align-items: center;
 }
 
-.header h1 {
+.top-bar h1 {
   font-size: 18px;
 }
 
-.header-actions button {
-  background: transparent;
+.top-actions button,
+.top-actions a {
+  background: none;
   border: none;
   color: #fff;
-  font-size: 20px;
-  margin-left: 10px;
+  font-size: 18px;
+  margin-right: 10px;
   cursor: pointer;
 }
 
-/* SEARCH */
-.search-section {
-  padding: 12px;
+/* ================= NAV ================= */
+.main-nav {
+  display: flex;
   background: var(--card);
+  border-bottom: 1px solid #ddd;
 }
 
-.search-section input {
-  width: 100%;
+.main-nav a,
+.main-nav button {
+  flex: 1;
   padding: 12px;
-  font-size: 16px;
-  border-radius: 8px;
-  border: 1px solid var(--border);
-}
-
-/* PRODUCTS */
-.products-section {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-  gap: 10px;
-  padding: 12px;
-}
-
-.product {
-  background: var(--card);
-  border-radius: 10px;
-  padding: 10px;
   text-align: center;
-  border: 1px solid var(--border);
+  background: none;
+  border: none;
   cursor: pointer;
-  transition: 0.2s;
-}
-
-.product:hover {
-  transform: scale(1.03);
-}
-
-.product-name {
   font-size: 14px;
-  margin-bottom: 6px;
+  color: var(--text);
 }
 
-.product-price {
-  font-weight: bold;
-  color: var(--primary);
+.main-nav .active {
+  background: var(--main);
+  color: #fff;
 }
 
-/* CART */
-.cart-section {
-  position: fixed;
-  bottom: 0;
-  width: 100%;
+/* ================= LAYOUT ================= */
+.pos-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  padding: 12px;
+}
+
+@media (max-width: 768px) {
+  .pos-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ================= PRODUCTS ================= */
+.products-panel,
+.invoice-panel {
   background: var(--card);
-  border-top: 2px solid var(--primary);
-  padding: 10px;
+  border-radius: var(--radius);
+  padding: 12px;
+  box-shadow: 0 5px 15px rgba(0,0,0,.08);
 }
 
-.cart-section h2 {
+.products-panel h2,
+.invoice-panel h2 {
+  margin-bottom: 10px;
   font-size: 16px;
-  margin-bottom: 8px;
 }
 
-#cartList {
-  list-style: none;
-  max-height: 150px;
+.products-panel input {
+  width: 100%;
+  padding: 10px;
+  border-radius: var(--radius);
+  border: 1px solid #ccc;
+  margin-bottom: 10px;
+}
+
+/* ===== Scan Button ===== */
+.scan-btn {
+  width: 100%;
+  padding: 10px;
+  border-radius: var(--radius);
+  background: #198754;
+  color: #fff;
+  border: none;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+
+/* ===== Grid ===== */
+#productsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: 10px;
+  max-height: 60vh;
   overflow-y: auto;
 }
 
-#cartList li {
-  display: flex;
-  justify-content: space-between;
-  padding: 6px 0;
-  border-bottom: 1px dashed var(--border);
-}
-
-/* TOTAL */
-.total {
-  font-size: 18px;
-  font-weight: bold;
-  margin: 10px 0;
-}
-
-/* PAY BUTTON */
-.pay-btn {
-  width: 100%;
-  padding: 14px;
-  background: var(--primary);
-  border: none;
-  border-radius: 10px;
-  color: #fff;
-  font-size: 18px;
+.product-card {
+  background: var(--bg);
+  padding: 10px;
+  border-radius: var(--radius);
+  text-align: center;
   cursor: pointer;
 }
 
-.pay-btn:active {
-  background: #0b5ed7;
+.product-card strong {
+  display: block;
+  font-size: 14px;
 }
 
-/* DESKTOP */
-@media (min-width: 768px) {
-  body {
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-  }
+.product-card span {
+  color: var(--main);
+  font-weight: bold;
+}
 
-  .cart-section {
-    position: static;
-    height: 100vh;
-  }
+/* ================= INVOICE ================= */
+#invoiceItems {
+  max-height: 45vh;
+  overflow-y: auto;
+  margin-bottom: 10px;
+}
+
+.invoice-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px;
+  border-bottom: 1px dashed #ccc;
+}
+
+.total-box {
+  display: flex;
+  justify-content: space-between;
+  font-size: 18px;
+  margin-top: 10px;
+}
+
+/* ===== Actions ===== */
+.actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.btn-save {
+  background: var(--main);
+  color: #fff;
+  padding: 12px;
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+
+.btn-clear {
+  background: var(--danger);
+  color: #fff;
+  padding: 12px;
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+
+/* ================= FOOTER ================= */
+footer {
+  text-align: center;
+  padding: 10px;
+  font-size: 12px;
+  opacity: .6;
+}
+
+/* ================= BARCODE ================= */
+.barcode-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.85);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.scanner-box {
+  background: #000;
+  padding: 10px;
+  border-radius: var(--radius);
+}
+
+.scanner-box video {
+  width: 280px;
+  height: 280px;
+  object-fit: cover;
+  border-radius: var(--radius);
+}
+
+.scanner-box button {
+  margin-top: 10px;
+  width: 100%;
+  padding: 8px;
+  border-radius: var(--radius);
+  border: none;
+  background: var(--danger);
+  color: #fff;
 }
