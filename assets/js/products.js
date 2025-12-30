@@ -1,112 +1,67 @@
-/*************************************************
- * PRODUCTS SYSTEM - POS SUPER PRO
- *************************************************/
+let products = JSON.parse(localStorage.getItem("products")) || [];
 
-const PRODUCTS_KEY = "pos_products";
+function addProduct() {
+  const name = document.getElementById("name").value.trim();
+  const price = parseFloat(document.getElementById("price").value);
+  const barcode = document.getElementById("barcode").value.trim();
 
-/* ===== تحميل الأصناف ===== */
-function loadProducts() {
-  return JSON.parse(localStorage.getItem(PRODUCTS_KEY)) || [];
-}
-
-/* ===== حفظ الأصناف ===== */
-function saveProducts(products) {
-  localStorage.setItem(PRODUCTS_KEY, JSON.stringify(products));
-}
-
-/* ===== إضافة صنف ===== */
-function addProduct(name, price, barcode = "") {
-  const products = loadProducts();
-
-  const exists = products.find(
-    p => p.name === name || (barcode && p.barcode === barcode)
-  );
-  if (exists) {
-    alert("❌ الصنف موجود بالفعل");
+  if (!name || !price) {
+    alert("❌ أدخل اسم وسعر الصنف");
     return;
   }
 
   products.push({
     id: Date.now(),
     name,
-    price: Number(price),
+    price,
     barcode
   });
 
-  saveProducts(products);
+  localStorage.setItem("products", JSON.stringify(products));
+
+  document.getElementById("name").value = "";
+  document.getElementById("price").value = "";
+  document.getElementById("barcode").value = "";
+
   renderProducts();
 }
 
-/* ===== حذف صنف ===== */
-function deleteProduct(id) {
-  let products = loadProducts();
-  products = products.filter(p => p.id !== id);
-  saveProducts(products);
-  renderProducts();
-}
-
-/* ===== البحث ===== */
-function searchProducts(query) {
-  const products = loadProducts();
-  query = query.toLowerCase();
-
-  return products.filter(p =>
-    p.name.toLowerCase().includes(query) ||
-    (p.barcode && p.barcode.includes(query))
-  );
-}
-
-/* ===== عرض الأصناف ===== */
-function renderProducts(list = null) {
+function renderProducts() {
   const table = document.getElementById("productsTable");
-  if (!table) return;
+  const search = document.getElementById("search").value.toLowerCase();
 
-  const products = list || loadProducts();
   table.innerHTML = "";
 
-  products.forEach(p => {
-    const row = document.createElement("tr");
-
-    row.innerHTML = `
-      <td>${p.name}</td>
-      <td>${p.price.toFixed(2)}</td>
-      <td>${p.barcode || "-"}</td>
-      <td>
-        <button onclick="deleteProduct(${p.id})">🗑 حذف</button>
-      </td>
-    `;
-
-    table.appendChild(row);
-  });
+  products
+    .filter(p =>
+      p.name.toLowerCase().includes(search) ||
+      (p.barcode && p.barcode.includes(search))
+    )
+    .forEach((p, index) => {
+      table.innerHTML += `
+        <tr>
+          <td>${index + 1}</td>
+          <td>${p.name}</td>
+          <td>${p.price}</td>
+          <td>${p.barcode || "-"}</td>
+          <td>
+            <button class="delete" onclick="deleteProduct(${p.id})">🗑</button>
+          </td>
+        </tr>
+      `;
+    });
 }
 
-/* ===== أحداث الصفحة ===== */
-document.addEventListener("DOMContentLoaded", () => {
+function deleteProduct(id) {
+  if (!confirm("هل أنت متأكد من الحذف؟")) return;
+
+  products = products.filter(p => p.id !== id);
+  localStorage.setItem("products", JSON.stringify(products));
   renderProducts();
+}
 
-  const form = document.getElementById("addProductForm");
-  const searchInput = document.getElementById("searchProduct");
+function goBack() {
+  window.location.href = "../index.html";
+}
 
-  /* إضافة صنف */
-  form?.addEventListener("submit", e => {
-    e.preventDefault();
-
-    const name = document.getElementById("productName").value.trim();
-    const price = document.getElementById("productPrice").value;
-    const barcode = document.getElementById("productBarcode").value.trim();
-
-    if (!name || !price) {
-      alert("⚠️ أدخل اسم وسعر الصنف");
-      return;
-    }
-
-    addProduct(name, price, barcode);
-    form.reset();
-  });
-
-  /* البحث */
-  searchInput?.addEventListener("input", e => {
-    const result = searchProducts(e.target.value);
-    renderProducts(result);
-  });
-});
+renderProducts();
