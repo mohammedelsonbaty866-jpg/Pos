@@ -1,122 +1,88 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <title>إدارة الأصناف</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="../assets/css/style.css">
+  <meta charset="UTF-8" />
+  <title>إدارة الأصناف | POS Super Pro</title>
 
-  <style>
-    body {
-      font-family: Tahoma, Arial;
-      background: #f4f6f9;
-      margin: 0;
-    }
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0d6efd" />
 
-    header {
-      background: #0d6efd;
-      color: #fff;
-      padding: 12px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
+  <!-- CSS -->
+  <link rel="stylesheet" href="../assets/css/style.css" />
+  <link rel="stylesheet" href="../assets/css/theme.css" />
 
-    .container {
-      padding: 15px;
-    }
-
-    .card {
-      background: #fff;
-      padding: 15px;
-      border-radius: 12px;
-      margin-bottom: 15px;
-      box-shadow: 0 2px 6px rgba(0,0,0,.15);
-    }
-
-    input {
-      width: 100%;
-      padding: 10px;
-      margin-bottom: 10px;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      font-size: 15px;
-    }
-
-    button {
-      width: 100%;
-      padding: 12px;
-      border: none;
-      border-radius: 8px;
-      background: #0d6efd;
-      color: #fff;
-      font-size: 16px;
-      cursor: pointer;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 10px;
-    }
-
-    th, td {
-      border-bottom: 1px solid #ddd;
-      padding: 8px;
-      text-align: center;
-      font-size: 14px;
-    }
-
-    .delete {
-      background: #dc3545;
-      color: #fff;
-      border: none;
-      padding: 6px 10px;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-  </style>
+  <link rel="icon" href="../assets/icons/icon-192.png" />
 </head>
 
-<body>
+<body class="light">
 
-<header>
-  <button onclick="goBack()">⬅</button>
-  <h3>إدارة الأصناف</h3>
-  <div>📦</div>
-</header>
+  <!-- ================= HEADER ================= -->
+  <header class="app-header">
+    <div class="logo">📦 إدارة الأصناف</div>
+    <div class="header-actions">
+      <a href="../index.html" class="back-btn">⬅ رجوع للكاشير</a>
+    </div>
+  </header>
 
-<div class="container">
+  <!-- ================= MAIN ================= -->
+  <main class="products-page">
 
-  <div class="card">
-    <h4>إضافة صنف</h4>
-    <input id="name" placeholder="اسم الصنف">
-    <input id="price" type="number" placeholder="السعر">
-    <input id="barcode" placeholder="الباركود (اختياري)">
-    <button onclick="addProduct()">➕ إضافة</button>
-  </div>
+    <!-- Add Product -->
+    <section class="card">
+      <h2>➕ إضافة صنف جديد</h2>
 
-  <div class="card">
-    <h4>الأصناف</h4>
-    <input id="search" placeholder="بحث بالاسم أو الباركود" onkeyup="renderProducts()">
+      <form id="productForm" class="form-grid">
+        <input type="text" id="productName" placeholder="اسم الصنف" required />
+        <input type="number" id="productPrice" placeholder="السعر" required />
+        <input type="text" id="productBarcode" placeholder="الباركود (اختياري)" />
 
-    <table>
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>الصنف</th>
-          <th>السعر</th>
-          <th>باركود</th>
-          <th>حذف</th>
-        </tr>
-      </thead>
-      <tbody id="productsTable"></tbody>
-    </table>
-  </div>
+        <button type="submit" class="primary-btn">
+          💾 حفظ الصنف
+        </button>
+      </form>
+    </section>
 
-</div>
+    <!-- Products List -->
+    <section class="card">
+      <h2>📋 قائمة الأصناف</h2>
 
-<script src="../assets/js/products.js"></script>
+      <table class="products-table">
+        <thead>
+          <tr>
+            <th>الاسم</th>
+            <th>السعر</th>
+            <th>الباركود</th>
+            <th>حذف</th>
+          </tr>
+        </thead>
+        <tbody id="productsTable">
+          <!-- المنتجات تظهر هنا -->
+        </tbody>
+      </table>
+    </section>
+
+  </main>
+
+  <!-- ================= NAV ================= -->
+  <nav class="bottom-nav">
+    <a href="../index.html">🏠 الكاشير</a>
+    <a href="products.html" class="active">📦 الأصناف</a>
+    <a href="reports.html">📊 التقارير</a>
+    <a href="settings.html">⚙️ الإعدادات</a>
+  </nav>
+
+  <!-- ================= JS ================= -->
+  <script src="../assets/js/data.js"></script>
+  <script src="../assets/js/products.js"></script>
+
+  <!-- Theme Load -->
+  <script>
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme === "dark") {
+      document.body.classList.remove("light");
+      document.body.classList.add("dark");
+    }
+  </script>
 
 </body>
 </html>
